@@ -10,23 +10,21 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
-import environ
+from environs import Env
+import os
 from pathlib import Path
-
-env = environ.Env(
-    DEBUG=(bool, False)
-)
-environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+env = Env()
+env.read_env()
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('SECRET_KEY')
+SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
@@ -43,8 +41,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'mod_wsgi.server',
-    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -82,11 +78,11 @@ WSGI_APPLICATION = 'PositiveMoodPlayList.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-    'default': env.db('DATABASE_DEFAULT_URL'),
-    'positivemoodplaylist': env.db('DATABASE_POSITIVE_MOOD_PLAYLIST_URL'),
+    'default': env.dj_db_url('DATABASE_DEFAULT_URL'),
+    'positivemoodplaylist': env.dj_db_url('DATABASE_POSITIVE_MOOD_PLAYLIST_URL'),
 }
 
-DATABASES_APPS_MAPPING = {
+DATABASE_APPS_MAPPING = {
     'admin': 'default',
     'auth': 'default',
     'contenttypes': 'default',
