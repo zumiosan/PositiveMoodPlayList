@@ -82,7 +82,7 @@ DATABASES = {
     'positivemoodplaylist': env.dj_db_url('DATABASE_POSITIVE_MOOD_PLAYLIST_URL'),
 }
 
-DATABASES_APPS_MAPPING = {
+DATABASE_APPS_MAPPING = {
     'admin': 'default',
     'auth': 'default',
     'contenttypes': 'default',
