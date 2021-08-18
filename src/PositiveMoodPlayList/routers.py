@@ -1,6 +1,6 @@
 # settings.py や urls.py が⼊っているディレクトリから,
 # settings.py に記述した DATABASE_APPS_MAPPING を読み込みます
-from {dir_name}.settings import DATABASE_APPS_MAPPING
+from PositiveMoodPlayList.settings import DATABASE_APPS_MAPPING
 
 class DatabaseRouter(object):
     def db_for_read(self, model, **hints):
