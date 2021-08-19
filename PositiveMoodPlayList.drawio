@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2021-08-19T13:44:37.487Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36" etag="SU5c21lLy3Iz3wana6G3" version="14.9.4" type="github" pages="6">
+<mxfile host="app.diagrams.net" modified="2021-08-19T13:48:18.796Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36" etag="d9X4jwpEbYJq-zLgTy1P" version="14.9.4" type="github" pages="6">
   <diagram id="X7kwkGdZq3H8oBrxgHaK" name="実装する機能">
     <mxGraphModel dx="1190" dy="773" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -272,7 +272,7 @@
         <mxCell id="isSq8ozEh19mpTyacTcl-3" value="データベース" style="text;html=1;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;shadow=0;glass=0;fontSize=20;strokeColor=#000000;" parent="isSq8ozEh19mpTyacTcl-1" vertex="1">
           <mxGeometry x="20" y="30" width="200" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="isSq8ozEh19mpTyacTcl-5" value="ユーザー" style="swimlane;rounded=1;shadow=0;glass=0;fontSize=20;strokeColor=#000000;fillColor=none;verticalAlign=bottom;html=0;startSize=40;arcSize=18;" parent="isSq8ozEh19mpTyacTcl-1" vertex="1">
+        <mxCell id="isSq8ozEh19mpTyacTcl-5" value="アカウント" style="swimlane;rounded=1;shadow=0;glass=0;fontSize=20;strokeColor=#000000;fillColor=none;verticalAlign=bottom;html=0;startSize=40;arcSize=18;" parent="isSq8ozEh19mpTyacTcl-1" vertex="1">
           <mxGeometry x="30" y="100" width="331" height="290" as="geometry">
             <mxRectangle x="59" y="100" width="200" height="30" as="alternateBounds" />
           </mxGeometry>
