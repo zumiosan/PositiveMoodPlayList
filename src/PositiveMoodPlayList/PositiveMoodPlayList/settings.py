@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'app'
 ]
 
 MIDDLEWARE = [
@@ -90,7 +91,7 @@ DATABASE_APPS_MAPPING = {
     'messages': 'default',
     'staticfiles': 'default',
     'django_celery_beat': 'default',
-    'positivemoodplaylist': 'positivemoodplaylist'
+    'app': 'positivemoodplaylist'
 }
 
 DATABASE_ROUTERS = [
