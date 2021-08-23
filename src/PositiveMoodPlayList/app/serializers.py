@@ -1,4 +1,3 @@
-from _typeshed import Self
 from .models import Account
 from rest_framework import serializers
 from django.contrib.auth.hashers import make_password
