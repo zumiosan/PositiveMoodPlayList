@@ -13,8 +13,6 @@ class Account(models.Model):
     user_id = models.CharField(verbose_name='ユーザID', max_length=255)
     user_password = models.CharField(verbose_name='パスワード', max_length=255)
     create_date = models.DateTimeField(verbose_name='作成日', default=timezone.now)
-    login_date = models.DateTimeField(verbose_name='ログイン日', default=timezone.now)
-
 
 
 class ExperimentInfo(models.Model):
