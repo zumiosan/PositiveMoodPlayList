@@ -107,7 +107,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
+src/.env
 .venv
 env/
 venv/
@@ -140,5 +140,12 @@ dmypy.json
 cython_debug/
 
 .DS_Store
+
+.idea
+
+# static files
+*.wav
+*.jpg
+*.png
 
 
