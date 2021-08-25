@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
-from django.utils import timezone
+from django.conf import settings
 
 
 class ExperimentInfo(models.Model):
@@ -12,10 +12,10 @@ class ExperimentInfo(models.Model):
         db_table = 'experiment_info'
 
     id = models.BigAutoField(primary_key=True)
-    user_id = models.ForeignKey(Account, on_delete=models.PROTECT)
+    username = models.CharField(verbose_name='ユーザ名', max_length=255, unique=True)
     ex_id = models.IntegerField(verbose_name='実験番号', default=0)
     playlist_type = models.IntegerField(verbose_name='プレイリストのタイプ', default=0)
-    playlist_mid = ArrayField(models.IntegerField(), verbose_name='プレイリストの楽曲', default=[])
+    playlist_mid = ArrayField(models.IntegerField(), verbose_name='プレイリストの楽曲', default=list)
 
 
 class MusicInfo(models.Model):
@@ -43,7 +43,7 @@ class ImpressionInfo(models.Model):
 
     id = models.BigAutoField(primary_key=True)
     mid = models.ForeignKey(MusicInfo, on_delete=models.PROTECT)
-    user_id = models.ForeignKey(Account, on_delete=models.PROTECT)
+    username = models.CharField(verbose_name='ユーザ名', max_length=255, unique=True)
     class_num = models.IntegerField(verbose_name='クラス番号', default=1)
     proba_hh = models.FloatField(verbose_name='High', default=0.00)
     proba_mh = models.FloatField(verbose_name='MHigh', default=0.00)
