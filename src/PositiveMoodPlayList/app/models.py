@@ -1,66 +1,68 @@
 from django.db import models
-from django.contrib.postgres.fields import ArrayField
 from django.utils import timezone
+from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, _user_has_perm
 
-class Account(models.Model):
+
+class AccountManager(BaseUserManager):
+    """
+    ユーザーを作成する
+    """
+    def create_user(self, request, **extra_fields):
+        now = timezone.now()
+        if not request['username']:
+            raise ValueError('Users must have a username')
+
+        user = self.model(
+            username=request['username'],
+            is_active=True,
+            date_joined=now,
+        )
+
+        user.set_password(request['password'])
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, username, email, password, **extra_fields):
+        request_data = {
+            'username': username,
+            'email': email,
+            'password': password
+        }
+        user = self.create_user(request_data)
+        user.is_active = True
+        user.is_staff = True
+        user.is_admin = True
+        user.save(using=self._db)
+        return user
+
+
+class Account(AbstractBaseUser):
     """
     アカウント
     """
-    class Meta:
+    class Meta(object):
         db_table = 'account'
-    
-    id = models.BigAutoField(primary_key=True)
-    user_id = models.CharField(verbose_name='ユーザID', max_length=255)
-    user_password = models.CharField(verbose_name='パスワード', max_length=255)
-    create_date = models.DateTimeField(verbose_name='作成日', default=timezone.now)
 
+    username = models.CharField(verbose_name='ユーザ名', max_length=255, unique=True)
+    email = models.EmailField(verbose_name='Eメール', max_length=255, null=True)
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+    is_admin = models.BooleanField(default=False)
+    date_joined = models.DateTimeField(default=timezone.now)
 
-class ExperimentInfo(models.Model):
-    """
-    実験に使う情報
-    """
-    class Meta:
-        db_table = 'experiment_info'
-    
-    id = models.BigAutoField(primary_key=True)
-    user_id = models.ForeignKey(Account, on_delete=models.PROTECT)
-    ex_id = models.IntegerField(verbose_name='実験番号', default=0)
-    playlist_type = models.IntegerField(verbose_name='プレイリストのタイプ', default=0)
-    playlist_mid = ArrayField(models.IntegerField(), verbose_name='プレイリストの楽曲', default=[])
+    objects = AccountManager()
 
+    USERNAME_FIELD = 'username'
 
-class MusicInfo(models.Model):
-    """
-    楽曲情報
-    """
-    class Meta:
-        db_table = 'music_info'
+    def user_has_perm(self, user, perm, obj):
+        return _user_has_perm(user, perm, obj)
 
-    id = models.BigAutoField(primary_key=True)
-    mid = models.IntegerField(verbose_name='楽曲番号', unique=True, null=None)
-    sid = models.CharField(verbose_name='ファイル名', unique=True, max_length=255, null=None)
-    music_name = models.CharField(verbose_name='曲名', max_length=255)
-    artist_name = models.CharField(verbose_name='アーティスト名', max_length=255)
+    def has_perm(self, perm, obj=None):
+        return _user_has_perm(self, perm, obj=obj)
 
+    def has_module_perms(self, app_label):
+        return self.is_admin
 
-class ImpressionInfo(models.Model):
-    """
-    楽曲の印象情報
-    """
-    class Meta:
-        db_table = 'impression_info'
-
-    id = models.BigAutoField(primary_key=True)
-    mid = models.ForeignKey(MusicInfo, on_delete=models.PROTECT)
-    user_id = models.ForeignKey(Account, on_delete=models.PROTECT)
-    class_num = models.IntegerField(verbose_name='クラス番号', default=1)
-    proba_hh = models.FloatField(verbose_name='High', default=0.00)
-    proba_mh = models.FloatField(verbose_name='MHigh', default=0.00)
-    proba_mm = models.FloatField(verbose_name='Middle', default=0.00)
-    proba_lm = models.FloatField(verbose_name='LMiddle', default=0.00)
-    proba_ll = models.FloatField(verbose_name='Low', default=0.00)
-
-
-# class PleasureInfo(models.Model):
-
-
+    @property
+    def is_superuser(self):
+        return self.is_admin

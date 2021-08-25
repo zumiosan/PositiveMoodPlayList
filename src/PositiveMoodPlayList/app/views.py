@@ -12,7 +12,7 @@ class AccountRegister(generics.CreateAPIView):
     queryset = Account.objects.all()
 
     def perform_create(self, serializer):
-        queryset = Account.objects.filter(user_id=self.request.data['user_id'])
+        queryset = Account.objects.filter(username=self.request.data['username'])
         if queryset.exists():
-            raise ValidationError('This user id has already used')
+            raise ValidationError('This username has already used')
         serializer.save()

@@ -2,6 +2,7 @@
 # settings.py に記述した DATABASE_APPS_MAPPING を読み込みます
 from PositiveMoodPlayList.settings import DATABASE_APPS_MAPPING
 
+
 class DatabaseRouter(object):
     def db_for_read(self, model, **hints):
         if model._meta.app_label in DATABASE_APPS_MAPPING:
