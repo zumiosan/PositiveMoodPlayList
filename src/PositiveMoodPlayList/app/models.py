@@ -13,9 +13,8 @@ class AccountManager(BaseUserManager):
             raise ValueError('Users must have a username')
 
         user = self.model(
-            user_id=request['username'],
+            username=request['username'],
             is_active=True,
-            last_login=now,
             date_joined=now,
         )
 
