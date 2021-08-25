@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'app'
+    'app.apps.AppConfig',
+    'playlist.apps.PlaylistConfig',
 ]
 
 MIDDLEWARE = [
@@ -92,12 +93,15 @@ DATABASE_APPS_MAPPING = {
     'messages': 'default',
     'staticfiles': 'default',
     'django_celery_beat': 'default',
-    'app': 'positivemoodplaylist'
+    'app': 'default',
+    'playlist': 'positivemoodplaylist'
 }
 
 DATABASE_ROUTERS = [
     'routers.DatabaseRouter',
 ]
+
+AUTH_USER_MODEL = 'app.Account'
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
