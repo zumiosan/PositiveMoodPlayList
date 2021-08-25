@@ -12,7 +12,7 @@ dependencies:
   - dj-database-url=0.5.0=py_0
   - django=3.2.5=pyhd3eb1b0_0
   - djangorestframework=3.12.4=pyhd8ed1ab_0
-  - djangorestframework-jwt=1.11.0=py_0
+  - djangorestframework_simplejwt=4.4.0=py_0
   - environs=9.3.3=pyhd8ed1ab_0
   - krb5=1.19.2=hcd88c3b_0
   - libcxx=10.0.0=1
