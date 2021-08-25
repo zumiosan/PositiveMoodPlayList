@@ -3,7 +3,7 @@ from rest_framework import serializers
 from django.contrib.auth.hashers import make_password
 
 
-class RegistrationSerializer(serializers.ModelSerializer):
+class AccountSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Account
