@@ -1,7 +1,6 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, _user_has_perm
-from django.contrib.auth.hashers import make_password
 
 
 class AccountManager(BaseUserManager):
@@ -10,25 +9,25 @@ class AccountManager(BaseUserManager):
     """
     def create_user(self, request, **extra_fields):
         now = timezone.now()
-        if not request['user_id']:
-            raise ValueError('Users must have a user id')
+        if not request['username']:
+            raise ValueError('Users must have a username')
 
         user = self.model(
-            user_id=request['user_id'],
-            user_password=make_password(request['user_password']),
+            user_id=request['username'],
             is_active=True,
             last_login=now,
             date_joined=now,
         )
 
+        user.set_password(request['password'])
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, user_id, email, password, **extra_fields):
+    def create_superuser(self, username, email, password, **extra_fields):
         request_data = {
-            'user_id': user_id,
+            'username': username,
             'email': email,
-            'user_password': password
+            'password': password
         }
         user = self.create_user(request_data)
         user.is_active = True
@@ -42,13 +41,11 @@ class Account(AbstractBaseUser):
     """
     アカウント
     """
-    class Meta:
+    class Meta(object):
         db_table = 'account'
-    
-    id = models.BigAutoField(primary_key=True)
-    user_id = models.CharField(verbose_name='ユーザID', max_length=255)
-    user_password = models.CharField(verbose_name='パスワード', max_length=255)
-    email = models.EmailField(verbose_name='Eメール', max_length=255, unique=True, null=True)
+
+    username = models.CharField(verbose_name='ユーザ名', max_length=255, unique=True)
+    email = models.EmailField(verbose_name='Eメール', max_length=255, null=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
@@ -56,11 +53,17 @@ class Account(AbstractBaseUser):
 
     objects = AccountManager()
 
-    USERNAME_FIELD = 'user_id'
-    REQUIRED_FIELDS = ['user_id']
+    USERNAME_FIELD = 'username'
+
+    def user_has_perm(self, user, perm, obj):
+        return _user_has_perm(user, perm, obj)
 
     def has_perm(self, perm, obj=None):
-        return True
+        return _user_has_perm(self, perm, obj=obj)
 
     def has_module_perms(self, app_label):
-        return True
+        return self.is_admin
+
+    @property
+    def is_superuser(self):
+        return self.is_admin
