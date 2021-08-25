@@ -148,4 +148,7 @@ cython_debug/
 *.jpg
 *.png
 
+# migrations
+migrations
+
 
