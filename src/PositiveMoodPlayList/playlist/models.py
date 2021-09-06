@@ -12,10 +12,11 @@ class ExperimentInfo(models.Model):
         db_table = 'experiment_info'
 
     id = models.BigAutoField(primary_key=True)
-    username = models.CharField(verbose_name='ユーザ名', max_length=255, unique=True)
+    username = models.CharField(verbose_name='ユーザ名', max_length=255, null=False)
     ex_id = models.IntegerField(verbose_name='実験番号', default=0)
     playlist_type = models.IntegerField(verbose_name='プレイリストのタイプ', default=0)
     playlist_mid = ArrayField(models.IntegerField(), verbose_name='プレイリストの楽曲', default=list)
+    is_finished = models.BooleanField(verbose_name='完了状態', default=False)
 
 
 class MusicInfo(models.Model):

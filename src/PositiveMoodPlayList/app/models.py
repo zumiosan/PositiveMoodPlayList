@@ -22,10 +22,9 @@ class AccountManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, username, email, password, **extra_fields):
+    def create_superuser(self, username, password, **extra_fields):
         request_data = {
             'username': username,
-            'email': email,
             'password': password
         }
         user = self.create_user(request_data)
