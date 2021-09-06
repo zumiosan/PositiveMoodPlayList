@@ -2,9 +2,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions, status
 from .models import ExperimentInfo
+from .modules import CreatePlayList
 
 
-class GetExperimentInfo(APIView):
+class GetExperimentInfoView(APIView):
     """
     実験情報を取得する．
     """
@@ -19,5 +20,17 @@ class GetExperimentInfo(APIView):
                 'is_finished': res.is_finished
             }
             data.append(tmp)
-        print(data)
+
         return Response(data=data, status=status.HTTP_200_OK)
+
+
+class CreatePlaylistView(APIView):
+    """
+    プレイリストを生成する．
+    """
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request):
+        mid = CreatePlayList.create_playlist(0, 0, 'test')
+        return Response(data=[], status=status.HTTP_200_OK)
+
