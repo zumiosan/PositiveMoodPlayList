@@ -11,35 +11,35 @@ env.read_env()
 def create_transition(transition, up_down_info):
     if transition == 0:
         transition = [
-            'Low',
-            'Low',
-            'LMiddle',
-            'LMiddle',
-            'LMiddle',
-            'Middle',
-            'Middle',
-            'Middle',
-            'MHigh',
-            'MHigh',
-            'High',
-            'High'
+            "ll",
+            "ll",
+            "lm",
+            "lm",
+            "lm",
+            "mm",
+            "mm",
+            "mm",
+            "mh",
+            "mh",
+            "hh",
+            "hh"
         ]
         up_down_info = [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 
     elif transition == 5:
         transition = [
-            'High',
-            'High',
-            'MHigh',
-            'MHigh',
-            'MHigh',
-            'Middle',
-            'Middle',
-            'Middle',
-            'LMiddle',
-            'LMiddle',
-            'Low',
-            'Low',
+            "hh",
+            "hh",
+            "mh",
+            "mh",
+            "mh",
+            "mm",
+            "mm",
+            "mm",
+            "lm",
+            "lm",
+            "ll",
+            "ll",
         ]
         up_down_info = [0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]
 
@@ -54,15 +54,15 @@ def get_class_name(class_num):
     """
     # クラス名の取得
     if class_num == 1:
-        class_name = 'High'
+        class_name = "hh"
     elif class_num == 2:
-        class_name = 'MHigh'
+        class_name = "mh"
     elif class_num == 3:
-        class_name = 'Middle'
+        class_name = "mm"
     elif class_num == 4:
-        class_name = 'MLow'
+        class_name = "lm"
     elif class_num == 5:
-        class_name = 'Low'
+        class_name = "ll"
     else:
         class_name = None
 
@@ -76,15 +76,15 @@ def get_class_number(class_name):
     :return: クラス番号
     """
     # クラス番号の取得
-    if class_name == 'High':
+    if class_name == "hh":
         class_num = 1
-    elif class_name == 'MHigh':
+    elif class_name == "mh":
         class_num = 2
-    elif class_name == 'Middle':
+    elif class_name == "mm":
         class_num = 3
-    elif class_name == 'MLow':
+    elif class_name == "lm":
         class_num = 4
-    elif class_name == 'Low':
+    elif class_name == "ll":
         class_num = 5
     else:
         class_num = None
@@ -93,7 +93,7 @@ def get_class_number(class_name):
 
 
 def get_connection():
-    return psycopg2.connect(env('DATABASE_POSITIVE_MOOD_PLAYLIST_URL'))
+    return psycopg2.connect(env("DATABASE_POSITIVE_MOOD_PLAYLIST_URL"))
 
 
 def execute_query(query):
@@ -110,7 +110,9 @@ def execute_query(query):
 
 
 def get_first_data(class_name, class_num, username):
-    query = 'SELECT * FROM {username} WHERE class = {class_num} and {class_name} >= 0.8 ORDER BY random() LIMIT 1;' \
+    query = "SELECT * FROM impression_info " \
+            "WHERE username='{username}' and class_num={class_num} " \
+            "and {class_name} >= 0.8 ORDER BY random() LIMIT 1;" \
         .format(username=username, class_num=class_num, class_name=class_name)
     data = execute_query(query)
     # print(data)
@@ -128,11 +130,11 @@ def not_change_class_data(before_class_proba, current_class_name, current_class_
                 upper_class_proba = before_class_proba[current_class_num - 1]
                 upper_class_name = current_class_name
 
-            query = 'SELECT * FROM {username} ' \
-                    'WHERE class={current_class_num} ' \
-                    'and {current_class_name} >= 0.8 ' \
-                    'and {upper_class_name} >= {upper_class_proba} ' \
-                    'ORDER BY random() LIMIT 1;' \
+            query = "SELECT * FROM impression_info " \
+                    "WHERE username='{username}' and class_num={current_class_num} " \
+                    "and {current_class_name} >= 0.8 " \
+                    "and {upper_class_name} >= {upper_class_proba} " \
+                    "ORDER BY random() LIMIT 1;" \
                 .format(username=username,
                         current_class_num=current_class_num,
                         current_class_name=current_class_name,
@@ -147,11 +149,11 @@ def not_change_class_data(before_class_proba, current_class_name, current_class_
                 lower_class_proba = before_class_proba[current_class_num - 1]
                 lower_class_name = current_class_name
 
-            query = 'SELECT * FROM {username} ' \
-                    'WHERE class={current_class_num} ' \
-                    'and {current_class_name} >= 0.8 ' \
-                    'and {lower_class_name} >= {lower_class_proba} ' \
-                    'ORDER BY random() LIMIT 1;' \
+            query = "SELECT * FROM impression_info " \
+                    "WHERE username='{username}' and class_num={current_class_num} " \
+                    "and {current_class_name} >= 0.8 " \
+                    "and {lower_class_name} >= {lower_class_proba} " \
+                    "ORDER BY random() LIMIT 1;" \
                 .format(username=username,
                         current_class_num=current_class_num,
                         current_class_name=current_class_name,
@@ -159,11 +161,11 @@ def not_change_class_data(before_class_proba, current_class_name, current_class_
                         lower_class_proba=lower_class_proba,
                         )
     elif current_class_num != next_class_num:
-        query = 'SELECT * FROM {username} ' \
-                'WHERE class={current_class_num} ' \
-                'and {current_class_name} >= 0.8 ' \
-                'and {next_class_name} >= {next_class_proba} ' \
-                'ORDER BY random() LIMIT 1;'\
+        query = "SELECT * FROM impression_info " \
+                "WHERE username='{username}' and class_num={current_class_num} " \
+                "and {current_class_name} >= 0.8 " \
+                "and {next_class_name} >= {next_class_proba} " \
+                "ORDER BY random() LIMIT 1;"\
             .format(username=username,
                     current_class_num=current_class_num,
                     current_class_name=current_class_name,
@@ -177,10 +179,10 @@ def not_change_class_data(before_class_proba, current_class_name, current_class_
 
 
 def change_class_data(current_class_name, current_class_num, before_class_name, username):
-    query = 'SELECT * FROM {username} WHERE class={current_class_num} ' \
-            'and {current_class_name} >= 0.8 ' \
-            'and {before_class_name} >= 0.7 ' \
-            'ORDER BY random() LIMIT 1;' \
+    query = "SELECT * FROM impression_info WHERE username='{username}' and class_num={current_class_num} " \
+            "and {current_class_name} >= 0.8 " \
+            "and {before_class_name} >= 0.7 " \
+            "ORDER BY random() LIMIT 1;" \
         .format(username=username,
                 current_class_num=current_class_num,
                 current_class_name=current_class_name,
@@ -194,7 +196,7 @@ def create_playlist(transition, up_down_info, username):
     """
     印象に基づいてプレイリストを生成する
     """
-    if type(transition) == 'int':
+    if type(transition) is int:
         transition, up_down_info = create_transition(transition, up_down_info)
 
     break_flag = len(transition)
@@ -218,11 +220,11 @@ def create_playlist(transition, up_down_info, username):
             if index == 0:
                 data = get_first_data(current_class_name, current_class_num, username)
                 mid.append(data[0][0])
-                before_data_proba = data[0][1:-1]
+                before_data_proba = data[0][3:-1]
                 before_class_num = current_class_num
                 before_class_name = current_class_name
                 music_data.append(data[0])
-                print(mid)
+                # print(mid)
                 # print(current_class_num)
                 # print(before_data_proba)
                 continue
@@ -235,7 +237,8 @@ def create_playlist(transition, up_down_info, username):
                 data = change_class_data(current_class_name, current_class_num, before_class_name, username)
             try:
                 mid.append(data[0][0])
-                before_data_proba = data[0][1:-1]
+                before_data_proba = data[0][3:-1]
+                # print(before_data_proba)
                 music_data.append(data[0])
             except IndexError:
                 break
@@ -243,6 +246,7 @@ def create_playlist(transition, up_down_info, username):
             # 現在の楽曲のクラス番号と名前を保存しておく
             before_class_num = current_class_num
             before_class_name = current_class_name
+            # print(mid, music_data)
 
         if len(mid) == break_flag:
             break

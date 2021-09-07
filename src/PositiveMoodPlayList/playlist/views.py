@@ -32,5 +32,5 @@ class CreatePlaylistView(APIView):
 
     def get(self, request):
         mid = CreatePlayList.create_playlist(0, 0, 'test')
-        return Response(data=[], status=status.HTTP_200_OK)
-
+        # print(mid)
+        return Response(data=mid, status=status.HTTP_200_OK)
