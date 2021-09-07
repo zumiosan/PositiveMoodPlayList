@@ -48,6 +48,7 @@ class Account(AbstractBaseUser):
     is_staff = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
     date_joined = models.DateTimeField(default=timezone.now)
+    login_date = models.DateTimeField(default=timezone.now)
 
     objects = AccountManager()
 

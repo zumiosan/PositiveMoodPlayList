@@ -29,7 +29,6 @@ class MusicInfo(models.Model):
 
     id = models.BigAutoField(primary_key=True)
     mid = models.IntegerField(verbose_name='楽曲番号', unique=True, null=None)
-    sid = models.CharField(verbose_name='ファイル名', unique=True, max_length=255, null=None)
     music_name = models.CharField(verbose_name='曲名', max_length=255)
     artist_name = models.CharField(verbose_name='アーティスト名', max_length=255)
 
@@ -43,14 +42,14 @@ class ImpressionInfo(models.Model):
         db_table = 'impression_info'
 
     id = models.BigAutoField(primary_key=True)
-    mid = models.ForeignKey(MusicInfo, on_delete=models.PROTECT)
+    mid = models.IntegerField(verbose_name='楽曲番号', unique=True, null=None)
     username = models.CharField(verbose_name='ユーザ名', max_length=255, unique=True)
     class_num = models.IntegerField(verbose_name='クラス番号', default=1)
-    proba_hh = models.FloatField(verbose_name='High', default=0.00)
-    proba_mh = models.FloatField(verbose_name='MHigh', default=0.00)
-    proba_mm = models.FloatField(verbose_name='Middle', default=0.00)
-    proba_lm = models.FloatField(verbose_name='LMiddle', default=0.00)
-    proba_ll = models.FloatField(verbose_name='Low', default=0.00)
+    hh = models.FloatField(verbose_name='High', default=0.00)
+    mh = models.FloatField(verbose_name='MHigh', default=0.00)
+    mm = models.FloatField(verbose_name='Middle', default=0.00)
+    lm = models.FloatField(verbose_name='LMiddle', default=0.00)
+    ll = models.FloatField(verbose_name='Low', default=0.00)
 
 # class PleasureInfo(models.Model):
 
