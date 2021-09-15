@@ -1,16 +1,38 @@
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import {Switch, Route, BrowserRouter, Link} from "react-router-dom";
+import Login from "./components/Login";
 
-const Hello: React.FunctionComponent<{ compiler: string, framework: string }> = (props) => {
-  return (
-    <div>
-      <div>{props.compiler}</div>
-      <div>{props.framework}</div>
-    </div>
-  );
+export const apiURL = 'http://localhost:8000/';
+
+export default function App() {
+    return(
+        <BrowserRouter>
+            <nav>
+                <ul>
+                    <li>
+                        <Link to='/home'>Home</Link>
+                    </li>
+                    <li>
+                        <Link to='/login'>Login</Link>
+                    </li>
+                </ul>
+            </nav>
+            <Switch>
+                <Route path="/index">
+
+                </Route>
+                <Route path="/login">
+                    <Login />
+                </Route>
+            </Switch>
+        </BrowserRouter>
+    );
 }
 
 ReactDOM.render(
-  <Hello compiler="TypeScript" framework="React" />,
-  document.getElementById("root")
+    <React.StrictMode>
+        <App />
+    </React.StrictMode>,
+  document.getElementById('root')
 );
