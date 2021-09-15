@@ -43,7 +43,7 @@ export default function Login() {
             </Grid>
             <Grid item xs={8}>
                 <form onSubmit={handleSubmit(getJwt)}>
-                    <Grid container alignItems={"center"} justifyContent={"center"} spacing={3}>
+                    <Grid container alignItems={"center"} justifyContent={"center"} spacing={10}>
                         <Grid item xs={8}>
                             <TextField
                                 label="username"
@@ -65,9 +65,9 @@ export default function Login() {
                         </Grid>
                         <Grid item xs={8} style={{textAlign:"center"}}>
                             <Button
-                            variant="contained"
-                            color="primary"
-                            type="submit"
+                                variant="contained"
+                                color="primary"
+                                type="submit"
                             >
                                 ログイン
                             </Button>
