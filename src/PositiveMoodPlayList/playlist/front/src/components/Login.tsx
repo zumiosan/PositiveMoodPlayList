@@ -35,7 +35,7 @@ export default function Login() {
     }
 
     return(
-        <Grid container alignItems={"center"} justify={"center"} xs={12}>
+        <Grid container alignItems={"center"} justifyContent={"center"}>
             <Grid item xs={8}>
                 <div style={{textAlign: "center"}}>
                     <h2>ログインフォーム</h2>
@@ -43,22 +43,24 @@ export default function Login() {
             </Grid>
             <Grid item xs={8}>
                 <form onSubmit={handleSubmit(getJwt)}>
-                    <Grid container alignItems={"center"} justify={"center"} spacing={3}>
+                    <Grid container alignItems={"center"} justifyContent={"center"} spacing={3}>
                         <Grid item xs={8}>
                             <TextField
                                 label="username"
-                                id="standard-basic"
+                                id="control-username"
                                 required
                                 fullWidth
+                                {...register('username')}
                             />
                         </Grid>
                         <Grid item xs={8}>
                             <TextField
                                 label="password"
-                                id="standard-basic"
+                                id="control-password"
                                 required
                                 type="password"
                                 fullWidth
+                                {...register('password')}
                             />
                         </Grid>
                         <Grid item xs={8} style={{textAlign:"center"}}>
