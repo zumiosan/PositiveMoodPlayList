@@ -41,13 +41,16 @@ export default function Experiment() {
 
     useEffect(() => {
         (async () => {
+            // const res = await fetch(
+            //     `${apiURL}playlist/exinfo/`,
+            //     {
+            //         method: "GET",
+            //         credentials: "same-origin"
+            //     }
+            // )
             const res = await axios.get(
                 `${apiURL}playlist/exinfo/`,
-                {
-                    headers: {
-                        'Authorization': `JWT ${cookies.get('accesstoken')}`
-                    },
-                }
+                { withCredentials: true }
             )
             console.log(res);
         })();

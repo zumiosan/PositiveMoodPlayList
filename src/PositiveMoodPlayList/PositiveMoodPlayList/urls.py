@@ -17,9 +17,11 @@ from django import urls
 from django.contrib import admin
 from django.conf.urls import url, include
 from django.urls import path
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('account/', include('app.urls')),
-    path('playlist/', include('playlist.urls'))
+    path('playlist/', include('playlist.urls')),
+    path('token/', TokenObtainPairView.as_view()),
 ]

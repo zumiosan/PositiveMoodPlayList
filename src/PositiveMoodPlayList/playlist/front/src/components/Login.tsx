@@ -5,6 +5,7 @@ import { useHistory } from "react-router-dom";
 import { Button, TextField, Grid } from "@material-ui/core";
 import { apiURL } from "../index";
 import { LoggedInContext } from "../index";
+import axios from "axios";
 
 export default function Login() {
     // ページ遷移の際に利用する.
@@ -21,21 +22,31 @@ export default function Login() {
 
     // APIにusername, passwordを送信してJWTトークンを取得してCookieに保存
     const getJwt = async(data: object) => {
+        const json = JSON.stringify(data)
         console.log(data);
-        const res = await fetch(
-            `${apiURL}/account/login/`,
+        // const res = await fetch(
+        //     `${apiURL}account/login/`,
+        //     {
+        //         method: 'POST',
+        //         headers: {
+        //             'Content-Type': 'application/json'
+        //         },
+        //         body: JSON.stringify(data)
+        //     }
+        // );
+        const res = await axios.post(
+            `${apiURL}account/login/`,
             {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            }
+                username: 'test',
+                password: '12345'
+            },
+            { withCredentials: true }
         );
+        console.log(res)
         // const jwtToken = await res.json();
         // console.log(jwtToken)
-        // setCookie('accesstoken', jwtToken['access'], { path: '/', httpOnly: false });
-        // setCookie('refreshtoken', jwtToken['refresh'], { path: '/', httpOnly: false });
+        // setCookie('access_token', jwtToken['access'], { path: '/', httpOnly: false });
+        // setCookie('refresh_token', jwtToken['refresh'], { path: '/', httpOnly: false });
         setIsLoggedIn(true);
         history.push('/');
     }

@@ -20,14 +20,14 @@ class TokenObtainView(jwt_views.TokenObtainPairView):
 
         # httpOnlyなのでtokenの操作は全てdjangoで行う
         res.set_cookie(
-            "access_token",
-            serializer.validated_data["access"],
+            key="access_token",
+            value=serializer.validated_data["access"],
             max_age=60 * 60 * 24,
             httponly=True,
         )
         res.set_cookie(
-            "refresh_token",
-            serializer.validated_data["refresh"],
+            key="refresh_token",
+            value=serializer.validated_data["refresh"],
             max_age=60 * 60 * 24 * 30,
             httponly=True,
         )
