@@ -11,6 +11,9 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import { LoggedInContext } from "../index";
+import LoginButton from "./LoginButton";
+import LogoutButton from "./LogoutButton";
+
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -57,10 +60,8 @@ export default function Header() {
     //ListItemの名前とLink先の対応関係
     const linkDict:{[index:string]: string} = {
         'Home': "",
-        "Login": "login",
         "Experiment": "experiment",
         "Create PlayList": "create_playlist",
-        "Logout": "logout",
     }
 
     const list = () => (
@@ -78,17 +79,8 @@ export default function Header() {
                         </ListItem>
                     </Link>
                 ))}
-                {!isLoggedIn && (
-                    ['Login'].map((text, index) => (
-                        <Link to={"/" + linkDict[text]} key={text}>
-                            <ListItem button key={text}>
-                                <ListItemText primary={text} />
-                            </ListItem>
-                        </Link>
-                    ))
-                )}
                 {isLoggedIn && (
-                    ['Logout', 'Experiment', 'Create PlayList'].map((text, index) => (
+                    ['Experiment', 'Create PlayList'].map((text, index) => (
                         <Link to={"/" + linkDict[text]} key={text}>
                             <ListItem button key={text}>
                                 <ListItemText primary={text} />
@@ -119,6 +111,12 @@ export default function Header() {
                     <Typography variant={"h6"} className={classes.title}>
                         PositiveMoodPlayList
                     </Typography>
+                    {!isLoggedIn && (
+                        <LoginButton />
+                    )}
+                    {isLoggedIn && (
+                        <LogoutButton />
+                    )}
                 </Toolbar>
             </AppBar>
         </div>
