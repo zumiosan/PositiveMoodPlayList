@@ -14,8 +14,8 @@ export default function LogoutButton() {
     const [cookie, setCookie, removeCookie] = useCookies();
 
     const handleLogout = () => {
-        removeCookie("access");
-        removeCookie("refresh");
+        removeCookie("accesstoken");
+        removeCookie("refreshtoken");
         setIsLoggedIn(false);
         history.push("/");
     }

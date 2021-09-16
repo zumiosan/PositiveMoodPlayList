@@ -114,9 +114,9 @@ export default function Header() {
                     {!isLoggedIn && (
                         <LoginButton />
                     )}
-                    {isLoggedIn && (
-                        <LogoutButton />
-                    )}
+                    {/*{isLoggedIn && (*/}
+                    {/*    <LogoutButton />*/}
+                    {/*)}*/}
                 </Toolbar>
             </AppBar>
         </div>

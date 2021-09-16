@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import {Switch, Route, BrowserRouter, Link} from "react-router-dom";
 import Login from "./components/Login";
 import Header from "./components/Header";
+import Experiment from "./components/Experiment";
 
 export const apiURL = 'http://localhost:8000/';
 
@@ -38,7 +39,7 @@ export default function App() {
                             <Login />
                         </Route>
                         <Route path={"/experiment"}>
-
+                            <Experiment />
                         </Route>
                     </Switch>
                 </LoggedInContext.Provider>
