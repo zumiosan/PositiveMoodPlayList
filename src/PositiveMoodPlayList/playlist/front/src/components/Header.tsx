@@ -1,16 +1,16 @@
-import React, {useState} from "react";
+import React, { useState, useContext } from "react";
 import { Link } from 'react-router-dom'
 import { createStyles, makeStyles, Theme } from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import { LoggedInContext } from "../index";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -34,9 +34,16 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export default function Header() {
+    // UI用のstyle
     const classes = useStyles();
-    const [state, setState] = useState(false);
 
+    //Drawerの表示状態
+    const [isOpen, setIsOpen] = useState(false);
+
+    const loggedInContext = useContext(LoggedInContext)!
+    const [isLoggedIn] = [loggedInContext.isLoggedIn];
+
+    // Drawerを表示するか閉じかの処理
     const toggleDrawer = (open: boolean) => (
         event: React.KeyboardEvent | React.MouseEvent,
     ) => {
@@ -44,14 +51,16 @@ export default function Header() {
             ((event as React.KeyboardEvent).key === 'Tab' || (event as React.KeyboardEvent).key === 'Shift')) {
             return;
         }
-        setState(open);
+        setIsOpen(open);
     };
 
+    //ListItemの名前とLink先の対応関係
     const linkDict:{[index:string]: string} = {
         'Home': "",
         "Login": "login",
         "Experiment": "experiment",
-        "Create PlayList": "create_playlist"
+        "Create PlayList": "create_playlist",
+        "Logout": "logout",
     }
 
     const list = () => (
@@ -62,13 +71,31 @@ export default function Header() {
             onKeyDown={toggleDrawer(false)}
         >
             <List>
-                {['Home', 'Login', 'Experiment', 'Create PlayList'].map((text, index) => (
+                {['Home'].map((text, index) => (
                     <Link to={"/" + linkDict[text]} key={text}>
                         <ListItem button key={text}>
                             <ListItemText primary={text} />
                         </ListItem>
                     </Link>
                 ))}
+                {!isLoggedIn && (
+                    ['Login'].map((text, index) => (
+                        <Link to={"/" + linkDict[text]} key={text}>
+                            <ListItem button key={text}>
+                                <ListItemText primary={text} />
+                            </ListItem>
+                        </Link>
+                    ))
+                )}
+                {isLoggedIn && (
+                    ['Logout', 'Experiment', 'Create PlayList'].map((text, index) => (
+                        <Link to={"/" + linkDict[text]} key={text}>
+                            <ListItem button key={text}>
+                                <ListItemText primary={text} />
+                            </ListItem>
+                        </Link>
+                    ))
+                )}
             </List>
         </div>
     )
@@ -86,13 +113,12 @@ export default function Header() {
                     >
                         <MenuIcon />
                     </IconButton>
-                    <Drawer open={state} onClose={toggleDrawer(false)}>
+                    <Drawer open={isOpen} onClose={toggleDrawer(false)}>
                         {list()}
                     </Drawer>
                     <Typography variant={"h6"} className={classes.title}>
                         PositiveMoodPlayList
                     </Typography>
-                    <Button color={"inherit"}>Login</Button>
                 </Toolbar>
             </AppBar>
         </div>

@@ -1,13 +1,18 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useCookies } from 'react-cookie';
 import { useForm } from "react-hook-form";
 import { useHistory } from "react-router-dom";
 import { Button, TextField, Grid } from "@material-ui/core";
 import { apiURL } from "../index";
+import { LoggedInContext } from "../index";
 
 export default function Login() {
     // ページ遷移の際に利用する.
     const history = useHistory();
+
+    //ログイン状態を切り替える用
+    const loggedInContext = useContext(LoggedInContext)!;
+    const [setIsLoggedIn] = [loggedInContext.setLoggedIn];
 
     // Cookieを扱う
     const [cookie, setCookie] = useCookies();
@@ -31,6 +36,7 @@ export default function Login() {
         console.log(jwtToken)
         setCookie('accesstoken', jwtToken['access'], { path: '/', httpOnly: false });
         setCookie('refreshtoken', jwtToken['refresh'], { path: '/', httpOnly: false });
+        setIsLoggedIn(true);
         history.push('/');
     }
 
