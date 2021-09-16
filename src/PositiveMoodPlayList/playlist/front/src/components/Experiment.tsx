@@ -45,7 +45,6 @@ export default function Experiment() {
                 `${apiURL}playlist/exinfo/`,
                 {
                     headers: {
-                        'Content-Type': 'application/json',
                         'Authorization': `JWT ${cookies.get('accesstoken')}`
                     },
                 }

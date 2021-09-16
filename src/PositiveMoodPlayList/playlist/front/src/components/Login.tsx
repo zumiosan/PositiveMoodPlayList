@@ -23,7 +23,7 @@ export default function Login() {
     const getJwt = async(data: object) => {
         console.log(data);
         const res = await fetch(
-            `${apiURL}token/`,
+            `${apiURL}/account/login/`,
             {
                 method: 'POST',
                 headers: {
@@ -32,10 +32,10 @@ export default function Login() {
                 body: JSON.stringify(data)
             }
         );
-        const jwtToken = await res.json();
-        console.log(jwtToken)
-        setCookie('accesstoken', jwtToken['access'], { path: '/', httpOnly: false });
-        setCookie('refreshtoken', jwtToken['refresh'], { path: '/', httpOnly: false });
+        // const jwtToken = await res.json();
+        // console.log(jwtToken)
+        // setCookie('accesstoken', jwtToken['access'], { path: '/', httpOnly: false });
+        // setCookie('refreshtoken', jwtToken['refresh'], { path: '/', httpOnly: false });
         setIsLoggedIn(true);
         history.push('/');
     }
