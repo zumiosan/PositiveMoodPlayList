@@ -2,9 +2,8 @@ import React, { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { useHistory } from "react-router-dom";
 import { Button, TextField, Grid } from "@material-ui/core";
-import { apiURL } from "../index";
 import { LoggedInContext } from "../index";
-import axios from "axios";
+import { login } from "./modules/apiJwt";
 
 export default function Login() {
     // ページ遷移の際に利用する.
@@ -19,11 +18,7 @@ export default function Login() {
 
     // APIにusername, passwordを送信してJWTトークンを取得してCookieに保存
     const getJwt = async(data: {[index: string]: string}) => {
-        const res = await axios.post(
-            `${apiURL}account/login/`,
-            data,
-            { withCredentials: true }
-        );
+        const res = await login(data);
         console.log(res)
         setIsLoggedIn(true);
         history.push('/');

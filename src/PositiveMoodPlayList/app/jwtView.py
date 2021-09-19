@@ -43,6 +43,9 @@ class ReturnRefreshTokenView(APIView):
     """
     リフレッシュトークンを返す
     """
+    permissions_classes = [permissions.AllowAny]
+    authentication_classes = []
+
     def get(self, request):
         try:
             token = request.COOKIES["refresh_token"]
@@ -81,7 +84,8 @@ class TokenDeleteView(APIView):
     """
     Cookieに保存しているTokenを削除する
     """
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny]
+    authentication_classes = []
 
     def get(self, request, *args, **kwargs):
         res = response.Response(status=status.HTTP_200_OK)
