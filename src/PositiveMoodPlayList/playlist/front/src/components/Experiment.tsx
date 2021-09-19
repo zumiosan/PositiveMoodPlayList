@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useCookies } from "react-cookie";
 import { apiURL } from "../index"
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -11,7 +10,6 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Grid from "@material-ui/core/Grid";
 import axios from "axios";
-import Cookies from "universal-cookie";
 
 const useStyles = makeStyles({
   table: {
@@ -34,20 +32,8 @@ export default function Experiment() {
     // 実験情報データ
     const [exptList, setExptList] = useState<{[index: string]: number | boolean}[]>();
 
-    // Cookie
-    const [accessToken, setAccessToken] = useCookies(["accesstoken"]);
-    const [refreshToken, setRefreshToken] = useCookies(["refreshtoken"]);
-    const cookies = new Cookies();
-
     useEffect(() => {
         (async () => {
-            // const res = await fetch(
-            //     `${apiURL}playlist/exinfo/`,
-            //     {
-            //         method: "GET",
-            //         credentials: "same-origin"
-            //     }
-            // )
             const res = await axios.get(
                 `${apiURL}playlist/exinfo/`,
                 { withCredentials: true }

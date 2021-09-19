@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
-import { useCookies } from "react-cookie";
 import Button from "@material-ui/core/Button";
-import { LoggedInContext } from "../index";
+import {apiURL, LoggedInContext} from "../index";
 import { useHistory } from "react-router-dom";
+import axios from "axios";
 
 
 export default function LogoutButton() {
@@ -11,11 +11,11 @@ export default function LogoutButton() {
     const loggedInContext = useContext(LoggedInContext)!;
     const [setIsLoggedIn] = [loggedInContext.setLoggedIn];
 
-    const [cookie, setCookie, removeCookie] = useCookies();
-
-    const handleLogout = () => {
-        removeCookie("accesstoken");
-        removeCookie("refreshtoken");
+    const handleLogout = async () => {
+        const res = await axios.get(
+            `${apiURL}account/logout/`,
+            { withCredentials: true }
+        );
         setIsLoggedIn(false);
         history.push("/");
     }
