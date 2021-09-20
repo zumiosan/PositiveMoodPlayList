@@ -56,15 +56,14 @@ export default function Experiment() {
                                 exptList.map((row) => (
                                     <TableRow>
                                         <TableCell align={"center"}>
-                                            <Link to={"/experiment/detail/" + String(row.ex_id) }>
+                                            <Link to={"/experiment/detail/" + String(row.ex_id) + String(row.playlist_type) }>
                                                 {row.ex_id}
                                             </Link>
                                         </TableCell>
                                         <TableCell align="center">
-                                            {row.is_finished && (
+                                            {row.is_finished ? (
                                                 "完了"
-                                            )}
-                                            {!row.is_finished && (
+                                            ) : (
                                                 "未完"
                                             )}
                                         </TableCell>

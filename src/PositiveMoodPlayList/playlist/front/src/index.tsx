@@ -42,7 +42,7 @@ export default function App() {
                         <Route exact path={"/experiment"}>
                             <Experiment />
                         </Route>
-                        <Route path={"/experiment/detail/:exptId"}>
+                        <Route path={"/experiment/detail/:exptInfo"}>
                             <ExperimentDetail />
                         </Route>
                     </Switch>

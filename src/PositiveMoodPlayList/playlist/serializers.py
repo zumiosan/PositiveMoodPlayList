@@ -14,4 +14,4 @@ class ExperimentInfoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ExperimentInfo
-        fields = ['ex_id', 'is_finished', 'playlist_mid']
+        fields = ['ex_id', 'is_finished', 'playlist_mid', 'playlist_type']

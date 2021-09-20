@@ -1,6 +1,9 @@
 import axios from "axios";
 import {apiURL} from "../../index";
 
+axios.defaults.xsrfCookieName = 'csrftoken'
+axios.defaults.xsrfHeaderName = "X-CSRFTOKEN"
+
 // 実験トップ画面のデータ取得
 export async function getExperimentInfo() {
     const res = await axios.get(
@@ -13,9 +16,9 @@ export async function getExperimentInfo() {
     return false;
 }
 
-export async function completeExperiment(data: {[index: string]: number}) {
+export async function completeExperiment(data: { ex_id: string; playlist_mid: number[]; is_finished: boolean }) {
     const res = await axios.put(
-        `${apiURL}account/expt-info/`,
+        `${apiURL}playlist/expt-info/`,
         data,
         { withCredentials: true }
     );
