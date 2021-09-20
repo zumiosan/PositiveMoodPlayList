@@ -1,3 +1,4 @@
+from django.middleware.csrf import get_token
 from django.http import JsonResponse
 from django.conf import settings
 from rest_framework import status, response, permissions
@@ -36,6 +37,10 @@ class TokenObtainView(jwt_views.TokenObtainPairView):
             expires=settings.SIMPLE_JWT['REFRESH_TOKEN_LIFETIME'],
             httponly=True,
         )
+
+        # csrftokenを設定
+        get_token(request)
+
         return res
 
 
