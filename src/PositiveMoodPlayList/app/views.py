@@ -1,4 +1,3 @@
-from django.http.request import validate_host
 from rest_framework import generics, permissions, status
 from rest_framework.validators import ValidationError
 from rest_framework.response import Response
@@ -12,6 +11,7 @@ class AccountRegister(generics.CreateAPIView):
     アカウント登録を行う
     """
     permission_classes = [permissions.AllowAny]
+    authentication_classes = []
     serializer_class = AccountSerializer
     queryset = Account.objects.all()
 

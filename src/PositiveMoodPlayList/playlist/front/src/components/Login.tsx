@@ -1,10 +1,9 @@
 import React, { useContext } from "react";
-import { useCookies } from 'react-cookie';
 import { useForm } from "react-hook-form";
 import { useHistory } from "react-router-dom";
 import { Button, TextField, Grid } from "@material-ui/core";
-import { apiURL } from "../index";
 import { LoggedInContext } from "../index";
+import { login } from "./modules/apiJwt";
 
 export default function Login() {
     // ページ遷移の際に利用する.
@@ -14,28 +13,13 @@ export default function Login() {
     const loggedInContext = useContext(LoggedInContext)!;
     const [setIsLoggedIn] = [loggedInContext.setLoggedIn];
 
-    // Cookieを扱う
-    const [cookie, setCookie] = useCookies();
     // フォーム
     const { register, handleSubmit, watch, formState: { errors } } = useForm();
 
     // APIにusername, passwordを送信してJWTトークンを取得してCookieに保存
-    const getJwt = async(data: object) => {
-        console.log(data);
-        const res = await fetch(
-            `${apiURL}token/`,
-            {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
-            }
-        );
-        const jwtToken = await res.json();
-        console.log(jwtToken)
-        setCookie('accesstoken', jwtToken['access'], { path: '/', httpOnly: false });
-        setCookie('refreshtoken', jwtToken['refresh'], { path: '/', httpOnly: false });
+    const getJwt = async(data: {[index: string]: string}) => {
+        const res = await login(data);
+        console.log(res)
         setIsLoggedIn(true);
         history.push('/');
     }
