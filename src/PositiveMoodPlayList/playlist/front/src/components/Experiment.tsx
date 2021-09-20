@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { apiURL } from "../index"
 import { makeStyles } from '@material-ui/core/styles';
+import { Link } from 'react-router-dom'
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -9,7 +9,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Grid from "@material-ui/core/Grid";
-import axios from "axios";
+import { getExperimentInfo } from "./modules/apiExperiment";
 
 const useStyles = makeStyles({
   table: {
@@ -34,41 +34,47 @@ export default function Experiment() {
 
     useEffect(() => {
         (async () => {
-            const res = await axios.get(
-                `${apiURL}playlist/exinfo/`,
-                { withCredentials: true }
-            )
-            console.log(res);
+            const res = await getExperimentInfo();
+            setExptList(res)
         })();
     }, [])
 
 
     return (
         <Grid container alignItems={"center"} justifyContent={"center"}>
-          <Grid item>
-            <TableContainer component={Paper}>
-                <Table className={classes.table} size="small" aria-label="a dense table">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>実験番号</TableCell>
-                      <TableCell>完了状態</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {rows.map((row) => (
-                      <TableRow key={row.name}>
-                        <TableCell component="th" scope="row">
-                          {row.name}
-                        </TableCell>
-                        <TableCell align="right">{row.calories}</TableCell>
-                        <TableCell align="right">{row.fat}</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-            </TableContainer>
-          </Grid>
+            <Grid item>
+                <TableContainer component={Paper}>
+                    <Table className={classes.table} size="small" aria-label="a dense table">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell align={"center"}>実験番号</TableCell>
+                                <TableCell align={"center"}>完了状態</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {exptList != undefined && (
+                                exptList.map((row) => (
+                                    <TableRow>
+                                        <TableCell align={"center"}>
+                                            <Link to={"/experiment/detail/" + String(row.ex_id) }>
+                                                {row.ex_id}
+                                            </Link>
+                                        </TableCell>
+                                        <TableCell align="center">
+                                            {row.is_finished && (
+                                                "完了"
+                                            )}
+                                            {!row.is_finished && (
+                                                "未完"
+                                            )}
+                                        </TableCell>
+                                    </TableRow>
+                                ))
+                            )}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </Grid>
         </Grid>
-
     );
 }
