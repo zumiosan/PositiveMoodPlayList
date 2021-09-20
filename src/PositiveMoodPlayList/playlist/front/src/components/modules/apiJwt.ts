@@ -8,7 +8,7 @@ export async function login(data: {[index: string]: string}) {
         data,
         { withCredentials: true }
     );
-    return res
+    return res.status == 200;
 }
 
 // ログアウト処理用
@@ -17,7 +17,7 @@ export async function logout() {
         `${apiURL}account/logout/`,
         { withCredentials: true }
     );
-    return res
+    return res.status == 200;
 }
 
 // リフレッシュトークン取得用
@@ -26,7 +26,7 @@ export async function getRefreshToken() {
         `${apiURL}account/refresh-token/`,
         { withCredentials: true }
     );
-    return res
+    return res;
 }
 
 // トークンのリフレッシュ用
@@ -40,6 +40,6 @@ export async function refreshToken(data: {[index:string]: string}) {
             },
             withCredentials : true
         }
-    )
-    return res
+    );
+    return res.status == 200;
 }
