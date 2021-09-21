@@ -43,3 +43,12 @@ export async function refreshToken(data: {[index:string]: string}) {
     );
     return res.status == 200;
 }
+
+// ユーザー情報の取得
+export async function getUserInfo() {
+    const res = await axios.get(
+        `${apiURL}account/get/`,
+        { withCredentials: true }
+    );
+    return res.status == 200;
+}
