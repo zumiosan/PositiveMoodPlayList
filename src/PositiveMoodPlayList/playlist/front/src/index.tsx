@@ -1,8 +1,11 @@
-import React, { useContext, createContext, useState } from 'react';
+import React, {useContext, createContext, useState, useEffect} from 'react';
 import ReactDOM from 'react-dom';
 import {Switch, Route, BrowserRouter, Link} from "react-router-dom";
 import Login from "./components/Login";
 import Header from "./components/Header";
+import Experiment from "./components/Experiment";
+import ExperimentDetail from "./components/ExperimentDetail";
+import {getUserInfo} from "./components/modules/apiJwt";
 
 export const apiURL = 'http://localhost:8000/';
 
@@ -24,6 +27,13 @@ export default function App() {
         setLoggedIn: setIsLoggedIn
     };
 
+    useEffect(() => {
+        (async () => {
+            const res = await getUserInfo();
+            setIsLoggedIn(res);
+        })();
+    }, []);
+
 
     return(
         <div>
@@ -34,11 +44,14 @@ export default function App() {
                         <Route exact path="/">
 
                         </Route>
-                        <Route path="/login">
+                        <Route exact path="/login">
                             <Login />
                         </Route>
-                        <Route path={"/experiment"}>
-
+                        <Route exact path={"/experiment"}>
+                            <Experiment />
+                        </Route>
+                        <Route path={"/experiment/detail/:exptInfo"}>
+                            <ExperimentDetail />
                         </Route>
                     </Switch>
                 </LoggedInContext.Provider>
