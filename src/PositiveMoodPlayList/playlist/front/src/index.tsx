@@ -1,10 +1,11 @@
-import React, { useContext, createContext, useState } from 'react';
+import React, {useContext, createContext, useState, useEffect} from 'react';
 import ReactDOM from 'react-dom';
 import {Switch, Route, BrowserRouter, Link} from "react-router-dom";
 import Login from "./components/Login";
 import Header from "./components/Header";
 import Experiment from "./components/Experiment";
 import ExperimentDetail from "./components/ExperimentDetail";
+import {getUserInfo} from "./components/modules/apiJwt";
 
 export const apiURL = 'http://localhost:8000/';
 
@@ -25,6 +26,13 @@ export default function App() {
         isLoggedIn: isLoggedIn,
         setLoggedIn: setIsLoggedIn
     };
+
+    useEffect(() => {
+        (async () => {
+            const res = await getUserInfo();
+            setIsLoggedIn(res);
+        })();
+    }, []);
 
 
     return(
