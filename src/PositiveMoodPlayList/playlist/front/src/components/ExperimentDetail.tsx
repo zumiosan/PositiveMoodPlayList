@@ -40,8 +40,8 @@ export default function ExperimentDetail() {
     }
 
     return (
-        <Grid container alignItems={"center"} justifyContent={"center"}>
-            <Grid item xs={8}>
+        <Grid container alignItems={"center"} justifyContent={"center"} spacing={4}>
+            <Grid item>
                 <Stepper activeStep={activeStep} alternativeLabel>
                     {steps.map((label, index) => {
                         const stepProps: { completed?: boolean } = {};
@@ -52,82 +52,88 @@ export default function ExperimentDetail() {
                         );
                     })}
                 </Stepper>
-                {activeStep === steps.length ? (
-                    <Fragment>
-                        <Typography variant={"body1"}>
+            </Grid>
+            {activeStep === steps.length ? (
+                <Grid item container justifyContent={"center"}>
+                     <Grid item>
+                        <Typography variant={"body1"} align={"center"}>
                             実験完了
                         </Typography>
-                        <Box sx={{display: 'flex', flexDirection: 'row', pt: 2 }}>
-                            <Box sx={{ flex: '1 1 auto' }} />
-                            <Button
-                              color="inherit"
-                              onClick={handleBack}
-                            >
-                              Back
-                            </Button>
-                            <Button>
-                                <Link to={"/experiment"}>
-                                    To Top Page
-                                </Link>
-                            </Button>
-                        </Box>
-                    </Fragment>
-                ) : activeStep === 2 ? (
-                    <Fragment>
-                        <Typography variant={"body1"}>
+                    </Grid>
+                    <Grid item>
+                        <Button
+                          color="inherit"
+                          onClick={handleBack}
+                        >
+                          Back
+                        </Button>
+                        <Button>
+                            <Link to={"/experiment"}>
+                                To Top Page
+                            </Link>
+                        </Button>
+                    </Grid>
+                </Grid>
+            ) : activeStep === 2 ? (
+                <Grid container>
+                    <Grid item xs={12}>
+                        <Typography variant={"body1"} align={"center"}>
                             このリンク先の実験後アンケートに回答してください．
                         </Typography>
-                        <Box sx={{display: 'flex', flexDirection: 'row', pt: 2 }}>
-                            <Box sx={{ flex: '1 1 auto' }} />
-                            <Button
-                              color="inherit"
-                              onClick={handleBack}
-                            >
-                              Back
-                            </Button>
-                            <Button onClick={handleComplete}>
-                                Next
-                            </Button>
-                        </Box>
-                    </Fragment>
-                ) : activeStep === 1 ? (
-                    <Fragment>
-                        <Typography variant={"body1"}>
+                    </Grid>
+                    <Grid item>
+                        <Button
+                          color="inherit"
+                          onClick={handleBack}
+                        >
+                          Back
+                        </Button>
+                        <Button onClick={handleComplete}>
+                            Next
+                        </Button>
+                    </Grid>
+                </Grid>
+            ) : activeStep === 1 ? (
+                <Grid container>
+                    <Grid item xs={12}>
+                        <Typography variant={"body1"} align={"center"}>
                             プレイリストを再生して聴取してください．
                         </Typography>
-                        <Box sx={{display: 'flex', flexDirection: 'row', pt: 2 }}>
-                            <Box sx={{ flex: '1 1 auto' }} />
-                            <Button
-                              color="inherit"
-                              onClick={handleBack}
-                            >
-                              Back
-                            </Button>
-                            <Button onClick={handleNext}>
-                                Next
-                            </Button>
-                        </Box>
-                    </Fragment>
-                ) : activeStep === 0 && (
-                    <Fragment>
-                        <Typography variant={"body1"}>
+                    </Grid>
+                    <Grid item>
+                        <Button
+                          color="inherit"
+                          onClick={handleBack}
+                        >
+                          Back
+                        </Button>
+                        <Button onClick={handleNext}>
+                            Next
+                        </Button>
+                    </Grid>
+                </Grid>
+            ) : activeStep === 0 && (
+                <Grid container>
+                    <Grid item xs={12}>
+                        <Typography variant={"body1"} align={"center"}>
                             このリンク先の実験前アンケートに回答してください．
                         </Typography>
-                        <Box sx={{display: 'flex', flexDirection: 'row', pt: 2 }}>
-                            <Box sx={{ flex: '1 1 auto' }} />
-                            <Button
-                              color="inherit"
-                              disabled
-                            >
-                              Back
-                            </Button>
-                            <Button onClick={handleNext}>
-                                Next
-                            </Button>
-                        </Box>
-                    </Fragment>
-                )}
-            </Grid>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Button
+                          color="inherit"
+                          disabled
+                        >
+                          Back
+                        </Button>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Button onClick={handleNext}>
+                            Next
+                        </Button>
+                    </Grid>
+                </Grid>
+            )}
         </Grid>
     )
 }

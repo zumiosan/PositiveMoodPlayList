@@ -53,8 +53,8 @@ export default function Experiment() {
                         </TableHead>
                         <TableBody>
                             {exptList != undefined && (
-                                exptList.map((row) => (
-                                    <TableRow>
+                                exptList.map((row, index) => (
+                                    <TableRow key={index}>
                                         <TableCell align={"center"}>
                                             <Link to={"/experiment/detail/" + String(row.ex_id) + String(row.playlist_type) }>
                                                 {row.ex_id}
