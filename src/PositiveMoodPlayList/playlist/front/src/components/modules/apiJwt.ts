@@ -1,6 +1,9 @@
 import axios from "axios";
 import {apiURL} from "../../index";
 
+axios.defaults.xsrfCookieName = 'csrftoken'
+axios.defaults.xsrfHeaderName = "X-CSRFTOKEN"
+
 // ログイン処理用
 export async function login(data: {[index: string]: string}) {
     const res = await axios.post(

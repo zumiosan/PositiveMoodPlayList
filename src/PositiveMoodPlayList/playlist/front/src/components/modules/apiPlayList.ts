@@ -1,8 +1,8 @@
 import axios from "axios";
 import {apiURL} from "../../index";
 
-// axios.defaults.xsrfCookieName = 'csrftoken'
-// axios.defaults.xsrfHeaderName = "X-CSRFTOKEN"
+axios.defaults.xsrfCookieName = 'csrftoken'
+axios.defaults.xsrfHeaderName = "X-CSRFTOKEN"
 
 export interface CreatePlayListInterface {
     transition: string[]
