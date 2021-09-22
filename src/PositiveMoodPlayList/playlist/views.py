@@ -33,15 +33,13 @@ class ExperimentInfoView(APIView):
         return Response(status=status.HTTP_200_OK)
 
 
-
-
 class CreatePlaylistView(APIView):
     """
     プレイリストを生成する．
     """
     permission_classes = [permissions.AllowAny]
 
-    def get(self, request):
+    def post(self, request):
         mid = CreatePlayList.create_playlist(0, 0, 'test')
         # print(mid)
         return Response(data=mid, status=status.HTTP_200_OK)
