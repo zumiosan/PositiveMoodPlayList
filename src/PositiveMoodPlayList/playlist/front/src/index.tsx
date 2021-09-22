@@ -76,7 +76,6 @@ export default function App() {
                 </LoggedInContext.Provider>
             </BrowserRouter>
         </div>
-
     );
 }
 
