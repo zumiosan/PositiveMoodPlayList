@@ -26,10 +26,12 @@ export default function MusicPlayer() {
     const playListContext = useContext(PlayListContext)!;
     const [playList] = [playListContext.playList];
 
+    const audio = document.getElementsByTagName("audio")[0];
+
     return (
         <Fragment>
             <Box component={"footer"} className={classes.footer} bgcolor={"#3f51b5"}>
-                <audio src={'sample.wav'} controls className={classes.audio}></audio>
+                <audio src={'sample.wav'} controls className={classes.audio} />
                 <Grid container>
 
                 </Grid>
