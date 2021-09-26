@@ -30,7 +30,7 @@ export default function App() {
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
     // プレイリスト再生楽曲リスト
-    const [playList, setPlayList] = useState<number[]>([]);
+    const [playList, setPlayList] = useState<number[]>([1255, 2303, 3647, 4162, 4252]);
 
     //子コンポーネントに送るもの
     const loggedInContext: LoggedInContextInterface = {

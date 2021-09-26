@@ -39,8 +39,11 @@ export default function MusicPlayer() {
     const playListContext = useContext(PlayListContext)!;
     const [playList] = [playListContext.playList];
 
+    // プレイリストの再生楽曲の箇所
+    const playListIndex = useRef<number>(0);
+
     // 楽曲ファイルのパス
-    const [src, setSrc] = useState<string>('http://goldfirestudios.com/proj/howlerjs/sound.ogg');
+    const [src, setSrc] = useState<string>('/asset/');
 
     // 再生中かどうか
     const [isPlay, setIsPlay] = useState<boolean>(false);
@@ -65,10 +68,16 @@ export default function MusicPlayer() {
         setVolume: setVolume,
     }
 
+    // プレイリストが更新された時
+    useEffect(() => {
+        const src = '/asset/' + String(playList[0]).padStart(6, '0') + '.wav';
+        setSrc(src);
+    }, [playList]);
+
     // 再生ボタンを押した時
     const handlePlay = () => {
         setIsPlay(true);
-        interval.current = setInterval(getPosition, 1000);
+        interval.current = setInterval(getPosition, 10);
     };
 
     // 一時停止ボタンを押した時
@@ -93,9 +102,39 @@ export default function MusicPlayer() {
         player.current!.seek(position);
     }, [position])
 
+    // 曲をセット
+    const handleSet = () => {
+        // 再生をストップ
+        player.current!.stop();
+
+        // 次の楽曲がない場合は最初の楽曲をセットして停止
+        if (playListIndex.current == playList.length || playListIndex.current == -1) {
+            clearInterval(Number(interval.current));
+            setIsPlay(false);
+            playListIndex.current = 0;
+        }
+
+        // 次の曲をセット
+        const src = '/asset/' + String(playList[playListIndex.current]).padStart(6, '0') + '.wav';
+        setSrc(src);
+    };
+
+    // 次の曲を再生
+    const handleNext = () => {
+        playListIndex.current += 1;
+        handleSet();
+    };
+
+    // 前の曲を再生
+    const handlePrevious = () => {
+        playListIndex.current -= 1;
+        handleSet();
+    };
+
     // 再生が終了した時
     const handleOnEnd = () => {
-
+        playListIndex.current += 1;
+        handleSet();
     };
 
     return (
@@ -105,6 +144,7 @@ export default function MusicPlayer() {
                 playing={isPlay}
                 volume={volume / 100}
                 onLoad={handleOnLoad}
+                onEnd={handleOnEnd}
                 ref={(ref) => (player.current = ref)}
             />
             <PlayerContext.Provider value={playerContext}>
@@ -127,7 +167,7 @@ export default function MusicPlayer() {
                         <Grid item container xs={8} sm={4}>
                             <Grid item container xs={12} alignItems={"center"} justifyContent={"center"}>
                                 <Grid item>
-                                    <IconButton>
+                                    <IconButton onClick={handlePrevious}>
                                         <SkipPreviousIcon sx={{color:"white", fontSize:"150%"}} />
                                     </IconButton>
                                 </Grid>
@@ -143,7 +183,7 @@ export default function MusicPlayer() {
                                     )}
                                 </Grid>
                                 <Grid item>
-                                    <IconButton >
+                                    <IconButton onClick={handleNext}>
                                         <SkipNextIcon sx={{color:"white", fontSize:"150%"}} />
                                     </IconButton>
                                 </Grid>
