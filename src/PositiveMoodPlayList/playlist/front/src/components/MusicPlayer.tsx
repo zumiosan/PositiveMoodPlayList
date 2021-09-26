@@ -73,8 +73,13 @@ export default function MusicPlayer() {
                     bgcolor: "#3f51b5"
                 }}>
                     <Grid container justifyContent={"center"} alignItems={"center"} spacing={2}>
-                        <Grid item xs={2} sm={4}>
-
+                        <Grid item container xs={2} sm={4}>
+                            <Grid item sx={{display: { xs: 'block', sm: 'none' }}}>
+                                <ImpressionMenu />
+                            </Grid>
+                            <Grid item sx={{display: { xs: 'block', sm: 'none' }}}>
+                                <ImpressionWordMenu />
+                            </Grid>
                         </Grid>
                         <audio src={'sample.wav'} controls style={{display: "none"}} />
                         <Grid item container xs={8} sm={4}>
@@ -104,9 +109,15 @@ export default function MusicPlayer() {
                             <PlayerSlider />
                         </Grid>
                         <Grid item container xs={2} sm={4} justifyContent={"center"} spacing={1}>
-                            <ImpressionMenu />
-                            <ImpressionWordMenu />
-                            <VolumeButton />
+                            <Grid item sx={{display: { xs: 'none', sm: 'inline' }}}>
+                                <ImpressionMenu />
+                            </Grid>
+                            <Grid item sx={{display: { xs: 'none', sm: 'inline' }}}>
+                                <ImpressionWordMenu />
+                            </Grid>
+                            <Grid item sx={{display: { xs: 'block', sm: 'inline' }}}>
+                                <VolumeButton />
+                            </Grid>
                         </Grid>
                     </Grid>
                 </Box>

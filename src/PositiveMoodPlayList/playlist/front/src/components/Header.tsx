@@ -79,7 +79,7 @@ export default function Header() {
                 marginBottom: 15,
             }}
         >
-            <AppBar position={"static"} sx={{bgcolor: "#3f51b5"}}>
+            <AppBar position={"fixed"} sx={{bgcolor: "#3f51b5"}}>
                 <Toolbar>
                     <IconButton
                         edge={"start"}

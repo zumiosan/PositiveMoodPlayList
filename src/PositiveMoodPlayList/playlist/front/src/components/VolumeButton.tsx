@@ -40,50 +40,48 @@ export default function VolumeButton() {
 
     return (
         <Fragment>
-            <Grid item sx={{display: { xs: 'none', sm: 'inline' }}}>
-                <IconButton
-                    sx={{
-                        color:"white",
-                    }}
-                    onClick={handleClick}
-                >
-                    <VolumeUpIcon />
-                </IconButton>
-                <Menu
-                    id="basic-menu"
-                    anchorEl={anchorEl}
-                    open={open}
-                    onClose={handleClose}
-                    anchorOrigin={{ vertical: "top", horizontal: "center" }}
-                    transformOrigin={{ vertical: "bottom", horizontal: "center" }}
-                    MenuListProps={{
-                      'aria-labelledby': 'basic-button',
-                    }}
-                    PaperProps={{
-                        style: {
-                            maxHeight: 100 * 4.5,
-                        },
-                    }}
-                >
-                    <MenuItem>
-                        <Box sx={{height: 200}}>
-                            <Slider
-                                sx={{
-                                    '& input[type="range"]': {
-                                        WebkitAppearance: 'slider-vertical',
-                                    },
-                                }}
-                                orientation="vertical"
-                                min={0}
-                                max={100}
-                                defaultValue={50}
-                                value={volume.current}
-                                onChange={(_, value) => handleChangeVolume(value as number)}
-                            />
-                        </Box>
-                    </MenuItem>
-                </Menu>
-            </Grid>
+            <IconButton
+                sx={{
+                    color:"white",
+                }}
+                onClick={handleClick}
+            >
+                <VolumeUpIcon />
+            </IconButton>
+            <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                anchorOrigin={{ vertical: "top", horizontal: "center" }}
+                transformOrigin={{ vertical: "bottom", horizontal: "center" }}
+                MenuListProps={{
+                  'aria-labelledby': 'basic-button',
+                }}
+                PaperProps={{
+                    style: {
+                        maxHeight: 100 * 4.5,
+                    },
+                }}
+            >
+                <MenuItem>
+                    <Box sx={{height: 200}}>
+                        <Slider
+                            sx={{
+                                '& input[type="range"]': {
+                                    WebkitAppearance: 'slider-vertical',
+                                },
+                            }}
+                            orientation="vertical"
+                            min={0}
+                            max={100}
+                            defaultValue={50}
+                            value={volume.current}
+                            onChange={(_, value) => handleChangeVolume(value as number)}
+                        />
+                    </Box>
+                </MenuItem>
+            </Menu>
         </Fragment>
     )
 }

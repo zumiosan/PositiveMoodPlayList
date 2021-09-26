@@ -24,36 +24,34 @@ export default function ImpressionMenu() {
     };
     return (
         <Fragment>
-            <Grid item sx={{display: { xs: 'none', sm: 'inline' }}}>
-                <IconButton
-                    sx={{
-                        color:"white",
-                    }}
-                    onClick={handleClick}
-                >
-                    <TagFacesIcon />
-                </IconButton>
-                <Menu
-                    id="basic-menu"
-                    anchorEl={anchorEl}
-                    open={open}
-                    onClose={handleClose}
-                    anchorOrigin={{ vertical: "top", horizontal: "center" }}
-                    transformOrigin={{ vertical: "bottom", horizontal: "center" }}
-                    MenuListProps={{
-                      'aria-labelledby': 'basic-button',
-                    }}
-                    PaperProps={{
-                        style: {
-                            maxHeight: 100 * 4.5,
-                        },
-                    }}
-                >
-                    {impressions.map((text) => (
-                        <MenuItem key={text} onClick={handleClose}>{text}</MenuItem>
-                    ))}
-                </Menu>
-            </Grid>
+            <IconButton
+                sx={{
+                    color:"white",
+                }}
+                onClick={handleClick}
+            >
+                <TagFacesIcon />
+            </IconButton>
+            <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                anchorOrigin={{ vertical: "top", horizontal: "center" }}
+                transformOrigin={{ vertical: "bottom", horizontal: "center" }}
+                MenuListProps={{
+                  'aria-labelledby': 'basic-button',
+                }}
+                PaperProps={{
+                    style: {
+                        maxHeight: 100 * 4.5,
+                    },
+                }}
+            >
+                {impressions.map((text) => (
+                    <MenuItem key={text} onClick={handleClose}>{text}</MenuItem>
+                ))}
+            </Menu>
         </Fragment>
     )
 }
