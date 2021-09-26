@@ -15,15 +15,15 @@ const TinyText = styled(Typography)({
 export default function PlayerSlider() {
 
     const playerContext = useContext(PlayerContext)!;
-    const [duration, setPosition] = [playerContext.duration, playerContext.setPosition];
-
-    //シークバーのポジション
-    const position = useRef<number>(50);
+    const [duration, position, setPosition] = [
+        playerContext.duration,
+        playerContext.position,
+        playerContext.setPosition
+    ];
 
     //ポジション変更時
     const handleMovePosition = (value:number) => {
         setPosition(value);
-        position.current = value;
     };
 
     // 再生時間のフォーマット
@@ -39,7 +39,7 @@ export default function PlayerSlider() {
                 <Slider
                     aria-label="time-indicator"
                     size="small"
-                    value={position.current}
+                    value={position}
                     min={0}
                     step={1}
                     max={duration}
@@ -68,8 +68,8 @@ export default function PlayerSlider() {
                     mt: -2,
                 }}
             >
-                <TinyText>{formatDuration(position.current)}</TinyText>
-                <TinyText>-{formatDuration(duration - position.current)}</TinyText>
+                <TinyText>{formatDuration(position)}</TinyText>
+                <TinyText>-{formatDuration(duration - position)}</TinyText>
             </Grid>
         </Fragment>
     )
