@@ -7,6 +7,7 @@ import Experiment from "./components/Experiment";
 import ExperimentDetail from "./components/ExperimentDetail";
 import {getUserInfo} from "./components/modules/apiJwt";
 import MusicPlayer from "./components/MusicPlayer";
+import Box from "@mui/material/Box";
 
 export const apiURL = 'http://localhost:8000/';
 
@@ -50,7 +51,7 @@ export default function App() {
 
 
     return(
-        <div>
+        <Box component={"div"}>
             <BrowserRouter>
                 <LoggedInContext.Provider value={loggedInContext}>
                     <Header />
@@ -75,7 +76,7 @@ export default function App() {
                     </PlayListContext.Provider>
                 </LoggedInContext.Provider>
             </BrowserRouter>
-        </div>
+        </Box>
     );
 }
 

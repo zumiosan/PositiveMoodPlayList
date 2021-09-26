@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import Button from "@material-ui/core/Button";
+import Button from "@mui/material/Button";
 import { LoggedInContext } from "../index";
 import { useHistory } from "react-router-dom";
 import { logout } from "./modules/apiJwt";

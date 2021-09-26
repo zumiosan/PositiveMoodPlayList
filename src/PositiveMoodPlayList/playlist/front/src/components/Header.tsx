@@ -1,44 +1,20 @@
 import React, { useState, useContext } from "react";
 import { Link } from 'react-router-dom'
-import { createStyles, makeStyles, Theme } from "@material-ui/core";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from '@material-ui/core/Typography';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import Drawer from '@material-ui/core/Drawer';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
+import Drawer from '@mui/material/Drawer';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
 import { LoggedInContext } from "../index";
 import LoginButton from "./LoginButton";
 import LogoutButton from "./LogoutButton";
-
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-      root: {
-          flexGrow: 1,
-          marginBottom: 15
-      },
-      menuButton: {
-        marginRight: theme.spacing(2),
-      },
-      title: {
-        flexGrow: 1,
-      },
-      list: {
-        width: 250,
-      },
-      fullList: {
-          width: 'auto'
-      },
-  }),
-);
+import Box from "@mui/material/Box";
 
 export default function Header() {
-    // UI用のstyle
-    const classes = useStyles();
 
     //Drawerの表示状態
     const [isOpen, setIsOpen] = useState(false);
@@ -65,11 +41,14 @@ export default function Header() {
     }
 
     const list = () => (
-        <div
-            className={classes.list}
+        <Box
+            component={"div"}
             role={"presentation"}
             onClick={toggleDrawer(false)}
             onKeyDown={toggleDrawer(false)}
+            sx={{
+                width: 250,
+            }}
         >
             <List>
                 {['Home'].map((text, index) => (
@@ -89,26 +68,35 @@ export default function Header() {
                     ))
                 )}
             </List>
-        </div>
+        </Box>
     )
 
     return (
-        <div className={classes.root}>
-            <AppBar position={"static"}>
+        <Box
+            component={"div"}
+            sx={{
+                flexGrow: 1,
+                marginBottom: 15,
+            }}
+        >
+            <AppBar position={"static"} sx={{bgcolor: "#3f51b5"}}>
                 <Toolbar>
                     <IconButton
                         edge={"start"}
-                        className={classes.menuButton}
+                        size={"large"}
                         color={"inherit"}
                         aria-label={"menu"}
                         onClick={toggleDrawer(true)}
+                        sx={{
+                            mr: 2
+                        }}
                     >
                         <MenuIcon />
                     </IconButton>
                     <Drawer open={isOpen} onClose={toggleDrawer(false)}>
                         {list()}
                     </Drawer>
-                    <Typography variant={"h6"} className={classes.title}>
+                    <Typography variant={"h6"} component={"div"} sx={{ flexGrow: 1, mr: 1 }}>
                         PositiveMoodPlayList
                     </Typography>
                     {!isLoggedIn && (
@@ -119,6 +107,6 @@ export default function Header() {
                     )}
                 </Toolbar>
             </AppBar>
-        </div>
+        </Box>
     );
 }
