@@ -10,20 +10,14 @@ import PauseCircleIcon from "@mui/icons-material/PauseCircle";
 import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 import SkipNextIcon from "@mui/icons-material/SkipNext";
 import { PlayListContext } from "../index";
+import MusicInfo from "./MusicInfo";
 import VolumeButton from "./VolumeButton";
 import ReactHowler from "react-howler";
-
-const impressions = [
-    'LL',
-    'LM',
-    'MM',
-    'MH',
-    'HH',
-]
 
 interface PlayerContextInterface {
     duration: number,
     position: number,
+    playListIndex: number,
     setPosition: React.Dispatch<React.SetStateAction<number>>,
     setVolume: React.Dispatch<React.SetStateAction<number>>,
 }
@@ -64,6 +58,7 @@ export default function MusicPlayer() {
     const playerContext: PlayerContextInterface = {
         duration: duration,
         position: position,
+        playListIndex: playListIndex.current,
         setPosition: setPosition,
         setVolume: setVolume,
     }
@@ -156,13 +151,33 @@ export default function MusicPlayer() {
                     bgcolor: "#3f51b5"
                 }}>
                     <Grid container justifyContent={"center"} alignItems={"center"} spacing={2}>
-                        <Grid item container xs={2} sm={4}>
-                            <Grid item sx={{display: { xs: 'block', sm: 'none' }}}>
+                        <Grid
+                            item
+                            container
+                            xs={12}
+                            sx={{display: { sm: 'none'}, color: "white"}}
+                            alignItems={"center"}
+                            spacing={2}
+                        >
+                            <MusicInfo />
+                        </Grid>
+                        <Grid item container xs={2} sx={{display: { xs: 'block', sm: 'none' }}}>
+                            <Grid item>
                                 <ImpressionMenu />
                             </Grid>
-                            <Grid item sx={{display: { xs: 'block', sm: 'none' }}}>
+                            <Grid item>
                                 <ImpressionWordMenu />
                             </Grid>
+                        </Grid>
+                        <Grid
+                            item
+                            container
+                            sm={4}
+                            alignItems={"center"}
+                            color={"white"}
+                            sx={{display: {xs: "none", sm: "inline-flex"}}}
+                        >
+                             <MusicInfo />
                         </Grid>
                         <Grid item container xs={8} sm={4}>
                             <Grid item container xs={12} alignItems={"center"} justifyContent={"center"}>

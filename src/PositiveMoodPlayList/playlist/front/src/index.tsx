@@ -33,8 +33,8 @@ export default function App() {
     const [playList, setPlayList] = useState<{[index:string]: number | string}[]>([
         {
             "mid": 1255,
-            "music_name": "",
-            "artist_name": ""
+            "music_name": "aaa",
+            "artist_name": "aaaaaa"
         },
     ]);
 
