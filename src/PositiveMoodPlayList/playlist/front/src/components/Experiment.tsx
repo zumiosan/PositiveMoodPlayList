@@ -1,24 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@mui/material/styles';
 import { Link } from 'react-router-dom'
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
-import Grid from "@material-ui/core/Grid";
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import Grid from "@mui/material/Grid";
 import { getExperimentInfo } from "./modules/apiExperiment";
 
-const useStyles = makeStyles({
-  table: {
-    minWidth: 650,
-  },
-});
-
 export default function Experiment() {
-    const classes = useStyles();
 
     // 実験情報データ
     const [exptList, setExptList] = useState<{[index: string]: number | boolean}[]>();
@@ -33,9 +26,12 @@ export default function Experiment() {
 
     return (
         <Grid container alignItems={"center"} justifyContent={"center"}>
-            <Grid item>
+            <Grid item xs={10}>
                 <TableContainer component={Paper}>
-                    <Table className={classes.table} size="small" aria-label="a dense table">
+                    <Table
+                        size="small"
+                        aria-label="a dense table"
+                    >
                         <TableHead>
                             <TableRow>
                                 <TableCell align={"center"}>実験番号</TableCell>
