@@ -70,7 +70,7 @@ export default function MusicPlayer() {
 
     // プレイリストが更新された時
     useEffect(() => {
-        const src = '/asset/' + String(playList[0]).padStart(6, '0') + '.wav';
+        const src = '/asset/' + String(playList[0]['mid']).padStart(6, '0') + '.wav';
         setSrc(src);
     }, [playList]);
 
@@ -115,7 +115,7 @@ export default function MusicPlayer() {
         }
 
         // 次の曲をセット
-        const src = '/asset/' + String(playList[playListIndex.current]).padStart(6, '0') + '.wav';
+        const src = '/asset/' + String(playList[playListIndex.current]['mid']).padStart(6, '0') + '.wav';
         setSrc(src);
     };
 

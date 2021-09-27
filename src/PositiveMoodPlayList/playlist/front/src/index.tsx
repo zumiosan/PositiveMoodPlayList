@@ -12,8 +12,8 @@ import Box from "@mui/material/Box";
 export const apiURL = 'http://localhost:8000/';
 
 interface PlayListContextInterface {
-    playList: number[]
-    setPlayList: React.Dispatch<React.SetStateAction<number[]>>
+    playList: {[p: string]: string | number}[]
+    setPlayList: React.Dispatch<React.SetStateAction<{[p: string]: string | number}[]>>
 }
 
 interface LoggedInContextInterface {
@@ -30,7 +30,13 @@ export default function App() {
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
     // プレイリスト再生楽曲リスト
-    const [playList, setPlayList] = useState<number[]>([1255, 2303, 3647, 4162, 4252]);
+    const [playList, setPlayList] = useState<{[index:string]: number | string}[]>([
+        {
+            "mid": 1255,
+            "music_name": "",
+            "artist_name": ""
+        },
+    ]);
 
     //子コンポーネントに送るもの
     const loggedInContext: LoggedInContextInterface = {

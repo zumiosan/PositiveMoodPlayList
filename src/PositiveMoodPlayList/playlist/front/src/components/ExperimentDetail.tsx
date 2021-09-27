@@ -30,9 +30,12 @@ export default function ExperimentDetail() {
                 upDownInfo: [0, -1, -1, -1],
                 isPersonalized: true,
             }
-            playListMid.current = await createPlayList(data);
+            const res = await createPlayList(data);
+            for (let i = 0; i < res.length; i++) {
+                playListMid.current.push(res[i]['mid'] as number);
+            }
             console.log(playListMid.current);
-            setPlayList(playListMid.current);
+            setPlayList(res);
         }
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
     };
