@@ -1,9 +1,9 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions, status
-from .models import ExperimentInfo
+from .models import ExperimentInfo, MusicInfo
 from .modules import CreatePlayList
-from .serializers import ExperimentInfoSerializer
+from .serializers import ExperimentInfoSerializer, MusicInfoSerializer
 from django.core.exceptions import ObjectDoesNotExist
 
 
@@ -37,9 +37,28 @@ class CreatePlaylistView(APIView):
     """
     プレイリストを生成する．
     """
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request):
         mid = CreatePlayList.create_playlist(0, 0, 'test')
+        data_list = []
+        for i in mid:
+            query_set = MusicInfo.objects.filter(mid=i)
+            serializer = MusicInfoSerializer(instance=query_set, many=True)
+            data_list.append(serializer.data)
         # print(mid)
-        return Response(data=mid, status=status.HTTP_200_OK)
+        return Response(data=data_list, status=status.HTTP_200_OK)
+
+
+class MusicInfoView(APIView):
+    """
+    楽曲情報に関するView
+    """
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        """指定された楽曲の情報を返す"""
+        data = request.data
+        print(data)
+        # query_set = MusicInfo.objects.filter(mid=)
+        return Response(status=status.HTTP_200_OK)
