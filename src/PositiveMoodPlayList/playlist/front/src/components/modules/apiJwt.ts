@@ -29,7 +29,7 @@ export async function getRefreshToken() {
         `${apiURL}account/refresh-token/`,
         { withCredentials: true }
     );
-    return res;
+    return res.data;
 }
 
 // トークンのリフレッシュ用
@@ -49,9 +49,21 @@ export async function refreshToken(data: {[index:string]: string}) {
 
 // ユーザー情報の取得
 export async function getUserInfo() {
-    const res = await axios.get(
+    try {
+        const res = await axios.get(
         `${apiURL}account/get/`,
         { withCredentials: true }
-    );
-    return res.status == 200;
+        );
+        return true;
+    } catch (e: any) {
+        // console.log(e.response);
+        return false;
+    }
+}
+
+// リフレッシュ処理
+export async function refresh() {
+    const token = await getRefreshToken();
+    const res = await refreshToken(token);
+    return res
 }

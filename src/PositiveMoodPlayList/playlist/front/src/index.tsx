@@ -5,7 +5,7 @@ import Login from "./components/Login";
 import Header from "./components/Header";
 import Experiment from "./components/Experiment";
 import ExperimentDetail from "./components/ExperimentDetail";
-import {getUserInfo} from "./components/modules/apiJwt";
+import {getRefreshToken, getUserInfo, logout, refresh} from "./components/modules/apiJwt";
 import MusicPlayer from "./components/MusicPlayer";
 import Box from "@mui/material/Box";
 
@@ -50,7 +50,13 @@ export default function App() {
 
     useEffect(() => {
         (async () => {
-            const res = await getUserInfo();
+            let res = await getUserInfo();
+            if (!res) {
+               const isRefresh = await refresh();
+               if (isRefresh) {
+                   res = await getUserInfo();
+               }
+            }
             setIsLoggedIn(res);
         })();
     }, []);
