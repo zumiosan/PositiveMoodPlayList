@@ -45,7 +45,7 @@ class CreatePlaylistView(APIView):
         for i in mid:
             query_set = MusicInfo.objects.filter(mid=i)
             serializer = MusicInfoSerializer(instance=query_set, many=True)
-            data_list.append(serializer.data)
+            data_list.append(serializer.data[0])
         # print(mid)
         return Response(data=data_list, status=status.HTTP_200_OK)
 

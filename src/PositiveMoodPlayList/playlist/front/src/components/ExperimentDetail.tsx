@@ -34,7 +34,6 @@ export default function ExperimentDetail() {
             for (let i = 0; i < res.length; i++) {
                 playListMid.current.push(res[i]['mid'] as number);
             }
-            console.log(playListMid.current);
             setPlayList(res);
         }
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
