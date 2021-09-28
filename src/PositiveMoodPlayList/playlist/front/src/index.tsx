@@ -8,6 +8,7 @@ import ExperimentDetail from "./components/ExperimentDetail";
 import {getRefreshToken, getUserInfo, logout, refresh} from "./components/modules/apiJwt";
 import MusicPlayer from "./components/MusicPlayer";
 import Box from "@mui/material/Box";
+import SelectPlayList from "./components/SelectPlayList";
 
 export const apiURL = 'http://localhost:8000/';
 
@@ -80,6 +81,9 @@ export default function App() {
                             </Route>
                             <Route path={"/experiment/detail/:exptInfo"}>
                                 <ExperimentDetail />
+                            </Route>
+                            <Route path={"/create-playlist"}>
+                                <SelectPlayList />
                             </Route>
                         </Switch>
                         {isLoggedIn && (

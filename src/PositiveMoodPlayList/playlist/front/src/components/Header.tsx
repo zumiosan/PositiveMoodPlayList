@@ -37,7 +37,7 @@ export default function Header() {
     const linkDict:{[index:string]: string} = {
         'Home': "",
         "Experiment": "experiment",
-        "Create PlayList": "create_playlist",
+        "Create PlayList": "create-playlist",
     }
 
     const list = () => (
