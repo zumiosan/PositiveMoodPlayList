@@ -103,10 +103,10 @@ export default function MusicPlayer() {
         player.current!.stop();
 
         // 次の楽曲がない場合は最初の楽曲をセットして停止
-        if (playListIndex.current == playList.length || playListIndex.current == -1) {
+        if (playListIndex.current >= playList.length || playListIndex.current <= -1) {
             clearInterval(Number(interval.current));
-            setIsPlay(false);
             playListIndex.current = 0;
+            setIsPlay(false);
         }
 
         // 次の曲をセット
