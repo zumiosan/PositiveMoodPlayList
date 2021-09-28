@@ -145,7 +145,7 @@ export default function MusicPlayer() {
             <PlayerContext.Provider value={playerContext}>
                 <Box component={"footer"} sx={{
                     width: "100%",
-                    maxHeight: "20%",
+                    maxHeight: "40%",
                     position: "fixed",
                     bottom: "0",
                     bgcolor: "#3f51b5"
