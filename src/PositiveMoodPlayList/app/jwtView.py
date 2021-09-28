@@ -1,5 +1,5 @@
 from django.middleware.csrf import get_token
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.conf import settings
 from rest_framework import status, response, permissions
 from rest_framework.views import APIView
@@ -11,6 +11,7 @@ class TokenObtainView(jwt_views.TokenObtainPairView):
     """
     JWTをCookieにセットして送る
     """
+
     def post(self, request, *args, **kwargs):
         # シリアライザーでバリデーションを行う．
         serializer = self.get_serializer(data=request.data)
@@ -44,26 +45,23 @@ class TokenObtainView(jwt_views.TokenObtainPairView):
         return res
 
 
-class ReturnRefreshTokenView(APIView):
+def refresh_get(request):
     """
     リフレッシュトークンを返す
     """
-    permissions_classes = [permissions.AllowAny]
-    authentication_classes = []
-
-    def get(self, request):
-        try:
-            token = request.COOKIES["refresh_token"]
-            return JsonResponse({"refresh": token}, status=status.HTTP_200_OK)
-        except Exception as e:
-            print(e)
-            return response.Response(status=status.HTTP_400_BAD_REQUEST)
+    try:
+        rt = request.COOKIES["refresh_token"]
+        return JsonResponse({"refresh": rt}, safe=False)
+    except Exception as e:
+        print(e)
+        return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
 
 class TokenRefreshView(jwt_views.TokenRefreshView):
     """
     リフレッシュトークンを使って新しいアクセストークンを作成する
     """
+
     def post(self, request, *args, **kwargs):
         # シリアライザーによるバリデーション
         serializer = self.get_serializer(data=request.data)
@@ -97,5 +95,3 @@ class TokenDeleteView(APIView):
         res.delete_cookie("access_token")
         res.delete_cookie("refresh_token")
         return res
-
-

@@ -1,5 +1,5 @@
 import React from "react";
-import Button from "@material-ui/core/Button";
+import Button from "@mui/material/Button";
 import { useHistory } from "react-router-dom";
 
 
@@ -11,6 +11,11 @@ export default function LoginButton() {
     }
 
     return (
-        <Button color="inherit" onClick={handleLogin}>Login</Button>
+        <Button
+            color="inherit"
+            onClick={handleLogin}
+        >
+            Login
+        </Button>
     );
 }

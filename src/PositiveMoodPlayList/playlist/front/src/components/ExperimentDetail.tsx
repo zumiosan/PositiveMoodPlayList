@@ -1,25 +1,42 @@
-import React, {Fragment, ReactNode, useRef, useState} from "react";
+import React, { Fragment, useState, useContext, useRef } from "react";
 import {useParams, Link} from "react-router-dom";
-import Stepper from "@material-ui/core/Stepper";
-import Step from "@material-ui/core/Step";
-import StepLabel from "@material-ui/core/StepLabel";
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
+import Stepper from "@mui/material/Stepper";
+import Step from "@mui/material/Step";
+import StepLabel from "@mui/material/StepLabel";
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 import {completeExperiment} from "./modules/apiExperiment";
-import Grid from "@material-ui/core/Grid";
+import Grid from "@mui/material/Grid";
+import { PlayListContext } from "../index";
+import { createPlayList, CreatePlayListInterface } from "./modules/apiPlayList";
 
-const steps = ['実験前アンケート', 'プレイリストの聴取', '実験後アンケート']
+const steps = ['実験前アンケート', 'プレイリストの聴取', '実験後アンケート'];
 
 export default function ExperimentDetail() {
     const [activeStep, setActiveStep] = useState<number>(0);
-    const playListMid = useRef<number[]>([]);
+
     const { exptInfo } = useParams<{exptInfo: string}>();
 
+    const playListMid = useRef<number[]>([]);
+
+    const playListContext = useContext(PlayListContext)!;
+    const [setPlayList] = [playListContext.setPlayList];
+
+
     const handleNext = async () => {
+        if (activeStep === 0) {
+            const data: CreatePlayListInterface = {
+                transition: ["hh", "hh", "mh", "mh"],
+                upDownInfo: [0, -1, -1, -1],
+                isPersonalized: true,
+            }
+            const res = await createPlayList(data);
+            for (let i = 0; i < res.length; i++) {
+                playListMid.current.push(res[i]['mid'] as number);
+            }
+            setPlayList(res);
+        }
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
-        // if (activeStep === 1) {
-        //     playListMid.current = await
-        // }
     };
 
     const handleBack = () => {
