@@ -29,6 +29,7 @@ export default function ExperimentDetail() {
                 transition: ["hh", "hh", "mh", "mh"],
                 upDownInfo: [0, -1, -1, -1],
                 isPersonalized: true,
+                isPleasure: true,
             }
             const res = await createPlayList(data);
             for (let i = 0; i < res.length; i++) {

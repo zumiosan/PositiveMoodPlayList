@@ -8,6 +8,7 @@ export interface CreatePlayListInterface {
     transition: string[]
     upDownInfo: number[]
     isPersonalized: boolean
+    isPleasure: boolean
 }
 
 // プレイリストを作成
