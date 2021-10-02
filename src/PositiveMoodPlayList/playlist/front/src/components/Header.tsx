@@ -72,15 +72,8 @@ export default function Header() {
     )
 
     return (
-        <Box
-            component={"div"}
-            sx={{
-                flexGrow: 1,
-                marginBottom: 15,
-            }}
-        >
-            <AppBar position={"fixed"} sx={{bgcolor: "#3f51b5"}}>
-                <Toolbar>
+            <AppBar position={"fixed"} sx={{bgcolor: "#3f51b5", height: "60px"}}>
+                <Toolbar sx={{height: "inherit"}}>
                     <IconButton
                         edge={"start"}
                         size={"large"}
@@ -107,6 +100,5 @@ export default function Header() {
                     )}
                 </Toolbar>
             </AppBar>
-        </Box>
     );
 }

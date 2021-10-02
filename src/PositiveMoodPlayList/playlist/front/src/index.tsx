@@ -37,6 +37,11 @@ export default function App() {
             "music_name": "aaa",
             "artist_name": "aaaaaa"
         },
+        {
+            "mid": 2303,
+            "music_name": "bbb",
+            "artist_name": "aaaaaa"
+        },
     ]);
 
     //子コンポーネントに送るもの
@@ -67,25 +72,27 @@ export default function App() {
         <Box component={"div"}>
             <BrowserRouter>
                 <LoggedInContext.Provider value={loggedInContext}>
-                    <Header />
                     <PlayListContext.Provider value={playListContext}>
-                        <Switch>
-                            <Route exact path="/">
+                        <Header />
+                        <Box sx={{marginTop: "100px", marginBottom: "40%"}}>
+                            <Switch>
+                                <Route exact path="/">
 
-                            </Route>
-                            <Route exact path="/login">
-                                <Login />
-                            </Route>
-                            <Route exact path={"/experiment"}>
-                                <Experiment />
-                            </Route>
-                            <Route path={"/experiment/detail/:exptInfo"}>
-                                <ExperimentDetail />
-                            </Route>
-                            <Route path={"/create-playlist"}>
-                                <SelectPlayList />
-                            </Route>
-                        </Switch>
+                                </Route>
+                                <Route exact path="/login">
+                                    <Login />
+                                </Route>
+                                <Route exact path={"/experiment"}>
+                                    <Experiment />
+                                </Route>
+                                <Route path={"/experiment/detail/:exptInfo"}>
+                                    <ExperimentDetail />
+                                </Route>
+                                <Route path={"/create-playlist"}>
+                                    <SelectPlayList />
+                                </Route>
+                            </Switch>
+                        </Box>
                         {isLoggedIn && (
                             <MusicPlayer />
                         )}
