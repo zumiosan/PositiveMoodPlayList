@@ -5,6 +5,7 @@ axios.defaults.xsrfCookieName = 'csrftoken'
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN"
 
 export interface CreatePlayListInterface {
+    exptType: number
     transition: string[]
     upDownInfo: number[]
     isPersonalized: boolean

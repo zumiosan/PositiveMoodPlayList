@@ -26,8 +26,9 @@ export default function ExperimentDetail() {
     const handleNext = async () => {
         if (activeStep === 0) {
             const data: CreatePlayListInterface = {
-                transition: ["hh", "hh", "mh", "mh"],
-                upDownInfo: [0, -1, -1, -1],
+                exptType: ,
+                transition: [],
+                upDownInfo: [],
                 isPersonalized: true,
                 isPleasure: true,
             }
