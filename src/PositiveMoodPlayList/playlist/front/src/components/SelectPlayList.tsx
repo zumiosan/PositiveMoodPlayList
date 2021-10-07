@@ -15,7 +15,7 @@ export default function SelectPlayList() {
         <Fragment>
             <Grid container spacing={3}>
                 {playlistPattern.map((value) => (
-                    <Grid item container justifyContent={"center"} xs={12} sm={4} key={value}>
+                    <Grid item container justifyContent={"center"} xs={12} sm={6} key={value}>
                         <PlayListCard pattern={value} />
                     </Grid>
                 ))}

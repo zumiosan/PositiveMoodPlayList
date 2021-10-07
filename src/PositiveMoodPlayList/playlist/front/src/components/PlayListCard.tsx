@@ -52,7 +52,7 @@ export const PlayListCard: React.FC<Props> = ({pattern}) => {
 
     return (
         <Fragment>
-            <Card sx={{ minWidth: 345 , maxWidth: 345}}>
+            <Card sx={{ minWidth: "90%"}}>
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="div">
                         {pattern}
