@@ -13,6 +13,7 @@ import { PlayListContext } from "../index";
 import MusicInfo from "./MusicInfo";
 import VolumeButton from "./VolumeButton";
 import ReactHowler from "react-howler";
+import Typography from "@mui/material/Typography";
 
 interface PlayerContextInterface {
     duration: number,
@@ -31,7 +32,7 @@ export default function MusicPlayer() {
 
     //　プレイリストの楽曲
     const playListContext = useContext(PlayListContext)!;
-    const [playList] = [playListContext.playList];
+    const [playList, playListInfo] = [playListContext.playList, playListContext.playListInfo];
 
     // プレイリストの再生楽曲の箇所
     const playListIndex = useRef<number>(0);
@@ -65,6 +66,7 @@ export default function MusicPlayer() {
 
     // プレイリストが更新された時
     useEffect(() => {
+        playListIndex.current = 0;
         const src = '/asset/' + String(playList[0]['mid']).padStart(6, '0') + '.wav';
         setSrc(src);
     }, [playList]);
@@ -145,12 +147,43 @@ export default function MusicPlayer() {
             <PlayerContext.Provider value={playerContext}>
                 <Box component={"footer"} sx={{
                     width: "100%",
-                    maxHeight: "20%",
+                    maxHeight: "200px",
                     position: "fixed",
                     bottom: "0",
                     bgcolor: "#3f51b5"
                 }}>
                     <Grid container justifyContent={"center"} alignItems={"center"} spacing={2}>
+                        {playListInfo['type'] != null && (
+                            <Grid
+                                item
+                                container
+                                xs={12}
+                                sx={{color: "white"}}
+                                alignItems={"center"}
+                                justifyContent={"center"}
+                                spacing={2}
+                            >
+                                <Grid item container alignItems={"center"} justifyContent={"center"} xs={6}>
+                                    <Typography variant="caption" fontSize={20} fontWeight={500}>
+                                        {playListInfo['type']}
+                                    </Typography>
+                                </Grid>
+                                {playListInfo['isPersonalize'] && (
+                                    <Grid item container alignItems={"center"} justifyContent={"center"} xs={3}>
+                                        <Typography>
+                                            Personalize
+                                        </Typography>
+                                    </Grid>
+                                )}
+                                {playListInfo['isPleasure'] && (
+                                    <Grid item container alignItems={"center"} justifyContent={"center"} xs={3}>
+                                        <Typography>
+                                            Pleasure
+                                        </Typography>
+                                    </Grid>
+                                )}
+                            </Grid>
+                        )}
                         <Grid
                             item
                             container

@@ -5,15 +5,18 @@ import Login from "./components/Login";
 import Header from "./components/Header";
 import Experiment from "./components/Experiment";
 import ExperimentDetail from "./components/ExperimentDetail";
-import {getRefreshToken, getUserInfo, logout, refresh} from "./components/modules/apiJwt";
+import {getUserInfo, refresh} from "./components/modules/apiJwt";
 import MusicPlayer from "./components/MusicPlayer";
 import Box from "@mui/material/Box";
+import SelectPlayList from "./components/SelectPlayList";
 
 export const apiURL = 'http://localhost:8000/';
 
 interface PlayListContextInterface {
     playList: {[p: string]: string | number}[]
     setPlayList: React.Dispatch<React.SetStateAction<{[p: string]: string | number}[]>>
+    playListInfo: {[p: string]: string | boolean | null}
+    setPlayListInfo: React.Dispatch<React.SetStateAction<{[p: string]: string | boolean | null}>>
 }
 
 interface LoggedInContextInterface {
@@ -36,7 +39,19 @@ export default function App() {
             "music_name": "aaa",
             "artist_name": "aaaaaa"
         },
+        {
+            "mid": 2303,
+            "music_name": "bbb",
+            "artist_name": "aaaaaa"
+        },
     ]);
+
+    // プレイリスト情報
+    const [playListInfo, setPlayListInfo] = useState<{[index:string]: string | boolean | null}>({
+        "type": null,
+        "isPersonalize": false,
+        "isPleasure": false,
+    });
 
     //子コンポーネントに送るもの
     const loggedInContext: LoggedInContextInterface = {
@@ -46,6 +61,8 @@ export default function App() {
     const playListContext: PlayListContextInterface = {
         playList: playList,
         setPlayList: setPlayList,
+        playListInfo: playListInfo,
+        setPlayListInfo: setPlayListInfo,
     }
 
     useEffect(() => {
@@ -66,22 +83,27 @@ export default function App() {
         <Box component={"div"}>
             <BrowserRouter>
                 <LoggedInContext.Provider value={loggedInContext}>
-                    <Header />
                     <PlayListContext.Provider value={playListContext}>
-                        <Switch>
-                            <Route exact path="/">
+                        <Header />
+                        <Box sx={{marginTop: "100px", marginBottom: "250px"}}>
+                            <Switch>
+                                <Route exact path="/">
 
-                            </Route>
-                            <Route exact path="/login">
-                                <Login />
-                            </Route>
-                            <Route exact path={"/experiment"}>
-                                <Experiment />
-                            </Route>
-                            <Route path={"/experiment/detail/:exptInfo"}>
-                                <ExperimentDetail />
-                            </Route>
-                        </Switch>
+                                </Route>
+                                <Route exact path="/login">
+                                    <Login />
+                                </Route>
+                                <Route exact path={"/experiment"}>
+                                    <Experiment />
+                                </Route>
+                                <Route path={"/experiment/detail/:exptInfo"}>
+                                    <ExperimentDetail />
+                                </Route>
+                                <Route path={"/create-playlist"}>
+                                    <SelectPlayList />
+                                </Route>
+                            </Switch>
+                        </Box>
                         {isLoggedIn && (
                             <MusicPlayer />
                         )}
