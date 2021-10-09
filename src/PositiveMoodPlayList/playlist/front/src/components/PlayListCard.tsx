@@ -51,7 +51,7 @@ export const PlayListCard: React.FC<Props> = ({pattern}) => {
                 handlePlayListInfo();
             } else {
                 setIsLoggIn(isRefresh);
-                history.push('/');
+                history.push('/login');
             }
         }
     };
@@ -69,7 +69,7 @@ export const PlayListCard: React.FC<Props> = ({pattern}) => {
                 handlePlayListInfo();
             } else {
                 setIsLoggIn(isRefresh);
-                history.push('/');
+                history.push('/login');
             }
         }
     }
