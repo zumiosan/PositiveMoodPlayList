@@ -43,7 +43,7 @@ class ExperimentCreatePlayListView(APIView):
         query_set = ExperimentInfo.objects.filter(username=request.user.username, ex_id=request.data['ex_id'])
         serializer = ExperimentInfoSerializer(instance=query_set, many=True)
         playlist_type = ExperimentDataList.experiment_playlist_pattern[serializer.data[0]['playlist_type']]
-        data_list = get_playlist_data(playlist_type)
+        data_list = get_playlist_data(playlist_type, request.user.username)
         return Response(data=data_list, status=status.HTTP_200_OK)
 
 
@@ -54,7 +54,7 @@ class CreatePlaylistView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request):
-        data_list = get_playlist_data(request.data)
+        data_list = get_playlist_data(request.data, request.user.username)
         # print(mid)
         return Response(data=data_list, status=status.HTTP_200_OK)
 
@@ -73,8 +73,8 @@ class MusicInfoView(APIView):
         return Response(status=status.HTTP_200_OK)
 
 
-def get_playlist_data(data):
-    mid = CreatePlayList.create_playlist(data['transition'], data['up_down_info'], 'test')
+def get_playlist_data(data, user_name='test'):
+    mid = CreatePlayList.create_playlist(data['transition'], data['up_down_info'], user_name)
     data_list = []
     for i in mid:
         query_set = MusicInfo.objects.filter(mid=i)
