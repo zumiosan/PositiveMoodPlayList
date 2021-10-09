@@ -74,7 +74,7 @@ export default function App() {
                 <LoggedInContext.Provider value={loggedInContext}>
                     <PlayListContext.Provider value={playListContext}>
                         <Header />
-                        <Box sx={{marginTop: "100px", marginBottom: "40%"}}>
+                        <Box sx={{marginTop: "100px", marginBottom: "200px"}}>
                             <Switch>
                                 <Route exact path="/">
 
