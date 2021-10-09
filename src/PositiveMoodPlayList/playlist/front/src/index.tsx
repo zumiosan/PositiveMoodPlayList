@@ -5,7 +5,7 @@ import Login from "./components/Login";
 import Header from "./components/Header";
 import Experiment from "./components/Experiment";
 import ExperimentDetail from "./components/ExperimentDetail";
-import {getRefreshToken, getUserInfo, logout, refresh} from "./components/modules/apiJwt";
+import {getUserInfo, refresh} from "./components/modules/apiJwt";
 import MusicPlayer from "./components/MusicPlayer";
 import Box from "@mui/material/Box";
 import SelectPlayList from "./components/SelectPlayList";
