@@ -1,7 +1,7 @@
-import React, { useContext } from "react";
+import React, {useContext, useEffect, useState} from "react";
 import { useForm } from "react-hook-form";
 import { useHistory } from "react-router-dom";
-import { Button, TextField, Grid } from "@mui/material";
+import { Button, TextField, Grid, Alert, AlertTitle } from "@mui/material";
 import { LoggedInContext } from "../index";
 import { login } from "./modules/apiJwt";
 
@@ -11,27 +11,48 @@ export default function Login() {
 
     //ログイン状態を切り替える用
     const loggedInContext = useContext(LoggedInContext)!;
-    const [setIsLoggedIn] = [loggedInContext.setLoggedIn];
+    const [isLoggedIn, setIsLoggedIn] = [loggedInContext.isLoggedIn, loggedInContext.setLoggedIn];
 
     // フォーム
     const { register, handleSubmit, watch, formState: { errors } } = useForm();
 
+    // ログインに成功したかどうか
+    const [isSuccess, setIsSuccess] = useState(true);
+
     // APIにusername, passwordを送信してJWTトークンを取得してCookieに保存
     const getJwt = async(data: {[index: string]: string}) => {
         const res = await login(data);
-        console.log(res)
-        setIsLoggedIn(true);
-        history.push('/');
+        if (res) {
+            setIsLoggedIn(true);
+            setIsSuccess(true);
+            history.push('/');
+        } else {
+            setIsSuccess(false);
+        }
     }
+
+    useEffect(() => {
+        if (isLoggedIn) {
+            history.push('/');
+        }
+    }, [])
 
     return(
         <Grid container alignItems={"center"} justifyContent={"center"}>
-            <Grid item xs={8}>
+            {!isSuccess && (
+                <Grid item xs={12}>
+                    <Alert severity={"error"}>
+                        <AlertTitle>Error</AlertTitle>
+                        ユーザ名またはパスワードが違います．
+                    </Alert>
+                </Grid>
+            )}
+            <Grid item xs={12}>
                 <div style={{textAlign: "center"}}>
                     <h2>ログインフォーム</h2>
                 </div>
             </Grid>
-            <Grid item xs={8}>
+            <Grid item xs={12}>
                 <form onSubmit={handleSubmit(getJwt)}>
                     <Grid container alignItems={"center"} justifyContent={"center"} spacing={10}>
                         <Grid item xs={8}>
