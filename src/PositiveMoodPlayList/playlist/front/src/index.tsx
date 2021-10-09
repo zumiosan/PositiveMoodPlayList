@@ -71,7 +71,7 @@ export default function App() {
             if (!res) {
                const isRefresh = await refresh();
                if (isRefresh) {
-                   res = await getUserInfo();
+                   setIsLoggedIn(isRefresh);
                }
             }
             setIsLoggedIn(res);
