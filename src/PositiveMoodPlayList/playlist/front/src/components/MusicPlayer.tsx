@@ -65,6 +65,7 @@ export default function MusicPlayer() {
 
     // プレイリストが更新された時
     useEffect(() => {
+        playListIndex.current = 0;
         const src = '/asset/' + String(playList[0]['mid']).padStart(6, '0') + '.wav';
         setSrc(src);
     }, [playList]);
