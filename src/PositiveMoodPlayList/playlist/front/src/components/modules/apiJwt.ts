@@ -25,11 +25,15 @@ export async function logout() {
 
 // リフレッシュトークン取得用
 export async function getRefreshToken() {
-    const res = await axios.get(
+    try {
+        const res = await axios.get(
         `${apiURL}account/refresh-token/`,
         { withCredentials: true }
-    );
-    return res.data;
+        );
+        return res.data;
+    } catch (e: any) {
+        return false
+    }
 }
 
 // トークンのリフレッシュ用
@@ -64,6 +68,7 @@ export async function getUserInfo() {
 // リフレッシュ処理
 export async function refresh() {
     const token = await getRefreshToken();
+    if (!token) { return false }
     const res = await refreshToken(token);
     return res
 }

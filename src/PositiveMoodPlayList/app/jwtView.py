@@ -72,10 +72,9 @@ class TokenRefreshView(jwt_views.TokenRefreshView):
 
         # レスポンスオブジェクトの作成
         res = response.Response(status=status.HTTP_200_OK)
-        res.delete_cookie("access_token")
         res.set_cookie(
-            "access_token",
-            serializer.validated_data["access"],
+            key="access_token",
+            value=serializer.validated_data["access"],
             # max_age=60 * 24 * 24 * 30,
             expires=settings.SIMPLE_JWT['ACCESS_TOKEN_LIFETIME'],
             httponly=True,
