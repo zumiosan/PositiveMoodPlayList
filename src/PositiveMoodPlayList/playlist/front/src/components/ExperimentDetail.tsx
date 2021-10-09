@@ -21,7 +21,7 @@ export default function ExperimentDetail() {
     const playListMid = useRef<number[]>([]);
 
     const playListContext = useContext(PlayListContext)!;
-    const [setPlayList] = [playListContext.setPlayList];
+    const [setPlayList, setPlayListInfo] = [playListContext.setPlayList, playListContext.setPlayListInfo];
 
 
     const handleNext = async () => {
@@ -34,6 +34,12 @@ export default function ExperimentDetail() {
                 playListMid.current.push(res[i]['mid'] as number);
             }
             setPlayList(res);
+            const playlistInfo = {
+                "type": null,
+                "isPersonalize": false,
+                "isPleasure": false,
+            };
+            setPlayListInfo(playlistInfo);
         }
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
     };

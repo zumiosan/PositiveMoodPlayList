@@ -22,7 +22,7 @@ export const PlayListCard: React.FC<Props> = ({pattern}) => {
     const [isPleasure, setIsPleasure] = useState(false);
 
     const playlistContext = useContext(PlayListContext)!;
-    const [setPlaylist] = [playlistContext.setPlayList];
+    const [setPlaylist, setPlayListInfo] = [playlistContext.setPlayList, playlistContext.setPlayListInfo];
 
     const handleCreate = async () => {
         const data: CreatePlayListInterface = {
@@ -35,19 +35,29 @@ export const PlayListCard: React.FC<Props> = ({pattern}) => {
         try {
             const playlist = await createPlayList(data);
             setPlaylist(playlist);
+            handlePlayListInfo();
         } catch (e: any) {
 
         }
-
     };
 
     const handleRandom = async () => {
         try {
             const playlist = await createRandomPlayList();
             setPlaylist(playlist);
+            handlePlayListInfo();
         } catch (e: any) {
 
         }
+    }
+
+    const handlePlayListInfo = () => {
+        const playlistInfo = {
+                "type": pattern,
+                "isPersonalize": isPersonalize,
+                "isPleasure": isPleasure,
+        }
+        setPlayListInfo(playlistInfo);
     }
 
     const handlePersonalize = (event: React.ChangeEvent<HTMLInputElement>) => {

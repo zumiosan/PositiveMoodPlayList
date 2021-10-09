@@ -15,6 +15,8 @@ export const apiURL = 'http://localhost:8000/';
 interface PlayListContextInterface {
     playList: {[p: string]: string | number}[]
     setPlayList: React.Dispatch<React.SetStateAction<{[p: string]: string | number}[]>>
+    playListInfo: {[p: string]: string | boolean | null}
+    setPlayListInfo: React.Dispatch<React.SetStateAction<{[p: string]: string | boolean | null}>>
 }
 
 interface LoggedInContextInterface {
@@ -44,6 +46,13 @@ export default function App() {
         },
     ]);
 
+    // プレイリスト情報
+    const [playListInfo, setPlayListInfo] = useState<{[index:string]: string | boolean | null}>({
+        "type": null,
+        "isPersonalize": false,
+        "isPleasure": false,
+    });
+
     //子コンポーネントに送るもの
     const loggedInContext: LoggedInContextInterface = {
         isLoggedIn: isLoggedIn,
@@ -52,6 +61,8 @@ export default function App() {
     const playListContext: PlayListContextInterface = {
         playList: playList,
         setPlayList: setPlayList,
+        playListInfo: playListInfo,
+        setPlayListInfo: setPlayListInfo,
     }
 
     useEffect(() => {
@@ -74,7 +85,7 @@ export default function App() {
                 <LoggedInContext.Provider value={loggedInContext}>
                     <PlayListContext.Provider value={playListContext}>
                         <Header />
-                        <Box sx={{marginTop: "100px", marginBottom: "200px"}}>
+                        <Box sx={{marginTop: "100px", marginBottom: "250px"}}>
                             <Switch>
                                 <Route exact path="/">
 
