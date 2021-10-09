@@ -23,3 +23,15 @@ export async function createPlayList(data:CreatePlayListInterface): Promise<{[p:
     }
     return res.data;
 }
+
+// ランダムのプレイリストを作成
+export async function createRandomPlayList(): Promise<{[p:string]: number | string}[]> {
+    const res = await axios.get(
+        `${apiURL}playlist/create-random/`,
+        { withCredentials: true }
+    );
+    if (res.status != 200) {
+        throw Error
+    }
+    return res.data;
+}

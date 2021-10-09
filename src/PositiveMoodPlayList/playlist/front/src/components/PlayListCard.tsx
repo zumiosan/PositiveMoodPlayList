@@ -9,7 +9,7 @@ import {FormControlLabel} from "@mui/material";
 import Grid from "@mui/material/Grid";
 import {playlistImage, impressionTransition} from "./modules/playlistInfo";
 import {PlayListContext} from "../index";
-import {createPlayList, CreatePlayListInterface} from "./modules/apiPlayList";
+import {createPlayList, CreatePlayListInterface, createRandomPlayList} from "./modules/apiPlayList";
 
 type Props = {
     pattern: string,
@@ -40,6 +40,15 @@ export const PlayListCard: React.FC<Props> = ({pattern}) => {
         }
 
     };
+
+    const handleRandom = async () => {
+        try {
+            const playlist = await createRandomPlayList();
+            setPlaylist(playlist);
+        } catch (e: any) {
+
+        }
+    }
 
     const handlePersonalize = (event: React.ChangeEvent<HTMLInputElement>) => {
         setIsPersonalize(event.target.checked);
@@ -78,7 +87,7 @@ export const PlayListCard: React.FC<Props> = ({pattern}) => {
                             </Fragment>
                         ):(
                             <Grid item container xs={12} justifyContent={"flex-end"} alignItems={"flex-end"}>
-                                <Button size="small" onClick={handleCreate}>CreatePlayList</Button>
+                                <Button size="small" onClick={handleRandom}>CreatePlayList</Button>
                             </Grid>
                         )}
                     </Grid>

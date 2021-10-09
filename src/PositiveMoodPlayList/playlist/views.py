@@ -43,7 +43,11 @@ class ExperimentCreatePlayListView(APIView):
         query_set = ExperimentInfo.objects.filter(username=request.user.username, ex_id=request.data['ex_id'])
         serializer = ExperimentInfoSerializer(instance=query_set, many=True)
         playlist_type = ExperimentDataList.experiment_playlist_pattern[serializer.data[0]['playlist_type']]
-        data_list = get_playlist_data(playlist_type, request.user.username)
+        data_list = []
+        if playlist_type["is_random"]:
+            data_list = get_random_data()
+        else:
+            data_list = get_playlist_data(playlist_type, request.user.username)
         return Response(data=data_list, status=status.HTTP_200_OK)
 
 
@@ -56,6 +60,18 @@ class CreatePlaylistView(APIView):
     def post(self, request):
         data_list = get_playlist_data(request.data, request.user.username)
         # print(mid)
+        return Response(data=data_list, status=status.HTTP_200_OK)
+
+
+class CreateRandomPlayListView(APIView):
+    """
+    ランダムプレイリストを生成する．
+    """
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        data_list = get_random_data()
+
         return Response(data=data_list, status=status.HTTP_200_OK)
 
 
@@ -80,5 +96,15 @@ def get_playlist_data(data, user_name='test'):
         query_set = MusicInfo.objects.filter(mid=i)
         serializer = MusicInfoSerializer(instance=query_set, many=True)
         data_list.append(serializer.data[0])
+
+    return data_list
+
+
+def get_random_data():
+    data_list = []
+    query_set = MusicInfo.objects.order_by('?')[:12]
+    serializer = MusicInfoSerializer(instance=query_set, many=True)
+    for i in serializer.data:
+        data_list.append(i)
 
     return data_list

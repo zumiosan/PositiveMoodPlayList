@@ -27,43 +27,6 @@ class_num_to_name = {
     5: 'll',
 }
 
-def create_transition(transition, up_down_info):
-    if transition == 0:
-        transition = [
-            "ll",
-            "ll",
-            "lm",
-            "lm",
-            "lm",
-            "mm",
-            "mm",
-            "mm",
-            "mh",
-            "mh",
-            "hh",
-            "hh"
-        ]
-        up_down_info = [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-
-    elif transition == 5:
-        transition = [
-            "hh",
-            "hh",
-            "mh",
-            "mh",
-            "mh",
-            "mm",
-            "mm",
-            "mm",
-            "lm",
-            "lm",
-            "ll",
-            "ll",
-        ]
-        up_down_info = [0, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]
-
-    return transition, up_down_info
-
 def get_connection():
     return psycopg2.connect(
         dsn=env("DATABASE_POSITIVE_MOOD_PLAYLIST_URL"),
@@ -178,9 +141,6 @@ def create_playlist(transition, up_down_info, username):
     up_down_info: 印象が上がるのか下がるのかの情報
     username: ユーザー名
     """
-    if type(transition) is int:
-        transition, up_down_info = create_transition(transition, up_down_info)
-
     # プレイリスト作成終了フラグ
     break_flag = len(transition)
 
