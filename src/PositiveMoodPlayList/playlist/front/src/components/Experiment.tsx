@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { makeStyles } from '@mui/material/styles';
 import { Link } from 'react-router-dom'
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -43,7 +42,7 @@ export default function Experiment() {
                                 exptList.map((row, index) => (
                                     <TableRow key={index}>
                                         <TableCell align={"center"}>
-                                            <Link to={"/experiment/detail/" + String(row.ex_id) + String(row.playlist_type) }>
+                                            <Link to={"/experiment/detail/" + String(row.ex_id) }>
                                                 {row.ex_id}
                                             </Link>
                                         </TableCell>

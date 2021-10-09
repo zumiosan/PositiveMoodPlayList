@@ -9,6 +9,7 @@ import {completeExperiment} from "./modules/apiExperiment";
 import Grid from "@mui/material/Grid";
 import { PlayListContext } from "../index";
 import { createPlayList, CreatePlayListInterface } from "./modules/apiPlayList";
+import { createExperimentPlaylist } from "./modules/apiExperiment";
 
 const steps = ['実験前アンケート', 'プレイリストの聴取', '実験後アンケート'];
 
@@ -25,14 +26,10 @@ export default function ExperimentDetail() {
 
     const handleNext = async () => {
         if (activeStep === 0) {
-            const data: CreatePlayListInterface = {
-                exptType: ,
-                transition: [],
-                upDownInfo: [],
-                isPersonalized: true,
-                isPleasure: true,
+            const data = {
+                ex_id: exptInfo,
             }
-            const res = await createPlayList(data);
+            const res = await createExperimentPlaylist(data);
             for (let i = 0; i < res.length; i++) {
                 playListMid.current.push(res[i]['mid'] as number);
             }
@@ -47,10 +44,9 @@ export default function ExperimentDetail() {
 
     const handleComplete = async () => {
         const data = {
-            "ex_id": exptInfo[0],
+            "ex_id": exptInfo,
             "is_finished": true,
             "playlist_mid": playListMid.current,
-            "playlist_type": exptInfo[1]
         }
         const res = await completeExperiment(data);
         await handleNext();

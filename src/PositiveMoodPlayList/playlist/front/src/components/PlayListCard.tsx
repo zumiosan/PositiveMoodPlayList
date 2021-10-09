@@ -26,11 +26,10 @@ export const PlayListCard: React.FC<Props> = ({pattern}) => {
 
     const handleCreate = async () => {
         const data: CreatePlayListInterface = {
-            exptType: -1,
-            upDownInfo: impressionTransition[pattern]["up_down_info"] as number[],
+            up_down_info: impressionTransition[pattern]["up_down_info"] as number[],
             transition: impressionTransition[pattern]["transition"] as string[],
-            isPersonalized: isPersonalize,
-            isPleasure: isPleasure,
+            is_personalize: isPersonalize,
+            is_pleasure: isPleasure,
         }
 
         try {
