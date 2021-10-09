@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions, status
 from .models import ExperimentInfo, MusicInfo
-from .modules import CreatePlayList
+from .modules import CreatePlayList, ExperimentDataList
 from .serializers import ExperimentInfoSerializer, MusicInfoSerializer
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -33,6 +33,20 @@ class ExperimentInfoView(APIView):
         return Response(status=status.HTTP_200_OK)
 
 
+class ExperimentCreatePlayListView(APIView):
+    """
+    実験用のプレイリストを作成する．
+    """
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        query_set = ExperimentInfo.objects.filter(username=request.user.username, ex_id=request.data['ex_id'])
+        serializer = ExperimentInfoSerializer(instance=query_set, many=True)
+        playlist_type = ExperimentDataList.experiment_playlist_pattern[serializer.data[0]['playlist_type']]
+        data_list = get_playlist_data(playlist_type)
+        return Response(data=data_list, status=status.HTTP_200_OK)
+
+
 class CreatePlaylistView(APIView):
     """
     プレイリストを生成する．
@@ -40,12 +54,7 @@ class CreatePlaylistView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request):
-        mid = CreatePlayList.create_playlist(0, 0, 'test')
-        data_list = []
-        for i in mid:
-            query_set = MusicInfo.objects.filter(mid=i)
-            serializer = MusicInfoSerializer(instance=query_set, many=True)
-            data_list.append(serializer.data[0])
+        data_list = get_playlist_data(request.data)
         # print(mid)
         return Response(data=data_list, status=status.HTTP_200_OK)
 
@@ -62,3 +71,14 @@ class MusicInfoView(APIView):
         print(data)
         # query_set = MusicInfo.objects.filter(mid=)
         return Response(status=status.HTTP_200_OK)
+
+
+def get_playlist_data(data):
+    mid = CreatePlayList.create_playlist(data['transition'], data['up_down_info'], 'test')
+    data_list = []
+    for i in mid:
+        query_set = MusicInfo.objects.filter(mid=i)
+        serializer = MusicInfoSerializer(instance=query_set, many=True)
+        data_list.append(serializer.data[0])
+
+    return data_list
