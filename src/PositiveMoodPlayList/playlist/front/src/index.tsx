@@ -9,6 +9,7 @@ import {getUserInfo, refresh} from "./components/modules/apiJwt";
 import MusicPlayer from "./components/MusicPlayer";
 import Box from "@mui/material/Box";
 import SelectPlayList from "./components/SelectPlayList";
+import Home from "./components/Home";
 
 export const apiURL = 'http://localhost:8000/';
 
@@ -88,7 +89,7 @@ export default function App() {
                         <Box sx={{marginTop: "100px", marginBottom: "250px"}}>
                             <Switch>
                                 <Route exact path="/">
-
+                                    <Home />
                                 </Route>
                                 <Route exact path="/login">
                                     <Login />
