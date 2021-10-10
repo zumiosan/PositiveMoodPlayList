@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
-from django.conf import settings
+from django.utils import timezone
 
 
 class ExperimentInfo(models.Model):
@@ -31,6 +31,20 @@ class MusicInfo(models.Model):
     mid = models.IntegerField(verbose_name='楽曲番号', unique=True, null=None)
     music_name = models.CharField(verbose_name='曲名', max_length=255)
     artist_name = models.CharField(verbose_name='アーティスト名', max_length=255, null=True)
+
+
+class PlayListInfo(models.Model):
+    """
+    作成されたプレイリストの情報
+    """
+
+    class Meta:
+        db_table = 'playlist_info'
+
+    id = models.BigAutoField(primary_key=True)
+    username = models.CharField(verbose_name='ユーザ名', max_length=255)
+    playlist_mid = ArrayField(models.IntegerField(), verbose_name='プレイリストの楽曲', null=True, blank=True)
+    datetime = models.DateTimeField(default=timezone.now)
 
 
 class ImpressionInfo(models.Model):

@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework import permissions, status
 from .models import ExperimentInfo, MusicInfo
 from .modules import CreatePlayList, ExperimentDataList
-from .serializers import ExperimentInfoSerializer, MusicInfoSerializer
+from .serializers import ExperimentInfoSerializer, MusicInfoSerializer, PlayListInfoSerializer
 from django.core.exceptions import ObjectDoesNotExist
 
 
@@ -43,11 +43,12 @@ class ExperimentCreatePlayListView(APIView):
         query_set = ExperimentInfo.objects.filter(username=request.user.username, ex_id=request.data['ex_id'])
         serializer = ExperimentInfoSerializer(instance=query_set, many=True)
         playlist_type = ExperimentDataList.experiment_playlist_pattern[serializer.data[0]['playlist_type']]
-        data_list = []
         if playlist_type["is_random"]:
             data_list = get_random_data()
         else:
             data_list = get_playlist_data(playlist_type, request.user.username)
+        save_playlist_info(data_list, request.user.username)
+
         return Response(data=data_list, status=status.HTTP_200_OK)
 
 
@@ -59,7 +60,8 @@ class CreatePlaylistView(APIView):
 
     def post(self, request):
         data_list = get_playlist_data(request.data, request.user.username)
-        # print(mid)
+        save_playlist_info(data_list, request.user.username)
+
         return Response(data=data_list, status=status.HTTP_200_OK)
 
 
@@ -71,6 +73,7 @@ class CreateRandomPlayListView(APIView):
 
     def get(self, request):
         data_list = get_random_data()
+        save_playlist_info(data_list, request.user.username)
 
         return Response(data=data_list, status=status.HTTP_200_OK)
 
@@ -108,3 +111,20 @@ def get_random_data():
         data_list.append(i)
 
     return data_list
+
+
+def save_playlist_info(data_list, username):
+    mid = []
+    for data in data_list:
+        mid.append(data['mid'])
+
+    playlist_info = {
+        'playlist_mid': mid,
+        'username': username,
+    }
+
+    serializer = PlayListInfoSerializer(data=playlist_info)
+    serializer.is_valid()
+    serializer.save()
+
+
