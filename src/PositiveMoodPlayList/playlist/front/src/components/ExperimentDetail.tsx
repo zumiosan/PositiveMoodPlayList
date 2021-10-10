@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useContext, useRef } from "react";
-import {useParams, Link} from "react-router-dom";
+import {useParams, Link, useHistory} from "react-router-dom";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
@@ -7,18 +7,25 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import {completeExperiment} from "./modules/apiExperiment";
 import Grid from "@mui/material/Grid";
-import { PlayListContext } from "../index";
-import { createPlayList, CreatePlayListInterface } from "./modules/apiPlayList";
+import {LoggedInContext, PlayListContext} from "../index";
 import { createExperimentPlaylist } from "./modules/apiExperiment";
+import {refresh} from "./modules/apiJwt";
+import {createPlayList} from "./modules/apiPlayList";
 
 const steps = ['実験前アンケート', 'プレイリストの聴取', '実験後アンケート'];
 
 export default function ExperimentDetail() {
+
+    const history = useHistory();
+
     const [activeStep, setActiveStep] = useState<number>(0);
 
     const { exptInfo } = useParams<{exptInfo: string}>();
 
     const playListMid = useRef<number[]>([]);
+
+    const loginContext = useContext(LoggedInContext)!;
+    const [setIsLoggIn] = [loginContext.setLoggedIn];
 
     const playListContext = useContext(PlayListContext)!;
     const [setPlayList, setPlayListInfo] = [playListContext.setPlayList, playListContext.setPlayListInfo];
@@ -29,17 +36,32 @@ export default function ExperimentDetail() {
             const data = {
                 ex_id: exptInfo,
             }
-            const res = await createExperimentPlaylist(data);
-            for (let i = 0; i < res.length; i++) {
-                playListMid.current.push(res[i]['mid'] as number);
-            }
-            setPlayList(res);
             const playlistInfo = {
                 "type": null,
                 "isPersonalize": false,
                 "isPleasure": false,
             };
-            setPlayListInfo(playlistInfo);
+            try {
+                const res = await createExperimentPlaylist(data);
+                for (let i = 0; i < res.length; i++) {
+                    playListMid.current.push(res[i]['mid'] as number);
+                }
+                setPlayList(res);
+                setPlayListInfo(playlistInfo);
+            } catch (e: any) {
+                const isRefresh = await refresh();
+                if (isRefresh) {
+                    const res = await createExperimentPlaylist(data);
+                    for (let i = 0; i < res.length; i++) {
+                        playListMid.current.push(res[i]['mid'] as number);
+                    }
+                    setPlayList(res);
+                    setPlayListInfo(playlistInfo);
+                } else {
+                    setIsLoggIn(isRefresh);
+                    history.push('/login');
+                }
+            }
         }
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
     };
@@ -54,7 +76,17 @@ export default function ExperimentDetail() {
             "is_finished": true,
             "playlist_mid": playListMid.current,
         }
-        const res = await completeExperiment(data);
+        try {
+            const res = await completeExperiment(data);
+        } catch (e:any) {
+            const isRefresh = await refresh();
+            if (isRefresh) {
+                const res = await completeExperiment(data);
+            } else {
+                setIsLoggIn(isRefresh);
+                history.push('/login');
+            }
+        }
         await handleNext();
     }
 

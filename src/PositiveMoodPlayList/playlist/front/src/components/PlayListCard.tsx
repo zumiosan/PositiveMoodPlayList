@@ -8,8 +8,10 @@ import Checkbox from "@mui/material/Checkbox";
 import {FormControlLabel} from "@mui/material";
 import Grid from "@mui/material/Grid";
 import {playlistImage, impressionTransition} from "./modules/playlistInfo";
-import {PlayListContext} from "../index";
+import {PlayListContext, LoggedInContext} from "../index";
 import {createPlayList, CreatePlayListInterface, createRandomPlayList} from "./modules/apiPlayList";
+import {refresh} from "./modules/apiJwt";
+import {useHistory} from "react-router-dom";
 
 type Props = {
     pattern: string,
@@ -17,9 +19,14 @@ type Props = {
 
 export const PlayListCard: React.FC<Props> = ({pattern}) => {
 
+    const history = useHistory();
+
     const [isPersonalize, setIsPersonalize] = useState(false);
 
     const [isPleasure, setIsPleasure] = useState(false);
+
+    const loginContext = useContext(LoggedInContext)!;
+    const [setIsLoggIn] = [loginContext.setLoggedIn];
 
     const playlistContext = useContext(PlayListContext)!;
     const [setPlaylist, setPlayListInfo] = [playlistContext.setPlayList, playlistContext.setPlayListInfo];
@@ -37,7 +44,15 @@ export const PlayListCard: React.FC<Props> = ({pattern}) => {
             setPlaylist(playlist);
             handlePlayListInfo();
         } catch (e: any) {
-
+            const isRefresh = await refresh();
+            if (isRefresh) {
+                const playlist = await createPlayList(data);
+                setPlaylist(playlist);
+                handlePlayListInfo();
+            } else {
+                setIsLoggIn(isRefresh);
+                history.push('/login');
+            }
         }
     };
 
@@ -47,7 +62,15 @@ export const PlayListCard: React.FC<Props> = ({pattern}) => {
             setPlaylist(playlist);
             handlePlayListInfo();
         } catch (e: any) {
-
+            const isRefresh = await refresh();
+            if (isRefresh) {
+                const playlist = await createRandomPlayList();
+                setPlaylist(playlist);
+                handlePlayListInfo();
+            } else {
+                setIsLoggIn(isRefresh);
+                history.push('/login');
+            }
         }
     }
 

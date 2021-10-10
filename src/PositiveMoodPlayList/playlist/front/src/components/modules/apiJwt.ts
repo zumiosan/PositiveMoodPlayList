@@ -6,12 +6,16 @@ axios.defaults.xsrfHeaderName = "X-CSRFTOKEN"
 
 // ログイン処理用
 export async function login(data: {[index: string]: string}) {
-    const res = await axios.post(
-        `${apiURL}account/login/`,
-        data,
-        { withCredentials: true }
-    );
-    return res.status == 200;
+    try {
+        const res = await axios.post(
+            `${apiURL}account/login/`,
+            data,
+            { withCredentials: true }
+        );
+        return res.status == 200;
+    } catch (e:any) {
+        return false
+    }
 }
 
 // ログアウト処理用
