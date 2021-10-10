@@ -22,7 +22,7 @@ export default function Home() {
                     </Grid>
                 </Grid>
             </Grid>
-            <Grid item container justifyContent={"center"} xs={12}>
+            <Grid item container justifyContent={"center"}>
                 <Grid item xs={10}>
                     <Typography variant={"body1"} gutterBottom>
                         楽曲に対する印象に基づいてプレイリストを設計し，ユーザの気分をポジティブに変化させます．
