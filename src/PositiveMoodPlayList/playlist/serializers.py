@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import ExperimentInfo, MusicInfo
+from .models import ExperimentInfo, MusicInfo, PlayListInfo
 
 
 class ExperimentInfoSerializer(serializers.ModelSerializer):
@@ -25,3 +25,13 @@ class MusicInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = MusicInfo
         fields = ['mid', 'music_name', 'artist_name']
+
+
+class PlayListInfoSerializer(serializers.ModelSerializer):
+    """
+    作成されたプレイリスト情報用のシリアライザー
+    """
+
+    class Meta:
+        model = PlayListInfo
+        fields = ['playlist_mid', 'username']
