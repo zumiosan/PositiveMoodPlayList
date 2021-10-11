@@ -8,9 +8,7 @@ export default function MusicInfo() {
 
     const playListContext = useContext(PlayListContext)!;
     const [playList] = [playListContext.playList];
-
-    const playerContext = useContext(PlayerContext)!;
-    const [playListIndex] = [playerContext.playListIndex];
+    const [playListIndex] = [playListContext.playListIndex];
 
     return (
         <Fragment>

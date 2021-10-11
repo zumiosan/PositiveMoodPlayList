@@ -10,6 +10,7 @@ import MusicPlayer from "./components/MusicPlayer";
 import Box from "@mui/material/Box";
 import SelectPlayList from "./components/SelectPlayList";
 import Home from "./components/Home";
+import PlayListDetail from "./components/PlayListDetail";
 
 export const apiURL = 'http://localhost:8000/';
 
@@ -18,6 +19,8 @@ interface PlayListContextInterface {
     setPlayList: React.Dispatch<React.SetStateAction<{[p: string]: string | number}[]>>
     playListInfo: {[p: string]: string | boolean | null}
     setPlayListInfo: React.Dispatch<React.SetStateAction<{[p: string]: string | boolean | null}>>
+    playListIndex: number
+    setPlayListIndex: React.Dispatch<React.SetStateAction<number>>
 }
 
 interface LoggedInContextInterface {
@@ -54,6 +57,9 @@ export default function App() {
         "isPleasure": false,
     });
 
+    // プレイリストの再生箇所
+    const [playListIndex, setPlayListIndex] = useState<number>(0);
+
     //子コンポーネントに送るもの
     const loggedInContext: LoggedInContextInterface = {
         isLoggedIn: isLoggedIn,
@@ -64,18 +70,22 @@ export default function App() {
         setPlayList: setPlayList,
         playListInfo: playListInfo,
         setPlayListInfo: setPlayListInfo,
+        playListIndex: playListIndex,
+        setPlayListIndex: setPlayListIndex,
     }
 
     useEffect(() => {
         (async () => {
-            let res = await getUserInfo();
+            const res = await getUserInfo();
             if (!res) {
-               const isRefresh = await refresh();
-               if (isRefresh) {
-                   setIsLoggedIn(isRefresh);
-               }
+                console.log('refresh')
+                const isRefresh = await refresh();
+                if (isRefresh) {
+                    setIsLoggedIn(isRefresh);
+                }
+            } else {
+                setIsLoggedIn(res)
             }
-            setIsLoggedIn(res);
         })();
     }, []);
 
@@ -86,7 +96,7 @@ export default function App() {
                 <LoggedInContext.Provider value={loggedInContext}>
                     <PlayListContext.Provider value={playListContext}>
                         <Header />
-                        <Box sx={{marginTop: "100px", marginBottom: "250px"}}>
+                        <Box sx={{marginTop: "100px", marginBottom: "300px"}}>
                             <Switch>
                                 <Route exact path="/">
                                     <Home />
@@ -102,6 +112,9 @@ export default function App() {
                                 </Route>
                                 <Route path={"/create-playlist"}>
                                     <SelectPlayList />
+                                </Route>
+                                <Route path={"/detail-playlist"}>
+                                    <PlayListDetail />
                                 </Route>
                             </Switch>
                         </Box>

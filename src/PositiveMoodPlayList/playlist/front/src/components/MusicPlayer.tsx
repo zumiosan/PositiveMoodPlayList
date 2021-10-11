@@ -14,11 +14,12 @@ import MusicInfo from "./MusicInfo";
 import VolumeButton from "./VolumeButton";
 import ReactHowler from "react-howler";
 import Typography from "@mui/material/Typography";
+import QueueMusicIcon from '@mui/icons-material/QueueMusic';
+import {Link} from "react-router-dom";
 
 interface PlayerContextInterface {
     duration: number,
     position: number,
-    playListIndex: number,
     setPosition: React.Dispatch<React.SetStateAction<number>>,
     setVolume: React.Dispatch<React.SetStateAction<number>>,
 }
@@ -35,7 +36,7 @@ export default function MusicPlayer() {
     const [playList, playListInfo] = [playListContext.playList, playListContext.playListInfo];
 
     // プレイリストの再生楽曲の箇所
-    const playListIndex = useRef<number>(0);
+    const [playListIndex, setPlayListIndex] = [playListContext.playListIndex, playListContext.setPlayListIndex];
 
     // 楽曲ファイルのパス
     const [src, setSrc] = useState<string>('/asset/');
@@ -59,14 +60,13 @@ export default function MusicPlayer() {
     const playerContext: PlayerContextInterface = {
         duration: duration,
         position: position,
-        playListIndex: playListIndex.current,
         setPosition: setPosition,
         setVolume: setVolume,
     }
 
     // プレイリストが更新された時
     useEffect(() => {
-        playListIndex.current = 0;
+        setPlayListIndex(0);
         const src = '/asset/' + String(playList[0]['mid']).padStart(6, '0') + '.wav';
         setSrc(src);
     }, [playList]);
@@ -74,7 +74,7 @@ export default function MusicPlayer() {
     // 再生ボタンを押した時
     const handlePlay = () => {
         setIsPlay(true);
-        interval.current = setInterval(getPosition, 10);
+        interval.current = setInterval(getPosition, 1);
     };
 
     // 一時停止ボタンを押した時
@@ -100,38 +100,44 @@ export default function MusicPlayer() {
     }, [position])
 
     // 曲をセット
-    const handleSet = () => {
+    useEffect(() => {
         // 再生をストップ
         player.current!.stop();
 
-        // 次の楽曲がない場合は最初の楽曲をセットして停止
-        if (playListIndex.current >= playList.length || playListIndex.current <= -1) {
-            clearInterval(Number(interval.current));
-            playListIndex.current = 0;
-            setIsPlay(false);
-        }
-
         // 次の曲をセット
-        const src = '/asset/' + String(playList[playListIndex.current]['mid']).padStart(6, '0') + '.wav';
+        const src = '/asset/' + String(playList[playListIndex]['mid']).padStart(6, '0') + '.wav';
         setSrc(src);
-    };
+        setPosition(0);
+    }, [playListIndex]);
 
     // 次の曲を再生
     const handleNext = () => {
-        playListIndex.current += 1;
-        handleSet();
+        // 次の楽曲がない場合は最初の楽曲をセットして停止
+        if (playListIndex + 1 >= playList.length) {
+            clearInterval(Number(interval.current));
+            setIsPlay(false);
+            setPlayListIndex(0);
+        } else {
+            setPlayListIndex(prevState => prevState + 1);
+        }
     };
 
     // 前の曲を再生
     const handlePrevious = () => {
-        playListIndex.current -= 1;
-        handleSet();
+        // 前の楽曲がない場合は停止
+        if (playListIndex - 1 <= -1) {
+            clearInterval(Number(interval.current));
+            setIsPlay(false);
+            setPosition(0);
+            player.current!.stop();
+        } else {
+            setPlayListIndex(prevState => prevState - 1);
+        }
     };
 
     // 再生が終了した時
     const handleOnEnd = () => {
-        playListIndex.current += 1;
-        handleSet();
+        handleNext();
     };
 
     return (
@@ -147,7 +153,7 @@ export default function MusicPlayer() {
             <PlayerContext.Provider value={playerContext}>
                 <Box component={"footer"} sx={{
                     width: "100%",
-                    maxHeight: "200px",
+                    maxHeight: "250px",
                     position: "fixed",
                     bottom: "0",
                     bgcolor: "#3f51b5"
@@ -161,23 +167,34 @@ export default function MusicPlayer() {
                                 sx={{color: "white"}}
                                 alignItems={"center"}
                                 justifyContent={"center"}
-                                spacing={2}
+                                spacing={1}
                             >
-                                <Grid item container alignItems={"center"} justifyContent={"center"} xs={6}>
-                                    <Typography variant="caption" fontSize={20} fontWeight={500}>
-                                        {playListInfo['type']}
+                                <Grid item container alignItems={"center"} justifyContent={"center"} xs={12} sm={6}>
+                                    <Typography
+                                        variant="caption"
+                                        fontWeight={500}
+                                        sx={{fontSize: { xs: 15, sm: 20}}}
+                                    >
+                                        Type: {playListInfo['type']}
                                     </Typography>
                                 </Grid>
+                                {playListInfo['type'] != 'Random' && (
+                                    <Grid item container alignItems={"center"} justifyContent={"center"} xs={4} sm={2}>
+                                        <Typography sx={{fontSize: { xs: 15, sm: 20}}}>
+                                            Options:
+                                        </Typography>
+                                    </Grid>
+                                )}
                                 {playListInfo['isPersonalize'] && (
-                                    <Grid item container alignItems={"center"} justifyContent={"center"} xs={3}>
-                                        <Typography>
+                                    <Grid item container alignItems={"center"} justifyContent={"center"} xs={4} sm={2}>
+                                        <Typography sx={{fontSize: { xs: 15, sm: 20}}}>
                                             Personalize
                                         </Typography>
                                     </Grid>
                                 )}
                                 {playListInfo['isPleasure'] && (
-                                    <Grid item container alignItems={"center"} justifyContent={"center"} xs={3}>
-                                        <Typography>
+                                    <Grid item container alignItems={"center"} justifyContent={"center"} xs={4} sm={2}>
+                                        <Typography sx={{fontSize: { xs: 15, sm: 20}}}>
                                             Pleasure
                                         </Typography>
                                     </Grid>
@@ -247,6 +264,19 @@ export default function MusicPlayer() {
                             </Grid>
                             <Grid item sx={{display: { xs: 'block', sm: 'inline' }}}>
                                 <VolumeButton />
+                            </Grid>
+                            <Grid item sx={{display: { xs: 'block', sm: 'inline' }}}>
+                                {playListInfo['type'] != null ? (
+                                    <IconButton>
+                                        <Link to={"/detail-playlist"}>
+                                            <QueueMusicIcon sx={{color: "white"}}  />
+                                        </Link>
+                                    </IconButton>
+                                ) : (
+                                    <IconButton>
+                                        <QueueMusicIcon sx={{color: "white"}}  />
+                                    </IconButton>
+                                )}
                             </Grid>
                         </Grid>
                     </Grid>

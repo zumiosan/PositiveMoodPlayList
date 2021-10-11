@@ -7,6 +7,7 @@ axios.defaults.xsrfHeaderName = "X-CSRFTOKEN"
 
 // 実験トップ画面のデータ取得
 export async function getExperimentInfo() {
+
     const res = await axios.get(
         `${apiURL}playlist/expt-info/`,
         { withCredentials: true }
