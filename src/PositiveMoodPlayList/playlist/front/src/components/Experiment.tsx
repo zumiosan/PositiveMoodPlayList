@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom'
+import React, {useContext, useEffect, useState} from 'react';
+import {Link, useHistory} from 'react-router-dom'
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -8,17 +8,35 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Grid from "@mui/material/Grid";
-import { getExperimentInfo } from "./modules/apiExperiment";
+import {completeExperiment, getExperimentInfo} from "./modules/apiExperiment";
+import {refresh} from "./modules/apiJwt";
+import {LoggedInContext} from "../index";
 
 export default function Experiment() {
+
+    const history = useHistory();
+
+    const loginContext = useContext(LoggedInContext)!;
+    const [setIsLoggIn] = [loginContext.setLoggedIn];
 
     // 実験情報データ
     const [exptList, setExptList] = useState<{[index: string]: number | boolean}[]>();
 
     useEffect(() => {
         (async () => {
-            const res = await getExperimentInfo();
-            setExptList(res)
+            try {
+                const res = await getExperimentInfo();
+                setExptList(res)
+            } catch (e: any) {
+                const isRefresh = await refresh();
+                if (isRefresh) {
+                    const res = await getExperimentInfo();
+                    setExptList(res)
+                } else {
+                    setIsLoggIn(isRefresh);
+                    history.push('/login');
+                }
+            }
         })();
     }, [])
 

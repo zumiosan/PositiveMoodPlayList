@@ -1,16 +1,16 @@
 import React, { Fragment, useState, useContext, useRef } from "react";
-import {useParams, Link, useHistory} from "react-router-dom";
+import { useParams, Link, useHistory } from "react-router-dom";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import {completeExperiment} from "./modules/apiExperiment";
+import { completeExperiment } from "./modules/apiExperiment";
 import Grid from "@mui/material/Grid";
 import {LoggedInContext, PlayListContext} from "../index";
 import { createExperimentPlaylist } from "./modules/apiExperiment";
-import {refresh} from "./modules/apiJwt";
-import {createPlayList} from "./modules/apiPlayList";
+import { refresh } from "./modules/apiJwt";
+import PlayListDetail from "./PlayListDetail";
 
 const steps = ['実験前アンケート', 'プレイリストの聴取', '実験後アンケート'];
 
@@ -179,6 +179,9 @@ export default function ExperimentDetail() {
                                 Next
                             </Button>
                         </Grid>
+                    </Grid>
+                    <Grid item container xs={10} alignItems={"center"} justifyContent={"center"}>
+                        <PlayListDetail />
                     </Grid>
                 </Fragment>
             ) : activeStep === 0 && (

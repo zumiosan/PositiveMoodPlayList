@@ -18,6 +18,8 @@ interface PlayListContextInterface {
     setPlayList: React.Dispatch<React.SetStateAction<{[p: string]: string | number}[]>>
     playListInfo: {[p: string]: string | boolean | null}
     setPlayListInfo: React.Dispatch<React.SetStateAction<{[p: string]: string | boolean | null}>>
+    playListIndex: number
+    setPlayListIndex: React.Dispatch<React.SetStateAction<number>>
 }
 
 interface LoggedInContextInterface {
@@ -54,6 +56,9 @@ export default function App() {
         "isPleasure": false,
     });
 
+    // プレイリストの再生箇所
+    const [playListIndex, setPlayListIndex] = useState<number>(0);
+
     //子コンポーネントに送るもの
     const loggedInContext: LoggedInContextInterface = {
         isLoggedIn: isLoggedIn,
@@ -64,18 +69,21 @@ export default function App() {
         setPlayList: setPlayList,
         playListInfo: playListInfo,
         setPlayListInfo: setPlayListInfo,
+        playListIndex: playListIndex,
+        setPlayListIndex: setPlayListIndex,
     }
 
     useEffect(() => {
         (async () => {
-            let res = await getUserInfo();
-            if (!res) {
+            try {
+                let res = await getUserInfo();
+                setIsLoggedIn(res);
+            } catch (e: any) {
                const isRefresh = await refresh();
                if (isRefresh) {
                    setIsLoggedIn(isRefresh);
                }
             }
-            setIsLoggedIn(res);
         })();
     }, []);
 
