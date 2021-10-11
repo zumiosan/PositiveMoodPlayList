@@ -29,15 +29,13 @@ export async function logout() {
 
 // リフレッシュトークン取得用
 export async function getRefreshToken() {
-    try {
-        const res = await axios.get(
-        `${apiURL}account/refresh-token/`,
-        { withCredentials: true }
-        );
-        return res.data;
-    } catch (e: any) {
-        return false
-    }
+    const res = await axios.get(
+    `${apiURL}account/refresh-token/`,
+    { withCredentials: true }
+    );
+
+    if (res.status == 400) {return false}
+    return res.data;
 }
 
 // トークンのリフレッシュ用

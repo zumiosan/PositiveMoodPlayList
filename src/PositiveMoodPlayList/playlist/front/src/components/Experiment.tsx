@@ -8,7 +8,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Grid from "@mui/material/Grid";
-import {completeExperiment, getExperimentInfo} from "./modules/apiExperiment";
+import {getExperimentInfo} from "./modules/apiExperiment";
 import {refresh} from "./modules/apiJwt";
 import {LoggedInContext} from "../index";
 
