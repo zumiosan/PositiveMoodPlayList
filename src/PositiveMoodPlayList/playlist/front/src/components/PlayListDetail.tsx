@@ -23,7 +23,7 @@ export default function PlayListDetail() {
 
     return (
         <Grid container alignItems={"center"} justifyContent={"center"}>
-            <Grid item xs={12}>
+            <Grid item xs={10}>
                 <TableContainer component={Paper}>
                     <Table
                         size="small"

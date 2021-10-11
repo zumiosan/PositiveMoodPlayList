@@ -10,6 +10,7 @@ import MusicPlayer from "./components/MusicPlayer";
 import Box from "@mui/material/Box";
 import SelectPlayList from "./components/SelectPlayList";
 import Home from "./components/Home";
+import PlayListDetail from "./components/PlayListDetail";
 
 export const apiURL = 'http://localhost:8000/';
 
@@ -75,14 +76,15 @@ export default function App() {
 
     useEffect(() => {
         (async () => {
-            try {
-                let res = await getUserInfo();
-                setIsLoggedIn(res);
-            } catch (e: any) {
-               const isRefresh = await refresh();
-               if (isRefresh) {
-                   setIsLoggedIn(isRefresh);
-               }
+            const res = await getUserInfo();
+            if (!res) {
+                console.log('refresh')
+                const isRefresh = await refresh();
+                if (isRefresh) {
+                    setIsLoggedIn(isRefresh);
+                }
+            } else {
+                setIsLoggedIn(res)
             }
         })();
     }, []);
@@ -94,7 +96,7 @@ export default function App() {
                 <LoggedInContext.Provider value={loggedInContext}>
                     <PlayListContext.Provider value={playListContext}>
                         <Header />
-                        <Box sx={{marginTop: "100px", marginBottom: "250px"}}>
+                        <Box sx={{marginTop: "100px", marginBottom: "300px"}}>
                             <Switch>
                                 <Route exact path="/">
                                     <Home />
@@ -110,6 +112,9 @@ export default function App() {
                                 </Route>
                                 <Route path={"/create-playlist"}>
                                     <SelectPlayList />
+                                </Route>
+                                <Route path={"/detail-playlist"}>
+                                    <PlayListDetail />
                                 </Route>
                             </Switch>
                         </Box>

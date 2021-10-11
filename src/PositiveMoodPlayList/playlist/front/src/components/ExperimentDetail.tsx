@@ -180,7 +180,7 @@ export default function ExperimentDetail() {
                             </Button>
                         </Grid>
                     </Grid>
-                    <Grid item container xs={10} alignItems={"center"} justifyContent={"center"}>
+                    <Grid item container xs={12} alignItems={"center"} justifyContent={"center"}>
                         <PlayListDetail />
                     </Grid>
                 </Fragment>

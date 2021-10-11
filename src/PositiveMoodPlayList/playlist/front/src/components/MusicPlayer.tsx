@@ -14,6 +14,8 @@ import MusicInfo from "./MusicInfo";
 import VolumeButton from "./VolumeButton";
 import ReactHowler from "react-howler";
 import Typography from "@mui/material/Typography";
+import QueueMusicIcon from '@mui/icons-material/QueueMusic';
+import {Link} from "react-router-dom";
 
 interface PlayerContextInterface {
     duration: number,
@@ -151,7 +153,7 @@ export default function MusicPlayer() {
             <PlayerContext.Provider value={playerContext}>
                 <Box component={"footer"} sx={{
                     width: "100%",
-                    maxHeight: "200px",
+                    maxHeight: "250px",
                     position: "fixed",
                     bottom: "0",
                     bgcolor: "#3f51b5"
@@ -165,23 +167,34 @@ export default function MusicPlayer() {
                                 sx={{color: "white"}}
                                 alignItems={"center"}
                                 justifyContent={"center"}
-                                spacing={2}
+                                spacing={1}
                             >
-                                <Grid item container alignItems={"center"} justifyContent={"center"} xs={6}>
-                                    <Typography variant="caption" fontSize={20} fontWeight={500}>
-                                        {playListInfo['type']}
+                                <Grid item container alignItems={"center"} justifyContent={"center"} xs={12} sm={6}>
+                                    <Typography
+                                        variant="caption"
+                                        fontWeight={500}
+                                        sx={{fontSize: { xs: 15, sm: 20}}}
+                                    >
+                                        Type: {playListInfo['type']}
                                     </Typography>
                                 </Grid>
+                                {playListInfo['type'] != 'Random' && (
+                                    <Grid item container alignItems={"center"} justifyContent={"center"} xs={4} sm={2}>
+                                        <Typography sx={{fontSize: { xs: 15, sm: 20}}}>
+                                            Options:
+                                        </Typography>
+                                    </Grid>
+                                )}
                                 {playListInfo['isPersonalize'] && (
-                                    <Grid item container alignItems={"center"} justifyContent={"center"} xs={3}>
-                                        <Typography>
+                                    <Grid item container alignItems={"center"} justifyContent={"center"} xs={4} sm={2}>
+                                        <Typography sx={{fontSize: { xs: 15, sm: 20}}}>
                                             Personalize
                                         </Typography>
                                     </Grid>
                                 )}
                                 {playListInfo['isPleasure'] && (
-                                    <Grid item container alignItems={"center"} justifyContent={"center"} xs={3}>
-                                        <Typography>
+                                    <Grid item container alignItems={"center"} justifyContent={"center"} xs={4} sm={2}>
+                                        <Typography sx={{fontSize: { xs: 15, sm: 20}}}>
                                             Pleasure
                                         </Typography>
                                     </Grid>
@@ -251,6 +264,19 @@ export default function MusicPlayer() {
                             </Grid>
                             <Grid item sx={{display: { xs: 'block', sm: 'inline' }}}>
                                 <VolumeButton />
+                            </Grid>
+                            <Grid item sx={{display: { xs: 'block', sm: 'inline' }}}>
+                                {playListInfo['type'] != null ? (
+                                    <IconButton>
+                                        <Link to={"/detail-playlist"}>
+                                            <QueueMusicIcon sx={{color: "white"}}  />
+                                        </Link>
+                                    </IconButton>
+                                ) : (
+                                    <IconButton>
+                                        <QueueMusicIcon sx={{color: "white"}}  />
+                                    </IconButton>
+                                )}
                             </Grid>
                         </Grid>
                     </Grid>
