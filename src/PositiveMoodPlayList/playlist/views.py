@@ -93,18 +93,21 @@ class MusicInfoView(APIView):
 
 
 def get_playlist_data(data, user_name='test'):
+    """
+    プレイリストを取得する
+    """
 
-    if data['isPersonalPleasure']:
-        if data['isPersonalize']:
+    if data['is_personal_pleasure']:
+        if data['is_personalize']:
             mid = CreatePlayListPleasure.create_playlist(data['transition'], data['up_down_info'], user_name, user_name)
         else:
             mid = CreatePlayListPleasure.create_playlist(data['transition'], data['up_down_info'], 'test', user_name)
-    elif data['isCommonPleasure']:
-        if data['isPersonalize']:
+    elif data['is_common_pleasure']:
+        if data['is_personalize']:
             mid = CreatePlayListPleasure.create_playlist(data['transition'], data['up_down_info'], user_name, 'test')
         else:
             mid = CreatePlayListPleasure.create_playlist(data['transition'], data['up_down_info'], 'test', 'test')
-    elif data['isPersonalize']:
+    elif data['is_personalize']:
         mid = CreatePlayList.create_playlist(data['transition'], data['up_down_info'], user_name)
     else:
         mid = CreatePlayList.create_playlist(data['transition'], data['up_down_info'], 'test')
@@ -119,6 +122,9 @@ def get_playlist_data(data, user_name='test'):
 
 
 def get_random_data():
+    """
+    ランダム設計のプレイリストを作成する
+    """
     data_list = []
     query_set = MusicInfo.objects.order_by('?')[:12]
     serializer = MusicInfoSerializer(instance=query_set, many=True)
@@ -129,6 +135,9 @@ def get_random_data():
 
 
 def save_playlist_info(data_list, username):
+    """
+    プレイリスト情報を保存する
+    """
     mid = []
     for data in data_list:
         mid.append(data['mid'])
