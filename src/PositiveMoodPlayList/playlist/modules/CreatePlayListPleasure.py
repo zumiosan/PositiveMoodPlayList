@@ -11,6 +11,8 @@ env.read_env()
 
 impressions = ['hh', 'mh', 'mm', 'lm', 'll']
 
+pleasure_level = 0.8
+
 class_name_to_num = {
     'hh': 1,
     'mh': 2,
@@ -49,7 +51,7 @@ def execute_query(query):
     return rows
 
 
-def get_first_data(class_name, class_num, username):
+def get_first_data(class_name, class_num, impression_username, pleasure_username):
     """
     最初の楽曲を取得
     """
@@ -61,8 +63,7 @@ def get_first_data(class_name, class_num, username):
     return data
 
 
-def not_change_class_data(before_class_proba, current_class_name, current_class_num, next_class_name, next_class_num,
-                          up_down, username):
+def not_change_class_data(before_class_proba, current_class_name, current_class_num, up_down, impression_username, pleasure_username):
     """
     印象が遷移しない場合の楽曲を取得
     """
@@ -118,7 +119,7 @@ def not_change_class_data(before_class_proba, current_class_name, current_class_
     return data
 
 
-def change_class_data(current_class_name, current_class_num, before_class_name, username):
+def change_class_data(current_class_name, current_class_num, before_class_name, impression_username, pleasure_username):
     """
     印象が遷移する場合
     """
@@ -135,12 +136,13 @@ def change_class_data(current_class_name, current_class_num, before_class_name, 
     return data
 
 
-def create_playlist(transition, up_down_info, username):
+def create_playlist(transition, up_down_info, impression_username, pleasure_username):
     """
-    印象に基づいてプレイリストを生成する
+    印象と快不快度に基づいてプレイリストを生成する
     transition: 印象の遷移
     up_down_info: 印象が上がるのか下がるのかの情報
-    username: ユーザー名
+    impression_username: 印象のテーブルを検索する用のユーザー名
+    pleasure_username: 快不快のテーブルを検索する用のユーザ名
     """
     # プレイリスト作成終了フラグ
     break_flag = len(transition)
@@ -165,7 +167,7 @@ def create_playlist(transition, up_down_info, username):
             # 最初の曲を決める
             if index == 0:
                 # データの取得
-                data = get_first_data(current_class_name, current_class_num, username)
+                data = get_first_data(current_class_name, current_class_num, impression_username, pleasure_username)
                 # midをlistに格納
                 mid.append(data[0]['mid'])
                 # 現在の印象確率を保持しておく
@@ -185,9 +187,9 @@ def create_playlist(transition, up_down_info, username):
             # 2曲目以降
             if before_class_num == current_class_num:  # 印象が遷移しない場合
                 data = not_change_class_data(before_data_proba, current_class_name, current_class_num, next_class_name,
-                                             next_class_num, up_down, username)
+                                             next_class_num, up_down, impression_username, pleasure_username)
             elif before_class_num != current_class_num:  # 印象が遷移する場合
-                data = change_class_data(current_class_name, current_class_num, before_class_name, username)
+                data = change_class_data(current_class_name, current_class_num, before_class_name, impression_username, pleasure_username)
             try:
                 # midを格納
                 mid.append(data[0]['mid'])

@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions, status
 from .models import ExperimentInfo, MusicInfo
-from .modules import CreatePlayList, ExperimentDataList
+from .modules import CreatePlayList, ExperimentDataList, CreatePlayListPleasure
 from .serializers import ExperimentInfoSerializer, MusicInfoSerializer, PlayListInfoSerializer
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -93,7 +93,22 @@ class MusicInfoView(APIView):
 
 
 def get_playlist_data(data, user_name='test'):
-    mid = CreatePlayList.create_playlist(data['transition'], data['up_down_info'], user_name)
+
+    if data['isPersonalPleasure']:
+        if data['isPersonalize']:
+            mid = CreatePlayListPleasure.create_playlist(data['transition'], data['up_down_info'], user_name, user_name)
+        else:
+            mid = CreatePlayListPleasure.create_playlist(data['transition'], data['up_down_info'], 'test', user_name)
+    elif data['isCommonPleasure']:
+        if data['isPersonalize']:
+            mid = CreatePlayListPleasure.create_playlist(data['transition'], data['up_down_info'], user_name, 'test')
+        else:
+            mid = CreatePlayListPleasure.create_playlist(data['transition'], data['up_down_info'], 'test', 'test')
+    elif data['isPersonalize']:
+        mid = CreatePlayList.create_playlist(data['transition'], data['up_down_info'], user_name)
+    else:
+        mid = CreatePlayList.create_playlist(data['transition'], data['up_down_info'], 'test')
+
     data_list = []
     for i in mid:
         query_set = MusicInfo.objects.filter(mid=i)
