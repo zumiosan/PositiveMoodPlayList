@@ -136,7 +136,13 @@ export default function ExperimentDetail() {
                     <Grid item container xs={10} alignItems={"center"} justifyContent={"center"}>
                         <Grid item xs={12}>
                             <Typography variant={"body1"} align={"center"}>
-                                このリンク先の実験後アンケートに回答してください．
+                                このリンク先の実験後アンケートに回答してください．<br/>
+                                <Button
+                                    href="https://docs.google.com/forms/d/1VkkzZlfwkXyGV8cdIw9fIhyNlsar9OwegMDREr8XQm0/edit"
+                                    target="_blank"
+                                >
+                                    アンケートへ
+                                </Button>
                             </Typography>
                         </Grid>
                     </Grid>
@@ -189,7 +195,13 @@ export default function ExperimentDetail() {
                     <Grid item container xs={10} alignItems={"center"} justifyContent={"center"}>
                         <Grid item xs={12}>
                             <Typography variant={"body1"} align={"center"}>
-                                このリンク先の実験前アンケートに回答してください．
+                                このリンク先の実験前アンケートに回答してください．<br/>
+                                <Button
+                                    href="https://docs.google.com/forms/d/e/1FAIpQLSc91m1qgLrrqV-nnMD_ETYAzbWWr1uxX541tF8uc7paJrX9IQ/viewform"
+                                    target="_blank"
+                                >
+                                    アンケートへ
+                                </Button>
                             </Typography>
                         </Grid>
                     </Grid>
