@@ -65,6 +65,17 @@ class ImpressionInfo(models.Model):
     lm = models.FloatField(verbose_name='LMiddle', default=0.00)
     ll = models.FloatField(verbose_name='Low', default=0.00)
 
-# class PleasureInfo(models.Model):
 
+class PleasureInfo(models.Model):
+    """
+    楽曲の快不快度情報
+    """
+
+    class Meta:
+        db_table = 'pleasure_info'
+
+    id = models.BigAutoField(primary_key=True)
+    mid = models.IntegerField(verbose_name='楽曲番号', null=None)
+    username = models.CharField(verbose_name='ユーザ名', max_length=255)
+    pleasure = models.FloatField(verbose_name='Pleasure', default=0.00)
 
