@@ -27,6 +27,7 @@ class_num_to_name = {
     5: 'll',
 }
 
+
 def get_connection():
     return psycopg2.connect(
         dsn=env("DATABASE_POSITIVE_MOOD_PLAYLIST_URL"),
