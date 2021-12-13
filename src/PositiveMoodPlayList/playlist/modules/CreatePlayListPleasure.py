@@ -58,7 +58,7 @@ def get_first_data(class_name, class_num, impression_username, pleasure_username
 
     query = f"WITH table1 AS (SELECT * FROM impression_info WHERE username='{impression_username}')," \
             f"table2 AS (SELECT * FROM pleasure_info WHERE username='{pleasure_username}')," \
-            f"table3 AS (SELECT * FROM INNER JOIN table2 ON table1.mid = table2.mid "\
+            f"table3 AS (SELECT * FROM table1 INNER JOIN table2 ON table1.mid = table2.mid "\
             "SELECT * FROM table3 " \
             f"WHERE class_num={class_num} AND {class_name} >= 0.8 AND pleasure >= {pleasure_level} " \
             f"ORDER BY random() LIMIT 1;"
@@ -84,7 +84,7 @@ def not_change_class_data(before_class_proba, current_class_name, current_class_
         # 印象がHighに近づく場合：一つ上の印象の印象確率が上がる
         query = f"WITH table1 AS (SELECT * FROM impression_info WHERE username='{impression_username}'), " \
                 f"table2 AS (SELECT * FROM pleasure_info WHERE username='{pleasure_username}'), " \
-                f"table3 AS (SELECT * FROM INNER JOIN table2 ON table1.mid = table2.mid " \
+                f"table3 AS (SELECT * FROM table1 INNER JOIN table2 ON table1.mid = table2.mid " \
                 f"SELECT * FROM table3 " \
                 f"WHERE class_num={current_class_num} and {current_class_name} >= 0.8 AND pleasure >= {pleasure_level} " \
                 f"AND {upper_class_name} >= {upper_class_proba} " \
@@ -103,7 +103,7 @@ def not_change_class_data(before_class_proba, current_class_name, current_class_
         # 印象がLowに近づく場合：一つ下の印象の印象確率が上がる．
         query = f"WITH table1 AS (SELECT * FROM impression_info WHERE username='{impression_username}'), " \
                 f"table2 AS (SELECT * FROM pleasure_info WHERE username='{pleasure_username}'), " \
-                f"table3 AS (SELECT * FROM INNER JOIN table2 ON table1.mid = table2.mid " \
+                f"table3 AS (SELECT * FROM table1 INNER JOIN table2 ON table1.mid = table2.mid " \
                 f"SELECT * FROM table3 " \
                 f"WHERE class_num={current_class_num} and {current_class_name} >= 0.8 " \
                 f"AND pleasure >= {pleasure_level} " \
@@ -122,7 +122,7 @@ def change_class_data(current_class_name, current_class_num, before_class_name, 
     """
     query = f"WITH table1 AS (SELECT * FROM impression_info WHERE username='{impression_username}'), " \
             f"table2 AS (SELECT * FROM pleasure_info WHERE username='{pleasure_username}'), " \
-            f"table3 AS (SELECT * FROM INNER JOIN table2 ON table1.mid = table2.mid " \
+            f"table3 AS (SELECT * FROM table1 INNER JOIN table2 ON table1.mid = table2.mid " \
             f"SELECT * FROM table3 " \
             f"WHERE class_num={current_class_num} " \
             f"and {current_class_name} >= 0.8 " \
