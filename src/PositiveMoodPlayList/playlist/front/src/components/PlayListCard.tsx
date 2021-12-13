@@ -23,7 +23,9 @@ export const PlayListCard: React.FC<Props> = ({pattern}) => {
 
     const [isPersonalize, setIsPersonalize] = useState(false);
 
-    const [isPleasure, setIsPleasure] = useState(false);
+    const [isPersonalPleasure, setIsPersonalPleasure] = useState(false);
+
+    const [isCommonPleasure, setIsCommonPleasure] = useState(false);
 
     const loginContext = useContext(LoggedInContext)!;
     const [setIsLoggIn] = [loginContext.setLoggedIn];
@@ -36,7 +38,8 @@ export const PlayListCard: React.FC<Props> = ({pattern}) => {
             up_down_info: impressionTransition[pattern]["up_down_info"] as number[],
             transition: impressionTransition[pattern]["transition"] as string[],
             is_personalize: isPersonalize,
-            is_pleasure: isPleasure,
+            is_personal_pleasure: isPersonalPleasure,
+            is_common_pleasure: isCommonPleasure,
         }
 
         try {
@@ -78,17 +81,28 @@ export const PlayListCard: React.FC<Props> = ({pattern}) => {
         const playlistInfo = {
                 "type": pattern,
                 "isPersonalize": isPersonalize,
-                "isPleasure": isPleasure,
+                "isPersonalPleasure": isPersonalPleasure,
+                "isCommonPleasure": isCommonPleasure,
         }
         setPlayListInfo(playlistInfo);
     }
 
-    const handlePersonalize = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setIsPersonalize(event.target.checked);
+    const handlePersonalize = () => {
+        setIsPersonalize(!isPersonalize);
     };
 
-    const handlePleasure = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setIsPleasure(event.target.checked);
+    const handlePersonalPleasure = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setIsPersonalPleasure(event.target.checked);
+        if (isCommonPleasure) {
+            setIsCommonPleasure(false);
+        }
+    };
+
+    const handleCommonPleasure = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setIsCommonPleasure(event.target.checked);
+        if (isPersonalPleasure) {
+            setIsPersonalPleasure(false);
+        }
     };
 
 
@@ -106,12 +120,20 @@ export const PlayListCard: React.FC<Props> = ({pattern}) => {
                             <Fragment>
                                 <Grid item container xs={12} spacing={2} justifyContent={"center"} alignItems={"center"}>
                                     <FormControlLabel
+                                        control={<Checkbox checked={!isPersonalize} onChange={handlePersonalize}/>}
+                                        label={"Common"}
+                                    />
+                                    <FormControlLabel
                                         control={<Checkbox checked={isPersonalize} onChange={handlePersonalize}/>}
                                         label={"Personalize"}
                                     />
                                     <FormControlLabel
-                                        control={<Checkbox checked={isPleasure} onChange={handlePleasure}/>}
-                                        label={"Pleasure"}
+                                        control={<Checkbox checked={isCommonPleasure} onChange={handleCommonPleasure}/>}
+                                        label={"CommonPleasure"}
+                                    />
+                                    <FormControlLabel
+                                        control={<Checkbox checked={isPersonalPleasure} onChange={handlePersonalPleasure}/>}
+                                        label={"PersonalPleasure"}
                                     />
                                 </Grid>
                                 <Grid item container xs={12} justifyContent={"flex-end"} alignItems={"center"}>
