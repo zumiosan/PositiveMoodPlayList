@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import {Switch, Route, BrowserRouter, Link} from "react-router-dom";
+import {Switch, Route, BrowserRouter, HashRouter} from "react-router-dom";
 import Login from "./components/Login";
 import Header from "./components/Header";
 import Experiment from "./components/Experiment";
@@ -92,7 +92,7 @@ export default function App() {
 
     return(
         <Box component={"div"}>
-            <BrowserRouter>
+            <HashRouter>
                 <LoggedInContext.Provider value={loggedInContext}>
                     <PlayListContext.Provider value={playListContext}>
                         <Header />
@@ -123,7 +123,7 @@ export default function App() {
                         )}
                     </PlayListContext.Provider>
                 </LoggedInContext.Provider>
-            </BrowserRouter>
+            </HashRouter>
         </Box>
     );
 }
