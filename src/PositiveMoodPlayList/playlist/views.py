@@ -1,10 +1,15 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions, status
+from django.views.generic import TemplateView
 from .models import ExperimentInfo, MusicInfo
 from .modules import CreatePlayList, ExperimentDataList, CreatePlayListPleasure
 from .serializers import ExperimentInfoSerializer, MusicInfoSerializer, PlayListInfoSerializer
 from django.core.exceptions import ObjectDoesNotExist
+
+
+class TopView(TemplateView):
+    template_name = "playlist/index.html"
 
 
 class ExperimentInfoView(APIView):
