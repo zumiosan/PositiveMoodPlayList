@@ -3,16 +3,17 @@ import HtmlWebpackPlugin from "html-webpack-plugin";
 
 module.exports = {
     //設定
-    mode: 'development',
+    mode: 'production',
 
     //エントリーポイント
     entry: './src/index.tsx',
 
     // jsファイルの出力先
     output: {
-        path: path.resolve(__dirname, 'dist'),
-        filename: '[name].js',
-        assetModuleFilename: 'asset/[name][ext]'
+        path: path.resolve(__dirname, '../static'),
+        publicPath: '/playlist/',
+        filename: 'bundle.js',
+        // assetModuleFilename: 'asset/[name][ext]'
     },
 
     // importで読み込むファイルの種類
