@@ -10,8 +10,7 @@ module.exports = {
 
     // jsファイルの出力先
     output: {
-        path: path.resolve(__dirname, '../static'),
-        publicPath: '/playlist/',
+        path: path.resolve(__dirname, '../static/playlist/js'),
         filename: 'bundle.js',
         // assetModuleFilename: 'asset/[name][ext]'
     },
