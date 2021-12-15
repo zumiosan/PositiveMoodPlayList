@@ -39,7 +39,8 @@ export default function MusicPlayer() {
     const [playListIndex, setPlayListIndex] = [playListContext.playListIndex, playListContext.setPlayListIndex];
 
     // 楽曲ファイルのパス
-    const [src, setSrc] = useState<string>('/asset/');
+    const staticPath = '/static/playlist/music/'
+    const [src, setSrc] = useState<string>(staticPath);
 
     // 再生中かどうか
     const [isPlay, setIsPlay] = useState<boolean>(false);
@@ -67,7 +68,7 @@ export default function MusicPlayer() {
     // プレイリストが更新された時
     useEffect(() => {
         setPlayListIndex(0);
-        const src = '/asset/' + String(playList[0]['mid']).padStart(6, '0') + '.wav';
+        const src = staticPath + String(playList[0]['mid']).padStart(6, '0') + '.wav';
         setSrc(src);
     }, [playList]);
 
@@ -85,7 +86,7 @@ export default function MusicPlayer() {
 
     // 楽曲ファイルを読み込んだ時
     const handleOnLoad = () => {
-        console.log(player.current!.duration());
+        // console.log(player.current!.duration());
         setDuration(Math.floor(player.current!.duration()));
     }
 
@@ -105,7 +106,7 @@ export default function MusicPlayer() {
         player.current!.stop();
 
         // 次の曲をセット
-        const src = '/asset/' + String(playList[playListIndex]['mid']).padStart(6, '0') + '.wav';
+        const src = staticPath + String(playList[playListIndex]['mid']).padStart(6, '0') + '.wav';
         setSrc(src);
         setPosition(0);
     }, [playListIndex]);
