@@ -39,7 +39,7 @@ export default function MusicPlayer() {
     const [playListIndex, setPlayListIndex] = [playListContext.playListIndex, playListContext.setPlayListIndex];
 
     // 楽曲ファイルのパス
-    const staticPath = '/static/playlist/music/'
+    const staticPath = '/static/music/'
     const [src, setSrc] = useState<string>(staticPath);
 
     // 再生中かどうか
