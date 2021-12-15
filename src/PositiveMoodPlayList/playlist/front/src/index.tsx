@@ -39,14 +39,9 @@ export default function App() {
     // プレイリスト再生楽曲リスト
     const [playList, setPlayList] = useState<{[index:string]: number | string}[]>([
         {
-            "mid": 1255,
-            "music_name": "aaa",
-            "artist_name": "aaaaaa"
-        },
-        {
-            "mid": 2303,
-            "music_name": "bbb",
-            "artist_name": "aaaaaa"
+            "mid": 0,
+            "music_name": "",
+            "artist_name": ""
         },
     ]);
 
