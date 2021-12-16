@@ -75,7 +75,7 @@ export default function MusicPlayer() {
     // 再生ボタンを押した時
     const handlePlay = () => {
         setIsPlay(true);
-        interval.current = setInterval(getPosition, 1);
+        // interval.current = setInterval(getPosition, 1);
     };
 
     // 一時停止ボタンを押した時
