@@ -29,7 +29,7 @@ export async function completeExperiment(data: { ex_id: string; playlist_mid: nu
 
 export async function createExperimentPlaylist(data: { ex_id: string }): Promise<{[p:string]: number | string}[]> {
     const res = await axios.post(
-        `${apiPlayListURL}playlist/expt-playlist/`,
+        `${apiPlayListURL}/expt-playlist/`,
         data,
         { withCredentials: true }
     )
