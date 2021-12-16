@@ -54,7 +54,8 @@ export default function App() {
     const [playListInfo, setPlayListInfo] = useState<{[index:string]: string | boolean | null}>({
         "type": null,
         "isPersonalize": false,
-        "isPleasure": false,
+        "isCommonPleasure": false,
+        "isPersonalPleasure": false,
     });
 
     // プレイリストの再生箇所
