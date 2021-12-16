@@ -184,8 +184,8 @@ def create_playlist(transition, up_down_info, impression_username, pleasure_user
 
             # 2曲目以降
             if before_class_num == current_class_num:  # 印象が遷移しない場合
-                data = not_change_class_data(before_data_proba, current_class_name, current_class_num, next_class_name,
-                                             next_class_num, up_down, impression_username, pleasure_username)
+                data = not_change_class_data(before_data_proba, current_class_name, current_class_num,
+                                             up_down, impression_username, pleasure_username)
             elif before_class_num != current_class_num:  # 印象が遷移する場合
                 data = change_class_data(current_class_name, current_class_num, before_class_name, impression_username, pleasure_username)
             try:
