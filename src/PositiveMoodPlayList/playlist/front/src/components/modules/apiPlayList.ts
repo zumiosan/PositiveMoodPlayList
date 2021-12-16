@@ -15,7 +15,7 @@ export interface CreatePlayListInterface {
 // プレイリストを作成
 export async function createPlayList(data:CreatePlayListInterface): Promise<{[p:string]: number | string}[]> {
     const res = await axios.post(
-        `${apiPlayListURL}/create-playlist/`,
+        `${apiPlayListURL}create-playlist/`,
         data,
         { withCredentials: true }
     );
@@ -28,7 +28,7 @@ export async function createPlayList(data:CreatePlayListInterface): Promise<{[p:
 // ランダムのプレイリストを作成
 export async function createRandomPlayList(): Promise<{[p:string]: number | string}[]> {
     const res = await axios.get(
-        `${apiPlayListURL}/create-random/`,
+        `${apiPlayListURL}create-random/`,
         { withCredentials: true }
     );
     if (res.status != 200) {

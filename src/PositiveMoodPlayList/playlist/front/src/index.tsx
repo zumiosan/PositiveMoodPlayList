@@ -12,7 +12,7 @@ import SelectPlayList from "./components/SelectPlayList";
 import Home from "./components/Home";
 import PlayListDetail from "./components/PlayListDetail";
 
-export const apiURL = 'http://localhost:8000/';
+export const apiURL = 'http://kidsapp.kyoto-su.ac.jp/';
 export const apiPlayListURL = `${apiURL}positive_mood_playlist/`;
 
 interface PlayListContextInterface {
