@@ -20,6 +20,7 @@ import {Link} from "react-router-dom";
 interface PlayerContextInterface {
     duration: number,
     position: number,
+    setIsSeek: React.Dispatch<React.SetStateAction<boolean>>,
     setPosition: React.Dispatch<React.SetStateAction<number>>,
     setVolume: React.Dispatch<React.SetStateAction<number>>,
 }
@@ -39,10 +40,14 @@ export default function MusicPlayer() {
     const [playListIndex, setPlayListIndex] = [playListContext.playListIndex, playListContext.setPlayListIndex];
 
     // 楽曲ファイルのパス
-    const [src, setSrc] = useState<string>('/asset/');
+    const staticPath = '/static/music/'
+    const [src, setSrc] = useState<string>(staticPath);
 
     // 再生中かどうか
     const [isPlay, setIsPlay] = useState<boolean>(false);
+
+    // シークバーを動かしているかどうか
+    const [isSeek, setIsSeek] = useState<boolean>(false);
 
     // 曲の長さ(秒)
     const [duration, setDuration] = useState<number>(0);
@@ -60,6 +65,7 @@ export default function MusicPlayer() {
     const playerContext: PlayerContextInterface = {
         duration: duration,
         position: position,
+        setIsSeek: setIsSeek,
         setPosition: setPosition,
         setVolume: setVolume,
     }
@@ -67,7 +73,7 @@ export default function MusicPlayer() {
     // プレイリストが更新された時
     useEffect(() => {
         setPlayListIndex(0);
-        const src = '/asset/' + String(playList[0]['mid']).padStart(6, '0') + '.wav';
+        const src = staticPath + String(playList[0]['mid']).padStart(6, '0') + '.wav';
         setSrc(src);
     }, [playList]);
 
@@ -85,18 +91,20 @@ export default function MusicPlayer() {
 
     // 楽曲ファイルを読み込んだ時
     const handleOnLoad = () => {
-        console.log(player.current!.duration());
+        // console.log(player.current!.duration());
         setDuration(Math.floor(player.current!.duration()));
     }
 
-    // 再生場所の取得
+    // 再生箇所の取得
     const getPosition = () => {
         setPosition(Math.floor(player.current!.seek()));
     }
 
     // 再生箇所の変更
     useEffect(() => {
-        player.current!.seek(position);
+        if (isSeek) {
+            player.current!.seek(position);
+        }
     }, [position])
 
     // 曲をセット
@@ -105,7 +113,7 @@ export default function MusicPlayer() {
         player.current!.stop();
 
         // 次の曲をセット
-        const src = '/asset/' + String(playList[playListIndex]['mid']).padStart(6, '0') + '.wav';
+        const src = staticPath + String(playList[playListIndex]['mid']).padStart(6, '0') + '.wav';
         setSrc(src);
         setPosition(0);
     }, [playListIndex]);

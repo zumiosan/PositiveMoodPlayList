@@ -15,15 +15,26 @@ const TinyText = styled(Typography)({
 export default function PlayerSlider() {
 
     const playerContext = useContext(PlayerContext)!;
-    const [duration, position, setPosition] = [
+    const [duration, position, setPosition, setIsSeek] = [
         playerContext.duration,
         playerContext.position,
-        playerContext.setPosition
+        playerContext.setPosition,
+        playerContext.setIsSeek,
     ];
 
     //ポジション変更時
     const handleMovePosition = (value:number) => {
         setPosition(value);
+    };
+
+    //シーククリック時
+    const handleMouseDown = () => {
+        setIsSeek(true);
+    };
+
+    //シークから離れた時
+    const handleMouseUp = () => {
+        setIsSeek(false);
     };
 
     // 再生時間のフォーマット
@@ -44,6 +55,8 @@ export default function PlayerSlider() {
                     step={1}
                     max={duration}
                     onChange={(_, value) => handleMovePosition(value as number)}
+                    onMouseDown={handleMouseDown}
+                    onMouseUp={handleMouseUp}
                     sx={{
                         color: "white",
                         '& .MuiSlider-thumb': {

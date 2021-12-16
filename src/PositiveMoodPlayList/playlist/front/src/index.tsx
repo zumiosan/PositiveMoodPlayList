@@ -12,7 +12,9 @@ import SelectPlayList from "./components/SelectPlayList";
 import Home from "./components/Home";
 import PlayListDetail from "./components/PlayListDetail";
 
-export const apiURL = 'http://localhost:8000/';
+export const apiURL = 'http://kidsapp.kyoto-su.ac.jp/';
+// export const apiURL = 'http://localhost:8000/';
+export const apiPlayListURL = `${apiURL}positive_mood_playlist/`;
 
 interface PlayListContextInterface {
     playList: {[p: string]: string | number}[]
@@ -39,14 +41,9 @@ export default function App() {
     // プレイリスト再生楽曲リスト
     const [playList, setPlayList] = useState<{[index:string]: number | string}[]>([
         {
-            "mid": 1255,
-            "music_name": "aaa",
-            "artist_name": "aaaaaa"
-        },
-        {
-            "mid": 2303,
-            "music_name": "bbb",
-            "artist_name": "aaaaaa"
+            "mid": 0,
+            "music_name": "",
+            "artist_name": ""
         },
     ]);
 

@@ -1,5 +1,5 @@
 import axios from "axios";
-import {apiURL} from "../../index";
+import {apiPlayListURL} from "../../index";
 
 axios.defaults.xsrfCookieName = 'csrftoken'
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN"
@@ -15,7 +15,7 @@ export interface CreatePlayListInterface {
 // プレイリストを作成
 export async function createPlayList(data:CreatePlayListInterface): Promise<{[p:string]: number | string}[]> {
     const res = await axios.post(
-        `${apiURL}playlist/create-playlist/`,
+        `${apiPlayListURL}create-playlist/`,
         data,
         { withCredentials: true }
     );
@@ -28,7 +28,7 @@ export async function createPlayList(data:CreatePlayListInterface): Promise<{[p:
 // ランダムのプレイリストを作成
 export async function createRandomPlayList(): Promise<{[p:string]: number | string}[]> {
     const res = await axios.get(
-        `${apiURL}playlist/create-random/`,
+        `${apiPlayListURL}create-random/`,
         { withCredentials: true }
     );
     if (res.status != 200) {
