@@ -152,6 +152,7 @@ export default function MusicPlayer() {
         <Fragment>
             <ReactHowler
                 src={src}
+                html5={true}
                 playing={isPlay}
                 volume={volume / 100}
                 onLoad={handleOnLoad}
