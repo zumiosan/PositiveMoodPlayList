@@ -102,10 +102,10 @@ export default function MusicPlayer() {
 
     // 再生箇所の変更
     useEffect(() => {
-        if (isSeek) {
+        if (!isSeek) {
             player.current!.seek(position);
         }
-    }, [position])
+    }, [isSeek])
 
     // 曲をセット
     useEffect(() => {
