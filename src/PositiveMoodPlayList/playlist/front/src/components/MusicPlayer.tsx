@@ -16,6 +16,7 @@ import ReactHowler from "react-howler";
 import Typography from "@mui/material/Typography";
 import QueueMusicIcon from '@mui/icons-material/QueueMusic';
 import {Link} from "react-router-dom";
+import raf from 'raf';
 
 interface PlayerContextInterface {
     duration: number,
@@ -61,6 +62,8 @@ export default function MusicPlayer() {
     // setInterval用の変数
     const interval = useRef<NodeJS.Timer | null>();
 
+    const raf_id = useRef<number | null>();
+
     // 子コンポーネントに送るもの
     const playerContext: PlayerContextInterface = {
         duration: duration,
@@ -80,13 +83,15 @@ export default function MusicPlayer() {
     // 再生ボタンを押した時
     const handlePlay = () => {
         setIsPlay(true);
-        interval.current = setInterval(getPosition, 1);
+        // interval.current = setInterval(getPosition, 1);
+        raf_id.current = raf(getPosition);
     };
 
     // 一時停止ボタンを押した時
     const handlePause = () => {
         setIsPlay(false);
-        clearInterval(Number(interval.current));
+        // clearInterval(Number(interval.current));
+        clearRAF();
     };
 
     // 楽曲ファイルを読み込んだ時
@@ -122,7 +127,8 @@ export default function MusicPlayer() {
     const handleNext = () => {
         // 次の楽曲がない場合は最初の楽曲をセットして停止
         if (playListIndex + 1 >= playList.length) {
-            clearInterval(Number(interval.current));
+            // clearInterval(Number(interval.current));
+            clearRAF();
             setIsPlay(false);
             setPlayListIndex(0);
         } else {
@@ -134,7 +140,8 @@ export default function MusicPlayer() {
     const handlePrevious = () => {
         // 前の楽曲がない場合は停止
         if (playListIndex - 1 <= -1) {
-            clearInterval(Number(interval.current));
+            // clearInterval(Number(interval.current));
+            clearRAF();
             setIsPlay(false);
             setPosition(0);
             player.current!.stop();
@@ -147,6 +154,10 @@ export default function MusicPlayer() {
     const handleOnEnd = () => {
         handleNext();
     };
+
+    const clearRAF = () => {
+        raf.cancel(raf_id.current!);
+    }
 
     return (
         <Fragment>
