@@ -5,5 +5,5 @@ from django.urls import path
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('account/', include('app.urls')),
-    path('playlist/', include('playlist.urls')),
+    path('positive_mood_playlist/', include('playlist.urls')),
 ]
