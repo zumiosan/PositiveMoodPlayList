@@ -106,16 +106,16 @@ def get_playlist_data(data, user_name='test'):
         if data['is_personalize']:
             mid = CreatePlayListPleasure.create_playlist(data['transition'], data['up_down_info'], user_name, user_name)
         else:
-            mid = CreatePlayListPleasure.create_playlist(data['transition'], data['up_down_info'], 'test', user_name)
+            mid = CreatePlayListPleasure.create_playlist(data['transition'], data['up_down_info'], 'common', user_name)
     elif data['is_common_pleasure']:
         if data['is_personalize']:
-            mid = CreatePlayListPleasure.create_playlist(data['transition'], data['up_down_info'], user_name, 'test')
+            mid = CreatePlayListPleasure.create_playlist(data['transition'], data['up_down_info'], user_name, 'common')
         else:
-            mid = CreatePlayListPleasure.create_playlist(data['transition'], data['up_down_info'], 'test', 'test')
+            mid = CreatePlayListPleasure.create_playlist(data['transition'], data['up_down_info'], 'common', 'common')
     elif data['is_personalize']:
         mid = CreatePlayList.create_playlist(data['transition'], data['up_down_info'], user_name)
     else:
-        mid = CreatePlayList.create_playlist(data['transition'], data['up_down_info'], 'test')
+        mid = CreatePlayList.create_playlist(data['transition'], data['up_down_info'], 'common')
 
     data_list = []
     for i in mid:
