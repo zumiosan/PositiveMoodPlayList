@@ -102,7 +102,9 @@ export default function MusicPlayer() {
 
     // 再生箇所の取得
     const getPosition = () => {
-        setPosition(Math.floor(player.current!.seek()));
+        if (!isSeek) {
+            setPosition(Math.floor(player.current!.seek()));
+        }
     }
 
     // 再生箇所の変更
