@@ -11,6 +11,10 @@ env.read_env()
 
 impressions = ['hh', 'mh', 'mm', 'lm', 'll']
 
+track_num_limit = 100
+
+impression_level = 0.8
+
 class_name_to_num = {
     'hh': 1,
     'mh': 2,
@@ -53,21 +57,38 @@ def get_first_data(class_name, class_num, username):
     """
     最初の楽曲を取得
     """
-    query = "SELECT * FROM impression_info " \
-            "WHERE username='{username}' and class_num={class_num} " \
-            "and {class_name} >= 0.8 ORDER BY random() LIMIT 1;" \
-        .format(username=username, class_num=class_num, class_name=class_name)
+    # 候補楽曲数を調べる．
+    query = f"SELECT count(*) FROM impression_info " \
+            f"WHERE username='{username}' " \
+            f"and class_num={class_num} " \
+            f"and {class_name} >= {impression_level};"
+    track_num = execute_query(query)[0]['count']
+
+    # 候補楽曲数が閾値より小さい場合は，class_numの制限を外す
+    if track_num >= track_num_limit:
+        query = f"SELECT * FROM impression_info " \
+                f"WHERE username='{username}' " \
+                f"and class_num={class_num} " \
+                f"and {class_name} >= {impression_level} " \
+                f"ORDER BY random() LIMIT 1;"
+    else:
+        query = f"SELECT * FROM impression_info " \
+                f"WHERE username='{username}' " \
+                f"and {class_name} >= {impression_level - 0.1} " \
+                f"ORDER BY random() LIMIT 1;"
+
     data = execute_query(query)
+
     return data
 
 
-def not_change_class_data(before_class_proba, current_class_name, current_class_num, next_class_name, next_class_num,
-                          up_down, username):
+def not_change_class_data(before_class_proba, current_class_name, current_class_num, up_down, username):
     """
     印象が遷移しない場合の楽曲を取得
     """
     query = None
     if up_down == 1:  # 印象がHighに近づく場合
+        # 印象がHighに近づく場合：一つ上の印象の印象確率が上がる
         # 一つ上の印象の印象確率とクラス名
         try:
             upper_class_proba = before_class_proba[class_num_to_name[current_class_num - 1]]
@@ -76,20 +97,31 @@ def not_change_class_data(before_class_proba, current_class_name, current_class_
             upper_class_proba = before_class_proba[class_num_to_name[current_class_num]]
             upper_class_name = current_class_name
 
-        # 実行するクエリ
-        # 印象がHighに近づく場合：一つ上の印象の印象確率が上がる
-        query = "SELECT * FROM impression_info " \
-                "WHERE username='{username}' and class_num={current_class_num} " \
-                "and {current_class_name} >= 0.8 " \
-                "and {upper_class_name} >= {upper_class_proba} " \
-                "ORDER BY random() LIMIT 1;" \
-            .format(username=username,
-                    current_class_num=current_class_num,
-                    current_class_name=current_class_name,
-                    upper_class_name=upper_class_name,
-                    upper_class_proba=upper_class_proba,
-                    )
+        # 候補楽曲数を調べる
+        query = f"SELECT count(*) FROM impression_info " \
+                f"WHERE username='{username}' " \
+                f"and class_num={current_class_num} " \
+                f"and {current_class_name} >= {impression_level} " \
+                f"and {upper_class_name} >= {upper_class_proba};"
+        track_num = execute_query(query)[0]['count']
+
+        # 候補楽曲数が閾値より小さい場合は，class_numの制限を外す
+        if track_num >= track_num_limit:
+            query = f"SELECT * FROM impression_info " \
+                    f"WHERE username='{username}' " \
+                    f"and class_num={current_class_num} " \
+                    f"and {current_class_name} >= {impression_level} " \
+                    f"and {upper_class_name} >= {upper_class_proba} " \
+                    f"ORDER BY random() LIMIT 1;"
+        else:
+            query = f"SELECT * FROM impression_info " \
+                    f"WHERE username='{username}' " \
+                    f"and {current_class_name} >= {impression_level - 0.1} " \
+                    f"and {upper_class_name} >= {upper_class_proba} " \
+                    f"ORDER BY random() LIMIT 1;"
+
     elif up_down == -1:  # 印象がLowに近づく場合
+        # 印象がLowに近づく場合：一つ下の印象の印象確率が上がる．
         # 一つ下の印象確率とクラス名
         try:
             lower_class_proba = before_class_proba[class_num_to_name[current_class_num + 1]]
@@ -98,19 +130,28 @@ def not_change_class_data(before_class_proba, current_class_name, current_class_
             lower_class_proba = before_class_proba[class_num_to_name[current_class_num]]
             lower_class_name = current_class_name
 
-        # 実行するクエリ
-        # 印象がLowに近づく場合：一つ下の印象の印象確率が上がる．
-        query = "SELECT * FROM impression_info " \
-                "WHERE username='{username}' and class_num={current_class_num} " \
-                "and {current_class_name} >= 0.8 " \
-                "and {lower_class_name} >= {lower_class_proba} " \
-                "ORDER BY random() LIMIT 1;" \
-            .format(username=username,
-                    current_class_num=current_class_num,
-                    current_class_name=current_class_name,
-                    lower_class_name=lower_class_name,
-                    lower_class_proba=lower_class_proba,
-                    )
+        # 候補楽曲数を調べる
+        query = f"SELECT count(*) FROM impression_info " \
+                f"WHERE username='{username}' " \
+                f"and class_num={current_class_num} " \
+                f"and {current_class_name} >= {impression_level} " \
+                f"and {lower_class_name} >= {lower_class_proba};"
+        track_num = execute_query(query)[0]['count']
+
+        # 候補楽曲数が閾値より小さい場合は，class_numの制限を外す
+        if track_num >= track_num_limit:
+            query = f"SELECT * FROM impression_info " \
+                    f"WHERE username='{username}' " \
+                    f"and class_num={current_class_num} " \
+                    f"and {current_class_name} >= {impression_level} " \
+                    f"and {lower_class_name} >= {lower_class_proba} " \
+                    f"ORDER BY random() LIMIT 1;"
+        else:
+            query = f"SELECT * FROM impression_info " \
+                    f"WHERE username='{username}' " \
+                    f"and {current_class_name} >= {impression_level - 0.1} " \
+                    f"and {lower_class_name} >= {lower_class_proba} " \
+                    f"ORDER BY random() LIMIT 1;"
 
     # クエリ実行
     data = execute_query(query)
@@ -122,14 +163,27 @@ def change_class_data(current_class_name, current_class_num, before_class_name, 
     """
     印象が遷移する場合
     """
-    query = "SELECT * FROM impression_info WHERE username='{username}' and class_num={current_class_num} " \
-            "and {current_class_name} >= 0.8 " \
-            "and {before_class_name} >= 0.7 " \
-            "ORDER BY random() LIMIT 1;" \
-        .format(username=username,
-                current_class_num=current_class_num,
-                current_class_name=current_class_name,
-                before_class_name=before_class_name)
+    # 候補楽曲数を調べる．
+    query = f"SELECT count(*) FROM impression_info " \
+            f"WHERE username='{username}' " \
+            f"and class_num={current_class_num} " \
+            f"and {current_class_name} >= {impression_level} " \
+            f"and {before_class_name} >= 0.7;"
+    track_num = execute_query(query)[0]['count']
+
+    if track_num >= track_num_limit:
+        query = f"SELECT * FROM impression_info " \
+                f"WHERE username='{username}' " \
+                f"and class_num={current_class_num} " \
+                f"and {current_class_name} >= {impression_level} " \
+                f"and {before_class_name} >= 0.7 " \
+                f"ORDER BY random() LIMIT 1;"
+    else:
+        query = f"SELECT * FROM impression_info " \
+                f"WHERE username='{username}' " \
+                f"and {current_class_name} >= {impression_level - 0.1} " \
+                f"and {before_class_name} >= 0.7 " \
+                f"ORDER BY random() LIMIT 1;"
     data = execute_query(query)
     # print(data)
     return data
@@ -184,8 +238,7 @@ def create_playlist(transition, up_down_info, username):
 
             # 2曲目以降
             if before_class_num == current_class_num:  # 印象が遷移しない場合
-                data = not_change_class_data(before_data_proba, current_class_name, current_class_num, next_class_name,
-                                             next_class_num, up_down, username)
+                data = not_change_class_data(before_data_proba, current_class_name, current_class_num, up_down, username)
             elif before_class_num != current_class_num:  # 印象が遷移する場合
                 data = change_class_data(current_class_name, current_class_num, before_class_name, username)
             try:
@@ -211,13 +264,13 @@ def create_playlist(transition, up_down_info, username):
         if len(mid) == break_flag:
             break
 
-    # for i in music_data:
-    #     print('hh:{0}, mh:{1}, mm:{2}, lm:{3}, ll:{4}'.format(
-    #         i['hh'],
-    #         i['mh'],
-    #         i['mm'],
-    #         i['lm'],
-    #         i['ll'],
-    #     ))
+    for i in music_data:
+        print('hh:{0}, mh:{1}, mm:{2}, lm:{3}, ll:{4}'.format(
+            i['hh'],
+            i['mh'],
+            i['mm'],
+            i['lm'],
+            i['ll'],
+        ))
 
     return mid
