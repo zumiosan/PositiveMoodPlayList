@@ -161,13 +161,21 @@ export default function ExperimentDetail() {
                             </Button>
                         </Grid>
                     </Grid>
+                    <Grid item container xs={12} alignItems={"center"} justifyContent={"center"}>
+                        <Typography variant={"h3"} align={"center"}>
+                            聴取したプレイリスト
+                        </Typography>
+                        <PlayListDetail />
+                    </Grid>
                 </Fragment>
             ) : activeStep === 1 ? (
                 <Fragment>
                     <Grid item container xs={10} alignItems={"center"} justifyContent={"center"}>
                         <Grid item xs={12}>
                             <Typography variant={"body1"} align={"center"}>
-                                プレイリストを再生して聴取してください．
+                                画面の下の方にある再生ボタン▶を押してプレイリストを聴取してください．<br/>
+                                再生ボタンを押すと，合計12個の楽曲が自動で連続再生されます．<br/>
+                                再生が終了したら，Nextボタンを押して実験後アンケート後画面へ移動してください．
                             </Typography>
                         </Grid>
                     </Grid>
@@ -187,7 +195,17 @@ export default function ExperimentDetail() {
                         </Grid>
                     </Grid>
                     <Grid item container xs={12} alignItems={"center"} justifyContent={"center"}>
-                        <PlayListDetail />
+                        <Typography variant={"h3"} align={"center"} color={"red"}>
+                            実験中の注意事項
+                        </Typography>
+                    </Grid>
+                    <Grid item container xs={6} alignItems={"center"} justifyContent={"center"}>
+                        <Typography variant={"body1"} align={"left"}>
+                            1. 実験中に完全に寝てしまうことは禁止です．<br/>
+                            2. 音によって気分を変化させる効果のある映像の視聴やゲームをプレイする等は禁止です.<br/>
+                            3. 連続してプレイリストを聴取する場合は，最低1時間の休憩を挟んでください．<br/>
+                            4. 実験を途中で中断する場合は，実験Topページに戻って初めからやり直してください．
+                        </Typography>
                     </Grid>
                 </Fragment>
             ) : activeStep === 0 && (
@@ -219,6 +237,19 @@ export default function ExperimentDetail() {
                                 Next
                             </Button>
                         </Grid>
+                    </Grid>
+                    <Grid item container xs={12} alignItems={"center"} justifyContent={"center"}>
+                        <Typography variant={"h3"} align={"center"} color={"red"}>
+                            実験中の注意事項
+                        </Typography>
+                    </Grid>
+                    <Grid item container xs={6} alignItems={"center"} justifyContent={"center"}>
+                        <Typography variant={"body1"} align={"left"}>
+                            1. 実験中に完全に寝てしまうことは禁止です．<br/>
+                            2. 音によって気分を変化させる効果のある映像の視聴やゲームをプレイする等は禁止です.<br/>
+                            3. 連続してプレイリストを聴取する場合は，最低1時間の休憩を挟んでください．<br/>
+                            4. 実験を途中で中断する場合は，実験Topページに戻って初めからやり直してください．
+                        </Typography>
                     </Grid>
                 </Fragment>
             )}
