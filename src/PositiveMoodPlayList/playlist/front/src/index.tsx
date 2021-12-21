@@ -76,7 +76,7 @@ export default function App() {
         (async () => {
             const res = await getUserInfo();
             if (!res) {
-                console.log('refresh')
+                // console.log('refresh')
                 const isRefresh = await refresh();
                 if (isRefresh) {
                     setIsLoggedIn(isRefresh);
