@@ -23,6 +23,8 @@ export const PlayListCard: React.FC<Props> = ({pattern}) => {
 
     const [isPersonalize, setIsPersonalize] = useState(false);
 
+    const [isCommon, setIsCommon] = useState(true);
+
     const [isPersonalPleasure, setIsPersonalPleasure] = useState(false);
 
     const [isCommonPleasure, setIsCommonPleasure] = useState(false);
