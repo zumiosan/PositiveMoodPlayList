@@ -1,9 +1,11 @@
-import React, { Fragment, useContext, useRef } from "react";
+import React, {Fragment, useContext, useEffect, useRef, useState} from "react";
 import { styled } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import Slider from "@mui/material/Slider";
 import { PlayerContext } from "./MusicPlayer";
+import raf from 'raf';
+
 
 const TinyText = styled(Typography)({
   fontSize: '0.75rem',
@@ -14,17 +16,45 @@ const TinyText = styled(Typography)({
 
 export default function PlayerSlider() {
 
+    // 親から受け取ったもの
     const playerContext = useContext(PlayerContext)!;
-    const [duration, position, setPosition, setIsSeek] = [
+    const [duration, player, isPlay] = [
         playerContext.duration,
-        playerContext.position,
-        playerContext.setPosition,
-        playerContext.setIsSeek,
+        playerContext.player,
+        playerContext.isPlay,
     ];
+
+    // シークバーのポジション
+    const [seekPosition, setSeekPosition] = useState<number>(0);
+
+    // シークバーをクリックしているかどうか
+    const [isSeek, setIsSeek] = useState<boolean>(false);
+
+    // アニメーションフレーム用の変数
+    const raf_id = useRef<number | null>();
+
+    // プレイリストの再生が始まった時とシークバーを動かした時の処理
+    useEffect(() => {
+        if (isPlay) {
+            raf_id.current = raf(getPosition);
+        }
+        return () => raf.cancel(raf_id.current!)
+    }, [isPlay, isSeek])
+
+    // ポジションを取得する処理
+    const getPosition  = () => {
+        // console.log(isSeek)
+        if (!isSeek) {
+            setSeekPosition(Math.floor(player.current!.seek()));
+        }
+        if (isPlay) {
+            raf_id.current = raf(getPosition);
+        }
+    }
 
     //ポジション変更時
     const handleMovePosition = (value:number) => {
-        setPosition(value);
+        setSeekPosition(value)
     };
 
     //シーククリック時
@@ -32,9 +62,10 @@ export default function PlayerSlider() {
         setIsSeek(true);
     };
 
-    //シークから離れた時
+    //シークから離れた時に再生箇所を変更
     const handleMouseUp = () => {
         setIsSeek(false);
+        player.current?.seek(seekPosition);
     };
 
     // 再生時間のフォーマット
@@ -50,7 +81,7 @@ export default function PlayerSlider() {
                 <Slider
                     aria-label="time-indicator"
                     size="small"
-                    value={position}
+                    value={seekPosition}
                     min={0}
                     step={1}
                     max={duration}
@@ -81,8 +112,8 @@ export default function PlayerSlider() {
                     mt: -2,
                 }}
             >
-                <TinyText>{formatDuration(position)}</TinyText>
-                <TinyText>-{formatDuration(duration - position)}</TinyText>
+                <TinyText>{formatDuration(seekPosition)}</TinyText>
+                <TinyText>-{formatDuration(duration - seekPosition)}</TinyText>
             </Grid>
         </Fragment>
     )
