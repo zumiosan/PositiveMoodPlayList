@@ -36,7 +36,8 @@ export default function PlayerSlider() {
     // プレイリストの再生が始まった時とシークバーを動かした時の処理
     useEffect(() => {
         if (isPlay) {
-            raf_id.current = raf(getPosition);
+            // raf_id.current = raf(getPosition);
+            getPosition()
         }
         return () => raf.cancel(raf_id.current!)
     }, [isPlay, isSeek])
@@ -59,13 +60,15 @@ export default function PlayerSlider() {
 
     //シーククリック時
     const handleMouseDown = () => {
+        raf.cancel(raf_id.current!)
         setIsSeek(true);
     };
 
     //シークから離れた時に再生箇所を変更
     const handleMouseUp = () => {
-        setIsSeek(false);
         player.current?.seek(seekPosition);
+        raf.cancel(raf_id.current!)
+        setIsSeek(false);
     };
 
     // 再生時間のフォーマット
