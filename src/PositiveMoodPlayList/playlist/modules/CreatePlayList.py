@@ -264,13 +264,13 @@ def create_playlist(transition, up_down_info, username):
         if len(mid) == break_flag:
             break
 
-    for i in music_data:
-        print('hh:{0}, mh:{1}, mm:{2}, lm:{3}, ll:{4}'.format(
-            i['hh'],
-            i['mh'],
-            i['mm'],
-            i['lm'],
-            i['ll'],
-        ))
+    # for i in music_data:
+    #     print('hh:{0}, mh:{1}, mm:{2}, lm:{3}, ll:{4}'.format(
+    #         i['hh'],
+    #         i['mh'],
+    #         i['mm'],
+    #         i['lm'],
+    #         i['ll'],
+    #     ))
 
     return mid
