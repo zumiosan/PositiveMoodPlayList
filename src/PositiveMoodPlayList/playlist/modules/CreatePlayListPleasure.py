@@ -1,5 +1,6 @@
 #!usr/bin/env python
 # -*- cording: utf-8 -*-
+import math
 import pprint
 
 from environs import Env
@@ -59,7 +60,7 @@ def get_first_data(class_name, class_num, impression_username, pleasure_username
     """
     最初の楽曲を取得
     """
-
+    global pleasure_level
     # 候補楽曲数を調べる．
     query = f"WITH table1 AS (SELECT * FROM impression_info WHERE username='{impression_username}')," \
             f"table2 AS (SELECT * FROM pleasure_info WHERE username='{pleasure_username}')," \
@@ -69,6 +70,7 @@ def get_first_data(class_name, class_num, impression_username, pleasure_username
             f"AND {class_name} >= {impression_level} " \
             f"AND pleasure >= {pleasure_level};"
     track_num = execute_query(query)[0]['count']
+    print(f'tn:{track_num}')
 
     # 候補楽曲数が閾値より小さい場合は，class_numの制限を外す
     if track_num >= track_num_limit:
@@ -79,16 +81,32 @@ def get_first_data(class_name, class_num, impression_username, pleasure_username
                 f"WHERE class_num={class_num} " \
                 f"AND {class_name} >= {impression_level} " \
                 f"AND pleasure >= {pleasure_level} " \
-                f"ORDER BY rANDom() LIMIT 1;"
+                f"ORDER BY random() LIMIT 1;"
     else:
+        pleasure_level -= 0.01
+        while track_num <= track_num_limit:
+            print(f'pl:{pleasure_level}')
+            if math.isclose(pleasure_level, 0.6):
+                break
+            query = f"WITH table1 AS (SELECT * FROM impression_info WHERE username='{impression_username}')," \
+                    f"table2 AS (SELECT * FROM pleasure_info WHERE username='{pleasure_username}')," \
+                    f"table3 AS (SELECT * FROM table1 INNER JOIN table2 ON table1.mid = table2.mid) " \
+                    f"SELECT count(*) FROM table3 " \
+                    f"WHERE {class_name} >= {impression_level - 0.1} " \
+                    f"AND pleasure >= {pleasure_level};"
+            track_num = execute_query(query)[0]['count']
+            pleasure_level -= 0.01
         query = f"WITH table1 AS (SELECT * FROM impression_info WHERE username='{impression_username}')," \
                 f"table2 AS (SELECT * FROM pleasure_info WHERE username='{pleasure_username}')," \
                 f"table3 AS (SELECT * FROM table1 INNER JOIN table2 ON table1.mid = table2.mid) " \
                 f"SELECT * FROM table3 " \
                 f"WHERE {class_name} >= {impression_level - 0.1} " \
                 f"AND pleasure >= {pleasure_level} " \
-                f"ORDER BY rANDom() LIMIT 1;"
+                f"ORDER BY random() LIMIT 1;"
+        pleasure_level = 0.8
 
+    # print(pleasure_level)
+    print(query)
     data = execute_query(query)
     return data
 
@@ -97,6 +115,7 @@ def not_change_class_data(before_class_proba, current_class_name, current_class_
     """
     印象が遷移しない場合の楽曲を取得
     """
+    global pleasure_level
     query = None
     if up_down == 1:  # 印象がHighに近づく場合
         # 印象がHighに近づく場合：一つ上の印象の印象確率が上がる
@@ -117,6 +136,7 @@ def not_change_class_data(before_class_proba, current_class_name, current_class_
                 f"AND pleasure >= {pleasure_level} " \
                 f"AND {upper_class_name} >= {upper_class_proba};"
         track_num = execute_query(query)[0]['count']
+        print(f'tn:{track_num}')
 
         # 候補楽曲数が閾値より小さい場合は，class_numの制限を外す
         if track_num >= track_num_limit:
@@ -128,8 +148,22 @@ def not_change_class_data(before_class_proba, current_class_name, current_class_
                     f"AND {current_class_name} >= {impression_level} " \
                     f"AND pleasure >= {pleasure_level} " \
                     f"AND {upper_class_name} >= {upper_class_proba} " \
-                    f"ORDER BY rANDom() LIMIT 1;"
+                    f"ORDER BY random() LIMIT 1;"
         else:
+            pleasure_level -= 0.01
+            while track_num <= track_num_limit:
+                print(f'pl:{pleasure_level}')
+                if math.isclose(pleasure_level, 0.6):
+                    break
+                query = f"WITH table1 AS (SELECT * FROM impression_info WHERE username='{impression_username}'), " \
+                        f"table2 AS (SELECT * FROM pleasure_info WHERE username='{pleasure_username}'), " \
+                        f"table3 AS (SELECT * FROM table1 INNER JOIN table2 ON table1.mid = table2.mid) " \
+                        f"SELECT count(*) FROM table3 " \
+                        f"WHERE {current_class_name} >= {impression_level - 0.1} " \
+                        f"AND pleasure >= {pleasure_level} " \
+                        f"AND {upper_class_name} >= {upper_class_proba};"
+                track_num = execute_query(query)[0]['count']
+                pleasure_level -= 0.01
             query = f"WITH table1 AS (SELECT * FROM impression_info WHERE username='{impression_username}'), " \
                     f"table2 AS (SELECT * FROM pleasure_info WHERE username='{pleasure_username}'), " \
                     f"table3 AS (SELECT * FROM table1 INNER JOIN table2 ON table1.mid = table2.mid) " \
@@ -137,7 +171,8 @@ def not_change_class_data(before_class_proba, current_class_name, current_class_
                     f"WHERE {current_class_name} >= {impression_level - 0.1} " \
                     f"AND pleasure >= {pleasure_level} " \
                     f"AND {upper_class_name} >= {upper_class_proba} " \
-                    f"ORDER BY rANDom() LIMIT 1;"
+                    f"ORDER BY random() LIMIT 1;"
+            pleasure_level = 0.8
 
     elif up_down == -1:  # 印象がLowに近づく場合
         # 印象がLowに近づく場合：一つ下の印象の印象確率が上がる．
@@ -158,6 +193,7 @@ def not_change_class_data(before_class_proba, current_class_name, current_class_
                 f"AND pleasure >= {pleasure_level} " \
                 f"AND {lower_class_name} >= {lower_class_proba};"
         track_num = execute_query(query)[0]['count']
+        print(f'tn:{track_num}')
 
         # 候補楽曲数が閾値より小さい場合は，class_numの制限を外す
         if track_num >= track_num_limit:
@@ -169,8 +205,22 @@ def not_change_class_data(before_class_proba, current_class_name, current_class_
                     f"AND {current_class_name} >= {impression_level} " \
                     f"AND pleasure >= {pleasure_level} " \
                     f"AND {lower_class_name} >= {lower_class_proba} " \
-                    f"ORDER BY rANDom() LIMIT 1;"
+                    f"ORDER BY random() LIMIT 1;"
         else:
+            pleasure_level -= 0.01
+            while track_num <= track_num_limit:
+                print(f'pl:{pleasure_level}')
+                if math.isclose(pleasure_level, 0.6):
+                    break
+                query = f"WITH table1 AS (SELECT * FROM impression_info WHERE username='{impression_username}'), " \
+                        f"table2 AS (SELECT * FROM pleasure_info WHERE username='{pleasure_username}'), " \
+                        f"table3 AS (SELECT * FROM table1 INNER JOIN table2 ON table1.mid = table2.mid) " \
+                        f"SELECT count(*) FROM table3 " \
+                        f"WHERE {current_class_name} >= {impression_level - 0.1} " \
+                        f"AND pleasure >= {pleasure_level} " \
+                        f"AND {lower_class_name} >= {lower_class_proba};"
+                track_num = execute_query(query)[0]['count']
+                pleasure_level -= 0.01
             query = f"WITH table1 AS (SELECT * FROM impression_info WHERE username='{impression_username}'), " \
                     f"table2 AS (SELECT * FROM pleasure_info WHERE username='{pleasure_username}'), " \
                     f"table3 AS (SELECT * FROM table1 INNER JOIN table2 ON table1.mid = table2.mid) " \
@@ -178,9 +228,11 @@ def not_change_class_data(before_class_proba, current_class_name, current_class_
                     f"WHERE {current_class_name} >= {impression_level - 0.1} " \
                     f"AND pleasure >= {pleasure_level} " \
                     f"AND {lower_class_name} >= {lower_class_proba} " \
-                    f"ORDER BY rANDom() LIMIT 1;"
+                    f"ORDER BY random() LIMIT 1;"
+            pleasure_level = 0.8
 
     # クエリ実行
+    print(query)
     data = execute_query(query)
     # print(data)
     return data
@@ -190,6 +242,7 @@ def change_class_data(current_class_name, current_class_num, before_class_name, 
     """
     印象が遷移する場合
     """
+    global pleasure_level
     query = f"WITH table1 AS (SELECT * FROM impression_info WHERE username='{impression_username}'), " \
             f"table2 AS (SELECT * FROM pleasure_info WHERE username='{pleasure_username}'), " \
             f"table3 AS (SELECT * FROM table1 INNER JOIN table2 ON table1.mid = table2.mid) " \
@@ -199,6 +252,7 @@ def change_class_data(current_class_name, current_class_num, before_class_name, 
             f"AND {before_class_name} >= 0.7 " \
             f"AND pleasure >= {pleasure_level};"
     track_num = execute_query(query)[0]['count']
+    print(f'tn:{track_num}')
 
     # 候補楽曲数が閾値より小さい場合は，class_numの制限を外す
     if track_num >= track_num_limit:
@@ -210,8 +264,22 @@ def change_class_data(current_class_name, current_class_num, before_class_name, 
                 f"AND {current_class_name} >= {impression_level} " \
                 f"AND {before_class_name} >= 0.7 " \
                 f"AND pleasure >= {pleasure_level} " \
-                f"ORDER BY rANDom() LIMIT 1;"
+                f"ORDER BY random() LIMIT 1;"
     else:
+        pleasure_level -= 0.01
+        while track_num <= track_num_limit:
+            print(f'pl:{pleasure_level}')
+            if math.isclose(pleasure_level, 0.6):
+                break
+            query = f"WITH table1 AS (SELECT * FROM impression_info WHERE username='{impression_username}'), " \
+                    f"table2 AS (SELECT * FROM pleasure_info WHERE username='{pleasure_username}'), " \
+                    f"table3 AS (SELECT * FROM table1 INNER JOIN table2 ON table1.mid = table2.mid) " \
+                    f"SELECT count(*) FROM table3 " \
+                    f"WHERE {current_class_name} >= {impression_level - 0.1} " \
+                    f"AND {before_class_name} >= 0.7 " \
+                    f"AND pleasure >= {pleasure_level};"
+            track_num = execute_query(query)[0]['count']
+            pleasure_level -= 0.01
         query = f"WITH table1 AS (SELECT * FROM impression_info WHERE username='{impression_username}'), " \
                 f"table2 AS (SELECT * FROM pleasure_info WHERE username='{pleasure_username}'), " \
                 f"table3 AS (SELECT * FROM table1 INNER JOIN table2 ON table1.mid = table2.mid) " \
@@ -219,8 +287,10 @@ def change_class_data(current_class_name, current_class_num, before_class_name, 
                 f"WHERE {current_class_name} >= {impression_level - 0.1} " \
                 f"AND {before_class_name} >= 0.7 " \
                 f"AND pleasure >= {pleasure_level} " \
-                f"ORDER BY rANDom() LIMIT 1;"
+                f"ORDER BY random() LIMIT 1;"
+        pleasure_level = 0.8
 
+    print(query)
     data = execute_query(query)
     # print(data)
     return data
@@ -237,12 +307,15 @@ def create_playlist(transition, up_down_info, impression_username, pleasure_user
     # プレイリスト作成終了フラグ
     break_flag = len(transition)
 
+    print(impression_username)
+
     while True:
         # プレイリストに使用する楽曲のmidを格納する
         mid = []
         music_data = []
         for index, (current_class_name, up_down) in enumerate(zip(transition, up_down_info)):
-            # print(index)
+            print(index)
+            print(mid)
             # 現在の楽曲のクラスの番号
             current_class_num = class_name_to_num[current_class_name]
 
