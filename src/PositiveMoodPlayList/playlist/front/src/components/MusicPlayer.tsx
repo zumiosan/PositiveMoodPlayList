@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useRef, useState, createContext, useEffect } from "react";
+import React, { Fragment, useContext, useRef, useState, createContext, useEffect, useCallback } from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import PlayerSlider from "./PlayerSlider";
@@ -16,14 +16,12 @@ import ReactHowler from "react-howler";
 import Typography from "@mui/material/Typography";
 import QueueMusicIcon from '@mui/icons-material/QueueMusic';
 import {Link} from "react-router-dom";
-import raf from 'raf';
 
 interface PlayerContextInterface {
     duration: number,
-    position: number,
-    setIsSeek: React.Dispatch<React.SetStateAction<boolean>>,
-    setPosition: React.Dispatch<React.SetStateAction<number>>,
     setVolume: React.Dispatch<React.SetStateAction<number>>,
+    player:  React.MutableRefObject<ReactHowler | null>,
+    isPlay: boolean,
 }
 
 export const PlayerContext = createContext<PlayerContextInterface | null>(null);
@@ -47,30 +45,18 @@ export default function MusicPlayer() {
     // 再生中かどうか
     const [isPlay, setIsPlay] = useState<boolean>(false);
 
-    // シークバーを動かしているかどうか
-    const [isSeek, setIsSeek] = useState<boolean>(false);
-
     // 曲の長さ(秒)
     const [duration, setDuration] = useState<number>(0);
-
-    // 再生場所
-    const [position, setPosition] = useState<number>(0);
 
     // ボリューム
     const [volume, setVolume] = useState<number>(50);
 
-    // setInterval用の変数
-    const interval = useRef<NodeJS.Timer | null>();
-
-    const raf_id = useRef<number | null>();
-
     // 子コンポーネントに送るもの
     const playerContext: PlayerContextInterface = {
         duration: duration,
-        position: position,
-        setIsSeek: setIsSeek,
-        setPosition: setPosition,
         setVolume: setVolume,
+        isPlay: isPlay,
+        player: player
     }
 
     // プレイリストが更新された時
@@ -83,15 +69,11 @@ export default function MusicPlayer() {
     // 再生ボタンを押した時
     const handlePlay = () => {
         setIsPlay(true);
-        // interval.current = setInterval(getPosition, 1);
-        raf_id.current = raf(getPosition);
     };
 
     // 一時停止ボタンを押した時
     const handlePause = () => {
         setIsPlay(false);
-        // clearInterval(Number(interval.current));
-        clearRAF();
     };
 
     // 楽曲ファイルを読み込んだ時
@@ -99,20 +81,6 @@ export default function MusicPlayer() {
         // console.log(player.current!.duration());
         setDuration(Math.floor(player.current!.duration()));
     }
-
-    // 再生箇所の取得
-    const getPosition = () => {
-        if (!isSeek) {
-            setPosition(Math.floor(player.current!.seek()));
-        }
-    }
-
-    // 再生箇所の変更
-    useEffect(() => {
-        if (!isSeek) {
-            player.current!.seek(position);
-        }
-    }, [isSeek])
 
     // 曲をセット
     useEffect(() => {
@@ -122,15 +90,12 @@ export default function MusicPlayer() {
         // 次の曲をセット
         const src = staticPath + String(playList[playListIndex]['mid']).padStart(6, '0') + '.wav';
         setSrc(src);
-        setPosition(0);
     }, [playListIndex]);
 
     // 次の曲を再生
     const handleNext = () => {
         // 次の楽曲がない場合は最初の楽曲をセットして停止
         if (playListIndex + 1 >= playList.length) {
-            // clearInterval(Number(interval.current));
-            clearRAF();
             setIsPlay(false);
             setPlayListIndex(0);
         } else {
@@ -142,10 +107,7 @@ export default function MusicPlayer() {
     const handlePrevious = () => {
         // 前の楽曲がない場合は停止
         if (playListIndex - 1 <= -1) {
-            // clearInterval(Number(interval.current));
-            clearRAF();
             setIsPlay(false);
-            setPosition(0);
             player.current!.stop();
         } else {
             setPlayListIndex(prevState => prevState - 1);
@@ -156,10 +118,6 @@ export default function MusicPlayer() {
     const handleOnEnd = () => {
         handleNext();
     };
-
-    const clearRAF = () => {
-        raf.cancel(raf_id.current!);
-    }
 
     return (
         <Fragment>
@@ -207,17 +165,30 @@ export default function MusicPlayer() {
                                         </Typography>
                                     </Grid>
                                 )}
-                                {playListInfo['isPersonalize'] && (
+                                {playListInfo['isPersonalize'] ? (
                                     <Grid item container alignItems={"center"} justifyContent={"center"} xs={4} sm={2}>
                                         <Typography sx={{fontSize: { xs: 15, sm: 20}}}>
                                             Personalize
                                         </Typography>
                                     </Grid>
-                                )}
-                                {playListInfo['isPleasure'] && (
+                                ) : (
                                     <Grid item container alignItems={"center"} justifyContent={"center"} xs={4} sm={2}>
                                         <Typography sx={{fontSize: { xs: 15, sm: 20}}}>
-                                            Pleasure
+                                            Common
+                                        </Typography>
+                                    </Grid>
+                                )}
+                                {playListInfo['isPersonalPleasure'] && (
+                                    <Grid item container alignItems={"center"} justifyContent={"center"} xs={4} sm={2}>
+                                        <Typography sx={{fontSize: { xs: 15, sm: 20}}}>
+                                            PersonalPleasure
+                                        </Typography>
+                                    </Grid>
+                                )}
+                                {playListInfo['isCommonPleasure'] && (
+                                    <Grid item container alignItems={"center"} justifyContent={"center"} xs={4} sm={2}>
+                                        <Typography sx={{fontSize: { xs: 15, sm: 20}}}>
+                                            CommonPleasure
                                         </Typography>
                                     </Grid>
                                 )}

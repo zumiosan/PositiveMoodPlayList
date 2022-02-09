@@ -376,15 +376,15 @@ def create_playlist(transition, up_down_info, impression_username, pleasure_user
         if len(mid) == break_flag:
             break
 
-    # print(music_data)
-    for i in music_data:
-        print('hh:{0}, mh:{1}, mm:{2}, lm:{3}, ll:{4}, pleasure:{5}'.format(
-            i['hh'],
-            i['mh'],
-            i['mm'],
-            i['lm'],
-            i['ll'],
-            i['pleasure'],
-        ))
+    # # print(music_data)
+    # for i in music_data:
+    #     print('hh:{0}, mh:{1}, mm:{2}, lm:{3}, ll:{4}, pleasure:{5}'.format(
+    #         i['hh'],
+    #         i['mh'],
+    #         i['mm'],
+    #         i['lm'],
+    #         i['ll'],
+    #         i['pleasure'],
+    #     ))
 
     return mid
