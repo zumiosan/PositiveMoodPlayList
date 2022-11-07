@@ -273,4 +273,4 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-
+static

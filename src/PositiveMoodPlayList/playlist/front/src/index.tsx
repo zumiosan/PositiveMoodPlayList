@@ -41,8 +41,63 @@ export default function App() {
     // プレイリスト再生楽曲リスト
     const [playList, setPlayList] = useState<{[index:string]: number | string}[]>([
         {
-            "mid": 0,
-            "music_name": "",
+            "mid": 88,
+            "music_name": "88",
+            "artist_name": ""
+        },
+        {
+            "mid": 97,
+            "music_name": "97",
+            "artist_name": ""
+        },
+        {
+            "mid": 156,
+            "music_name": "156",
+            "artist_name": ""
+        },
+        {
+            "mid": 207,
+            "music_name": "207",
+            "artist_name": ""
+        },
+        {
+            "mid": 216,
+            "music_name": "216",
+            "artist_name": ""
+        },
+        {
+            "mid": 630,
+            "music_name": "630",
+            "artist_name": ""
+        },
+        {
+            "mid": 847,
+            "music_name": "847",
+            "artist_name": ""
+        },
+        {
+            "mid": 893,
+            "music_name": "847",
+            "artist_name": ""
+        },
+        {
+            "mid": 1089,
+            "music_name": "1089",
+            "artist_name": ""
+        },
+        {
+            "mid": 1200,
+            "music_name": "1200",
+            "artist_name": ""
+        },
+        {
+            "mid": 1220,
+            "music_name": "1220",
+            "artist_name": ""
+        },
+        {
+            "mid": 1735,
+            "music_name": "1735",
             "artist_name": ""
         },
     ]);

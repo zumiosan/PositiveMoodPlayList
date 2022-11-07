@@ -20,7 +20,7 @@ import {Link} from "react-router-dom";
 interface PlayerContextInterface {
     duration: number,
     setVolume: React.Dispatch<React.SetStateAction<number>>,
-    player:  React.MutableRefObject<ReactHowler | null>,
+    player:  ReactHowler,
     isPlay: boolean,
 }
 
@@ -29,8 +29,8 @@ export const PlayerContext = createContext<PlayerContextInterface | null>(null);
 export default function MusicPlayer() {
 
     // オーディオプレイヤーオブジェクト
-    const player = useRef<ReactHowler | null>(null);
-
+    // const player = useRef<ReactHowler | null>(null);
+    const [player, setPlayer] = useState<ReactHowler | null>(null);
     //　プレイリストの楽曲
     const playListContext = useContext(PlayListContext)!;
     const [playList, playListInfo] = [playListContext.playList, playListContext.playListInfo];
@@ -39,7 +39,7 @@ export default function MusicPlayer() {
     const [playListIndex, setPlayListIndex] = [playListContext.playListIndex, playListContext.setPlayListIndex];
 
     // 楽曲ファイルのパス
-    const staticPath = '/static/music/'
+    const staticPath = '/static/music_origin/'
     const [src, setSrc] = useState<string>(staticPath);
 
     // 再生中かどうか
@@ -56,12 +56,13 @@ export default function MusicPlayer() {
         duration: duration,
         setVolume: setVolume,
         isPlay: isPlay,
-        player: player
+        player: player!
     }
 
     // プレイリストが更新された時
     useEffect(() => {
         setPlayListIndex(0);
+        setIsPlay(false);
         const src = staticPath + String(playList[0]['mid']).padStart(6, '0') + '.wav';
         setSrc(src);
     }, [playList]);
@@ -78,15 +79,15 @@ export default function MusicPlayer() {
 
     // 楽曲ファイルを読み込んだ時
     const handleOnLoad = () => {
-        // console.log(player.current!.duration());
-        setDuration(Math.floor(player.current!.duration()));
+        // console.log(player?.duration());
+        setDuration(Math.floor(player!.duration()));
+        if (playListIndex != 0) {
+            setIsPlay(true)
+        }
     }
 
     // 曲をセット
     useEffect(() => {
-        // 再生をストップ
-        player.current!.stop();
-
         // 次の曲をセット
         const src = staticPath + String(playList[playListIndex]['mid']).padStart(6, '0') + '.wav';
         setSrc(src);
@@ -96,7 +97,6 @@ export default function MusicPlayer() {
     const handleNext = () => {
         // 次の楽曲がない場合は最初の楽曲をセットして停止
         if (playListIndex + 1 >= playList.length) {
-            setIsPlay(false);
             setPlayListIndex(0);
         } else {
             setPlayListIndex(prevState => prevState + 1);
@@ -108,7 +108,6 @@ export default function MusicPlayer() {
         // 前の楽曲がない場合は停止
         if (playListIndex - 1 <= -1) {
             setIsPlay(false);
-            player.current!.stop();
         } else {
             setPlayListIndex(prevState => prevState - 1);
         }
@@ -116,6 +115,7 @@ export default function MusicPlayer() {
 
     // 再生が終了した時
     const handleOnEnd = () => {
+        setIsPlay(false);
         handleNext();
     };
 
@@ -128,7 +128,7 @@ export default function MusicPlayer() {
                 volume={volume / 100}
                 onLoad={handleOnLoad}
                 onEnd={handleOnEnd}
-                ref={(ref) => (player.current = ref)}
+                ref={(ref) => (setPlayer(ref))}
             />
             <PlayerContext.Provider value={playerContext}>
                 <Box component={"footer"} sx={{

@@ -46,7 +46,7 @@ export default function PlayerSlider() {
     const getPosition  = () => {
         // console.log(isSeek)
         if (!isSeek) {
-            setSeekPosition(Math.floor(player.current!.seek()));
+            setSeekPosition(Math.floor(player?.seek()));
         }
         if (isPlay) {
             raf_id.current = raf(getPosition);
@@ -66,7 +66,7 @@ export default function PlayerSlider() {
 
     //シークから離れた時に再生箇所を変更
     const handleMouseUp = () => {
-        player.current?.seek(seekPosition);
+        player?.seek(seekPosition);
         raf.cancel(raf_id.current!)
         setIsSeek(false);
     };
